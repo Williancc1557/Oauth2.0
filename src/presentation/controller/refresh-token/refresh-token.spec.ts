@@ -26,16 +26,16 @@ const makeCreateAcessTokenStub = (): CreateAcessToken => {
 
 const makeSut = () => {
   const checkRefreshTokenStub = makeCheckRefreshTokenStub();
-  const createAcessToken = makeCreateAcessTokenStub();
+  const createAcessTokenStub = makeCreateAcessTokenStub();
   const sut = new RefreshTokenController(
     checkRefreshTokenStub,
-    createAcessToken
+    createAcessTokenStub
   );
 
   return {
     sut,
     checkRefreshTokenStub,
-    createAcessToken,
+    createAcessTokenStub,
   };
 };
 
@@ -62,10 +62,10 @@ describe("RefreshToken Controller", () => {
     expect(req.statusCode).toBe(400);
   });
 
-  test("should create acess is called with correct values", async () => {
-    const { sut, createAcessToken } = makeSut();
+  test("should checkRefreshToken is called with correct values", async () => {
+    const { sut, checkRefreshTokenStub } = makeSut();
 
-    const createAcessTokenStub = jest.spyOn(createAcessToken, "create");
+    const checkRefreshTokenSpy = jest.spyOn(checkRefreshTokenStub, "check");
 
     await sut.handle({
       body: {
@@ -73,6 +73,20 @@ describe("RefreshToken Controller", () => {
       },
     });
 
-    expect(createAcessTokenStub).toBeCalledWith("valid_user_id");
+    expect(checkRefreshTokenSpy).toBeCalledWith("valid_acess_token");
+  });
+
+  test("should create acess is called with correct values", async () => {
+    const { sut, createAcessTokenStub } = makeSut();
+
+    const createAcessTokenSpy = jest.spyOn(createAcessTokenStub, "create");
+
+    await sut.handle({
+      body: {
+        refreshToken: "valid_acess_token",
+      },
+    });
+
+    expect(createAcessTokenSpy).toBeCalledWith("valid_user_id");
   });
 });
