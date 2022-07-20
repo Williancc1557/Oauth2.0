@@ -56,6 +56,22 @@ describe("RefreshToken Controller", () => {
     expect(req.statusCode).toBe(500);
   });
 
+  test("should return internalServerError if createAcessTokenStub has any error", async () => {
+    const { sut, createAcessTokenStub } = makeSut();
+
+    jest.spyOn(createAcessTokenStub, "create").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const req = await sut.handle({
+      body: {
+        refreshToken: "valid_acess_token",
+      },
+    });
+
+    expect(req.statusCode).toBe(500);
+  });
+
   test("should return 400 if refreshToken is not provided", async () => {
     const { sut } = makeSut();
 
