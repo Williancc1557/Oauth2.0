@@ -19,7 +19,7 @@ export class RefreshTokenController implements Controller {
     }
 
     const userId = await this.checkRefreshToken.check(
-      httpRequest.body.acessToken
+      httpRequest.body.refreshToken
     );
 
     if (!userId) {
