@@ -1,0 +1,10 @@
+{
+  "root": true,
+  "extends": [
+    "@techmmunity/eslint-config/typescript",
+    "@techmmunity/eslint-config/jest"
+  ],
+  "rules": {
+    "no-explicit-any": "off"
+  }
+}
