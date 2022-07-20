@@ -1,5 +1,5 @@
 type UserId = string;
 
 export interface CheckRefreshToken {
-  check: (acessToken: string) => UserId | undefined;
+  check: (acessToken: string) => Promise<UserId | undefined>;
 }

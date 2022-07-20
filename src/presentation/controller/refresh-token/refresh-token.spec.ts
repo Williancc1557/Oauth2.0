@@ -5,7 +5,7 @@ import type { CreateAcessToken } from "../../protocols/create-acess-token";
 const makeCheckRefreshTokenStub = (): CheckRefreshToken => {
   class CheckRefreshToken implements CheckRefreshToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public check(refreshToken: string): string | undefined {
+    public async check(refreshToken: string): Promise<string | undefined> {
       return "valid_user_id";
     }
   }

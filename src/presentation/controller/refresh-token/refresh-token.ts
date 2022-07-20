@@ -18,7 +18,9 @@ export class RefreshTokenController implements Controller {
       return badRequest(new MissingParamError("refreshToken"));
     }
 
-    const userId = this.checkRefreshToken.check(httpRequest.body.acessToken);
+    const userId = await this.checkRefreshToken.check(
+      httpRequest.body.acessToken
+    );
 
     if (!userId) {
       return badRequest(new InvalidParamError("refreshToken"));
