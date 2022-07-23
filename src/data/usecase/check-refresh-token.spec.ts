@@ -39,4 +39,12 @@ describe("CheckRefreshToken", () => {
 
     expect(res).toBeUndefined();
   });
+
+  test("should return account.id if sucess", async () => {
+    const { sut } = makeSut();
+
+    const res = await sut.check("valid_refresh_token");
+
+    expect(res).toBe("valid_id");
+  });
 });
