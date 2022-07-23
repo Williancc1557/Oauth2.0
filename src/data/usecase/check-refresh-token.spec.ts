@@ -40,6 +40,16 @@ describe("CheckRefreshToken", () => {
     expect(res).toBeUndefined();
   });
 
+  test("should call getRefreshToken with correct values", async () => {
+    const { sut, getRefreshTokenStub } = makeSut();
+
+    const getRefreshTokenSpy = jest.spyOn(getRefreshTokenStub, "get");
+
+    await sut.check("valid_refresh_token");
+
+    expect(getRefreshTokenSpy).toBeCalledWith("valid_refresh_token");
+  });
+
   test("should return account.id if sucess", async () => {
     const { sut } = makeSut();
 
