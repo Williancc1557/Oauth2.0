@@ -6,13 +6,9 @@ export class DbCheckRefreshToken implements CheckRefreshToken {
     private readonly getRefreshTokenRepository: GetRefreshTokenRepository
   ) {}
 
-  public async check(refreshToken: string): Promise<string> {
+  public async check(refreshToken: string): Promise<string | undefined> {
     const account = await this.getRefreshTokenRepository.get(refreshToken);
 
-    if (!account) {
-      return undefined;
-    }
-
-    return account.id;
+    return account?.id;
   }
 }
