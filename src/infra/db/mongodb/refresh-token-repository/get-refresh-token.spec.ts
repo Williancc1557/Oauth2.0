@@ -45,4 +45,12 @@ describe("GetRefreshToken", () => {
       })
     );
   });
+
+  test("should return undefined if account don't exists", async () => {
+    const { sut } = makeSut();
+
+    const account = await sut.get("2345");
+
+    expect(account).toBeUndefined();
+  });
 });
