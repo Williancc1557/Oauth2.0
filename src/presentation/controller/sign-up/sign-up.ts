@@ -7,6 +7,8 @@ export class SignUpController implements Controller {
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     if (!httpRequest.body.name) {
       return badRequest(new MissingParamError("name"));
+    } else if (!httpRequest.body.email) {
+      return badRequest(new MissingParamError("email"));
     }
 
     return ok(null);
