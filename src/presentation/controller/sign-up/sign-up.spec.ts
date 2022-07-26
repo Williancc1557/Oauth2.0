@@ -13,4 +13,17 @@ describe("Sign-Up", () => {
 
     expect(req.statusCode).toBe(400);
   });
+
+  test("should returns statusCode 400 if email is not provided", async () => {
+    const sut = new SignUpController();
+
+    const httpRequest = {
+      name: "valid_name",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(400);
+  });
 });
