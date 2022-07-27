@@ -1,4 +1,8 @@
 import type { AccountModel } from "../../../domain/models/account";
+import type {
+  AddAccount,
+  AddAccountInput,
+} from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { ValidateEmail } from "../../protocols/validate-email";
 import { SignUpController } from "./sign-up";
@@ -25,15 +29,38 @@ const makeGetAccountByEmailStub = () => {
   return new GetAccountByEmailStub();
 };
 
+const makeAddAccountStub = () => {
+  class AddAccountStub implements AddAccount {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public async add(account: AddAccountInput): Promise<AccountModel> {
+      return {
+        id: "valid_id",
+        name: "valid_name",
+        email: "valid_email@mail.com",
+        password: "valid_password",
+        refreshToken: "valid_refreshToken",
+      };
+    }
+  }
+
+  return new AddAccountStub();
+};
+
 const makeSut = () => {
   const validateEmailStub = makeValidateEmailStub();
   const getAccountByEmailStub = makeGetAccountByEmailStub();
-  const sut = new SignUpController(validateEmailStub, getAccountByEmailStub);
+  const addAccountStub = makeAddAccountStub();
+  const sut = new SignUpController(
+    validateEmailStub,
+    getAccountByEmailStub,
+    addAccountStub
+  );
 
   return {
     sut,
     validateEmailStub,
     getAccountByEmailStub,
+    addAccountStub,
   };
 };
 
@@ -159,5 +186,25 @@ describe("Sign-Up", () => {
     const req = await sut.handle({ body: httpRequest });
 
     expect(req.statusCode).toBe(200);
+  });
+
+  test("should returns account in the body if sucess", async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.body).toStrictEqual({
+      id: "valid_id",
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+      refreshToken: "valid_refreshToken",
+    });
   });
 });
