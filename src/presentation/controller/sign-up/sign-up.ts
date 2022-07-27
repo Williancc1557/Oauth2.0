@@ -26,7 +26,7 @@ export class SignUpController implements Controller {
       return badRequest(new InvalidParamError("email"));
     }
 
-    if (this.getAccountByEmail.get(httpRequest.body.email)) {
+    if (await this.getAccountByEmail.get(httpRequest.body.email)) {
       return conflict(new AccountAlreadyExistsError());
     }
 
