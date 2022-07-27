@@ -1,8 +1,30 @@
+import type { ValidateEmail } from "../../protocols/validate-email";
 import { SignUpController } from "./sign-up";
+
+const makeValidateEmailStub = () => {
+  class ValidateEmailStub implements ValidateEmail {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public validate(email: string): boolean {
+      return true;
+    }
+  }
+
+  return new ValidateEmailStub();
+};
+
+const makeSut = () => {
+  const validateEmailStub = makeValidateEmailStub();
+  const sut = new SignUpController(validateEmailStub);
+
+  return {
+    sut,
+    validateEmailStub,
+  };
+};
 
 describe("Sign-Up", () => {
   test("should returns statusCode 400 if name is not provided", async () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
 
     const httpRequest = {
       email: "valid_email@mail.com",
@@ -15,7 +37,7 @@ describe("Sign-Up", () => {
   });
 
   test("should returns statusCode 400 if email is not provided", async () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
 
     const httpRequest = {
       name: "valid_name",
@@ -28,7 +50,7 @@ describe("Sign-Up", () => {
   });
 
   test("should returns statusCode 400 if password is not provided", async () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
 
     const httpRequest = {
       name: "valid_name",
