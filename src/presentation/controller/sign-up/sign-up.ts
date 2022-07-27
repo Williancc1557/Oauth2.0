@@ -1,3 +1,4 @@
+import type { AddAccount } from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import { AccountAlreadyExistsError } from "../../erros/account-already-exists-error";
 import { InvalidParamError } from "../../erros/invalid-param-error";
@@ -10,7 +11,8 @@ import type { ValidateEmail } from "../../protocols/validate-email";
 export class SignUpController implements Controller {
   public constructor(
     public readonly validateEmail: ValidateEmail,
-    public readonly getAccountByEmail: GetAccountByEmail
+    public readonly getAccountByEmail: GetAccountByEmail,
+    public readonly addAccount: AddAccount
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -30,6 +32,8 @@ export class SignUpController implements Controller {
       return conflict(new AccountAlreadyExistsError());
     }
 
-    return ok(null);
+    const account = await this.addAccount.add(httpRequest.body);
+
+    return ok(account);
   }
 }
