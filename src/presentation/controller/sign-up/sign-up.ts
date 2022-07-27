@@ -9,6 +9,8 @@ export class SignUpController implements Controller {
       return badRequest(new MissingParamError("name"));
     } else if (!httpRequest.body.email) {
       return badRequest(new MissingParamError("email"));
+    } else if (!httpRequest.body.password) {
+      return badRequest(new MissingParamError("password"));
     }
 
     return ok(null);
