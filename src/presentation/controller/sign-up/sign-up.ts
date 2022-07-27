@@ -9,16 +9,12 @@ export class SignUpController implements Controller {
   public constructor(public readonly validateEmail: ValidateEmail) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (!httpRequest.body.name) {
-      return badRequest(new MissingParamError("name"));
-    }
+    const requiredParams = ["name", "email", "password"];
 
-    if (!httpRequest.body.email) {
-      return badRequest(new MissingParamError("email"));
-    }
-
-    if (!httpRequest.body.password) {
-      return badRequest(new MissingParamError("password"));
+    for (const param of requiredParams) {
+      if (!httpRequest.body[param]) {
+        return badRequest(new MissingParamError(param));
+      }
     }
 
     if (!this.validateEmail.validate(httpRequest.body.email)) {
