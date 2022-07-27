@@ -17,14 +17,8 @@ const makeValidateEmailStub = () => {
 const makeGetAccountByEmailStub = () => {
   class GetAccountByEmailStub implements GetAccountByEmail {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public async get(email: string): Promise<AccountModel> {
-      return {
-        id: "valid_id",
-        name: "valid_name",
-        email: "valid_email@mail.com",
-        password: "valid_password",
-        refreshToken: "valid_refresh_token",
-      };
+    public async get(email: string): Promise<AccountModel | null> {
+      return null;
     }
   }
 
@@ -134,7 +128,7 @@ describe("Sign-Up", () => {
   test("should returns statusCode 409 if account already exists", async () => {
     const { sut, getAccountByEmailStub } = makeSut();
 
-    jest.spyOn(getAccountByEmailStub, "get").mockResolvedValueOnce({
+    jest.spyOn(getAccountByEmailStub, "get").mockResolvedValue({
       id: "valid_id",
       name: "valid_name",
       email: "valid_email@mail.com",
@@ -151,5 +145,19 @@ describe("Sign-Up", () => {
     const req = await sut.handle({ body: httpRequest });
 
     expect(req.statusCode).toBe(409);
+  });
+
+  test("should returns statusCode 400 if success", async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(200);
   });
 });
