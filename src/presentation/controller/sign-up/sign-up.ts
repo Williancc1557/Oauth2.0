@@ -3,7 +3,12 @@ import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-e
 import { AccountAlreadyExistsError } from "../../erros/account-already-exists-error";
 import { InvalidParamError } from "../../erros/invalid-param-error";
 import { MissingParamError } from "../../erros/missing-param-error";
-import { badRequest, conflict, ok } from "../../helpers/http-helper";
+import {
+  badRequest,
+  conflict,
+  ok,
+  serverError,
+} from "../../helpers/http-helper";
 import type { Controller } from "../../protocols/controller";
 import type { HttpRequest, HttpResponse } from "../../protocols/http";
 import type { ValidateEmail } from "../../protocols/validate-email";
@@ -16,24 +21,28 @@ export class SignUpController implements Controller {
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const requiredParams = ["name", "email", "password"];
+    try {
+      const requiredParams = ["name", "email", "password"];
 
-    for (const param of requiredParams) {
-      if (!httpRequest.body[param]) {
-        return badRequest(new MissingParamError(param));
+      for (const param of requiredParams) {
+        if (!httpRequest.body[param]) {
+          return badRequest(new MissingParamError(param));
+        }
       }
+
+      if (!this.validateEmail.validate(httpRequest.body.email)) {
+        return badRequest(new InvalidParamError("email"));
+      }
+
+      if (await this.getAccountByEmail.get(httpRequest.body.email)) {
+        return conflict(new AccountAlreadyExistsError());
+      }
+
+      const account = await this.addAccount.add(httpRequest.body);
+
+      return ok(account);
+    } catch (err) {
+      return serverError();
     }
-
-    if (!this.validateEmail.validate(httpRequest.body.email)) {
-      return badRequest(new InvalidParamError("email"));
-    }
-
-    if (await this.getAccountByEmail.get(httpRequest.body.email)) {
-      return conflict(new AccountAlreadyExistsError());
-    }
-
-    const account = await this.addAccount.add(httpRequest.body);
-
-    return ok(account);
   }
 }
