@@ -1,3 +1,5 @@
+import type { AccountModel } from "../../../domain/models/account";
+import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { ValidateEmail } from "../../protocols/validate-email";
 import { SignUpController } from "./sign-up";
 
@@ -12,13 +14,32 @@ const makeValidateEmailStub = () => {
   return new ValidateEmailStub();
 };
 
+const makeGetAccountByEmailStub = () => {
+  class GetAccountByEmailStub implements GetAccountByEmail {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public async get(email: string): Promise<AccountModel> {
+      return {
+        id: "valid_id",
+        name: "valid_name",
+        email: "valid_email@mail.com",
+        password: "valid_password",
+        refreshToken: "valid_refresh_token",
+      };
+    }
+  }
+
+  return new GetAccountByEmailStub();
+};
+
 const makeSut = () => {
   const validateEmailStub = makeValidateEmailStub();
-  const sut = new SignUpController(validateEmailStub);
+  const getAccountByEmailStub = makeGetAccountByEmailStub();
+  const sut = new SignUpController(validateEmailStub, getAccountByEmailStub);
 
   return {
     sut,
     validateEmailStub,
+    getAccountByEmailStub,
   };
 };
 
@@ -62,7 +83,7 @@ describe("Sign-Up", () => {
     expect(req.statusCode).toBe(400);
   });
 
-  test("should returns statusCode 400 if email is not called with correct values", async () => {
+  test("should validate is called with correct values", async () => {
     const { sut, validateEmailStub } = makeSut();
 
     const validateEmailSpy = jest.spyOn(validateEmailStub, "validate");
@@ -92,5 +113,21 @@ describe("Sign-Up", () => {
     const req = await sut.handle({ body: httpRequest });
 
     expect(req.statusCode).toBe(400);
+  });
+
+  test("should getAccountByEmail is called with correct values", async () => {
+    const { sut, getAccountByEmailStub } = makeSut();
+
+    const getAccountByEmailSpy = jest.spyOn(getAccountByEmailStub, "get");
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(getAccountByEmailSpy).toBeCalledWith("valid_email@mail.com");
   });
 });
