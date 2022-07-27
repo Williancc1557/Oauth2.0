@@ -192,6 +192,24 @@ describe("Sign-Up", () => {
     expect(req.statusCode).toBe(409);
   });
 
+  test("should returns statusCode 500 if getAccountByEmail throws", async () => {
+    const { sut, getAccountByEmailStub } = makeSut();
+
+    jest.spyOn(getAccountByEmailStub, "get").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(500);
+  });
+
   test("should returns statusCode 400 if success", async () => {
     const { sut } = makeSut();
 
