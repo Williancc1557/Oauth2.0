@@ -130,4 +130,26 @@ describe("Sign-Up", () => {
 
     expect(getAccountByEmailSpy).toBeCalledWith("valid_email@mail.com");
   });
+
+  test("should returns statusCode 409 if account already exists", async () => {
+    const { sut, getAccountByEmailStub } = makeSut();
+
+    jest.spyOn(getAccountByEmailStub, "get").mockResolvedValueOnce({
+      id: "valid_id",
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+      refreshToken: "valid_refresh_token",
+    });
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(409);
+  });
 });
