@@ -195,9 +195,7 @@ describe("Sign-Up", () => {
   test("should returns statusCode 500 if getAccountByEmail throws", async () => {
     const { sut, getAccountByEmailStub } = makeSut();
 
-    jest.spyOn(getAccountByEmailStub, "get").mockImplementation(() => {
-      throw new Error();
-    });
+    jest.spyOn(getAccountByEmailStub, "get").mockRejectedValueOnce(Error);
 
     const httpRequest = {
       name: "valid_name",
@@ -228,6 +226,22 @@ describe("Sign-Up", () => {
       email: "valid_email@mail.com",
       password: "valid_password",
     });
+  });
+
+  test("should returns statusCode 500 if addAccount throws", async () => {
+    const { sut, addAccountStub } = makeSut();
+
+    jest.spyOn(addAccountStub, "add").mockRejectedValueOnce(Error);
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(500);
   });
 
   test("should returns statusCode 400 if success", async () => {
