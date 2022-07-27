@@ -61,4 +61,20 @@ describe("Sign-Up", () => {
 
     expect(req.statusCode).toBe(400);
   });
+
+  test("should returns statusCode 400 if email is not called with correct values", async () => {
+    const { sut, validateEmailStub } = makeSut();
+
+    const validateEmailSpy = jest.spyOn(validateEmailStub, "validate");
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(validateEmailSpy).toBeCalledWith("valid_email@mail.com");
+  });
 });
