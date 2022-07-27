@@ -188,7 +188,7 @@ describe("Sign-Up", () => {
     expect(req.statusCode).toBe(200);
   });
 
-  test("should returns account in the body if sucess", async () => {
+  test("should returns account in the body if success", async () => {
     const { sut } = makeSut();
 
     const httpRequest = {
