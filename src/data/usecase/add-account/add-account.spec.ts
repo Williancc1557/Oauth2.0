@@ -46,6 +46,24 @@ describe("DbAddAccount", () => {
         await expect(req).rejects.toThrow();
     });
 
+    test("should check if addAccountRepository is called with valid value", async () => {
+        const { sut, addAccountRepositoryStub } = makeSut();
+
+        const addAccountRepositorySpy = jest.spyOn(addAccountRepositoryStub, "add");
+
+        await sut.add({
+            name: "valid_name",
+            email: "valid_email@mail.com",
+            password: "valid_password",
+        });
+
+        expect(addAccountRepositorySpy).toBeCalledWith({
+            name: "valid_name",
+            email: "valid_email@mail.com",
+            password: "valid_password",
+        });
+    });
+
     test("should return account if sucess", async () => {
         const { sut } = makeSut();
 
