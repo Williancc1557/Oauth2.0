@@ -4,8 +4,20 @@ import type {
   AddAccountInput,
 } from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
+import type { CreateAcessToken } from "../../protocols/create-acess-token";
 import type { ValidateEmail } from "../../protocols/validate-email";
 import { SignUpController } from "./sign-up";
+
+const makeCreateAcessTokenStub = (): CreateAcessToken => {
+  class CreateAcessTokenStub implements CreateAcessToken {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public create(userId: string): string {
+      return "valid_acess_token";
+    }
+  }
+
+  return new CreateAcessTokenStub();
+};
 
 const makeValidateEmailStub = () => {
   class ValidateEmailStub implements ValidateEmail {
@@ -47,13 +59,15 @@ const makeAddAccountStub = () => {
 };
 
 const makeSut = () => {
+  const createAcessTokenStub = makeCreateAcessTokenStub();
   const validateEmailStub = makeValidateEmailStub();
   const getAccountByEmailStub = makeGetAccountByEmailStub();
   const addAccountStub = makeAddAccountStub();
   const sut = new SignUpController(
     validateEmailStub,
     getAccountByEmailStub,
-    addAccountStub
+    addAccountStub,
+    createAcessTokenStub
   );
 
   return {
@@ -61,6 +75,7 @@ const makeSut = () => {
     validateEmailStub,
     getAccountByEmailStub,
     addAccountStub,
+    createAcessTokenStub,
   };
 };
 
@@ -275,6 +290,7 @@ describe("Sign-Up", () => {
       email: "valid_email@mail.com",
       password: "valid_password",
       refreshToken: "valid_refreshToken",
+      acessToken: "valid_acess_token",
     });
   });
 });

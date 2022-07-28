@@ -1,8 +1,7 @@
-import type { CreateAcessToken } from "../presentation/protocols/create-acess-token";
 import jwt from "jsonwebtoken";
 import env from "../main/config/env";
 
-export class UtilCreateAcessToken implements CreateAcessToken {
+export class UtilCreateRefreshToken {
   public create(userId: string): string {
     return jwt.sign(
       {
@@ -10,9 +9,6 @@ export class UtilCreateAcessToken implements CreateAcessToken {
         sub: "user",
       },
       env.secretJwt,
-      {
-        expiresIn: "5m",
-      }
     );
   }
 }
