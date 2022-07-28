@@ -259,6 +259,22 @@ describe("Sign-Up", () => {
     expect(req.statusCode).toBe(500);
   });
 
+  test("should createAcessToken is called with correct values", async () => {
+    const { sut, createAcessTokenStub } = makeSut();
+
+    const createAcessTokenSpy = jest.spyOn(createAcessTokenStub, "create");
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(createAcessTokenSpy).toBeCalledWith("valid_id");
+  });
+
   test("should returns statusCode 400 if success", async () => {
     const { sut } = makeSut();
 
