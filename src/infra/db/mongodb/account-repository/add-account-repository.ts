@@ -2,21 +2,21 @@ import { ObjectId } from "mongodb";
 import type { AddAccountRepository } from "../../../../data/protocols/add-account-repository";
 import type { AccountModel } from "../../../../domain/models/account";
 import type { AddAccountInput } from "../../../../domain/usecase/add-account";
-import type { CreateAcessToken } from "../../../../presentation/protocols/create-acess-token";
+import type { CreateRefreshToken } from "../../../../presentation/protocols/create-refresh-token";
 import { mongoHelper } from "../helpers/mongo-helper";
 
 export class AddAccountMongoRepository implements AddAccountRepository {
     public constructor(
-        private readonly createAcessToken: CreateAcessToken
+        private readonly createRefreshToken: CreateRefreshToken
     ) { }
 
     public async add(account: AddAccountInput): Promise<AccountModel> {
         const accountCollection = await mongoHelper.getCollection("account");
-
         const { insertedId } = await accountCollection.insertOne(account);
 
         const accountData = await accountCollection.findOne(new ObjectId(insertedId));
+        const refreshToken = this.createRefreshToken.create((String(accountData._id.id)));
 
-        return mongoHelper.map(accountData);
+        return mongoHelper.map(Object.assign(accountData, { refreshToken }));
     }
 }
