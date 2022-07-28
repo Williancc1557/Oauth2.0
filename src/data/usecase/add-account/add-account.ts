@@ -1,6 +1,6 @@
-import type { AccountModel } from "../../domain/models/account";
-import type { AddAccount, AddAccountInput } from "../../domain/usecase/add-account";
-import type { AddAccountRepository } from "../protocols/add-account-repository";
+import type { AccountModel } from "../../../domain/models/account";
+import type { AddAccount, AddAccountInput } from "../../../domain/usecase/add-account";
+import type { AddAccountRepository } from "../../protocols/add-account-repository";
 
 export class DbAddAccount implements AddAccount {
     public constructor(
