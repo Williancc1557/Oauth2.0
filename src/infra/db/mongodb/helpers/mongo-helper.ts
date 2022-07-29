@@ -27,11 +27,15 @@ export const mongoHelper = {
 
   // eslint-disable-next-line
   map(account: any): any {
-    const { _id, ...accountWithoudId } = account;
+    try {
+      const { _id, ...accountWithoudId } = account;
 
-    return {
-      ...accountWithoudId,
-      id: _id.toString(),
-    };
+      return {
+        ...accountWithoudId,
+        id: _id.toString(),
+      };
+    } catch {
+      return null;
+    }
   },
 };
