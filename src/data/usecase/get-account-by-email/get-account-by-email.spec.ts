@@ -45,6 +45,18 @@ describe("GetAccountByEmail", () => {
     );
   });
 
+  test("should return null if email is not found", async () => {
+    const { sut, getAccountByEmailRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(getAccountByEmailRepositoryStub, "get")
+      .mockResolvedValueOnce(null);
+
+    const req = await sut.get("valid_email@email.com");
+
+    expect(req).not.toBeTruthy();
+  });
+
   test("should return account if sucess", async () => {
     const { sut } = makeSut();
 
