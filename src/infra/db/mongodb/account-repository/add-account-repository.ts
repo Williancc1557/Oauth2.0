@@ -6,17 +6,23 @@ import type { CreateRefreshToken } from "../../../../presentation/protocols/crea
 import { mongoHelper } from "../helpers/mongo-helper";
 
 export class AddAccountMongoRepository implements AddAccountRepository {
-    public constructor(
-        private readonly createRefreshToken: CreateRefreshToken
-    ) { }
+  public constructor(private readonly createRefreshToken: CreateRefreshToken) {}
 
-    public async add(account: AddAccountInput): Promise<AccountModel> {
-        const accountCollection = await mongoHelper.getCollection("account");
-        const { insertedId } = await accountCollection.insertOne(account);
+  public async add(account: AddAccountInput): Promise<AccountModel> {
+    const accountCollection = await mongoHelper.getCollection("account");
+    const { insertedId } = await accountCollection.insertOne(account);
 
-        const accountData = await accountCollection.findOne(new ObjectId(insertedId));
-        const refreshToken = this.createRefreshToken.create((String(accountData._id.id)));
+    const refreshToken = this.createRefreshToken.create(String(insertedId.id));
 
-        return mongoHelper.map(Object.assign(accountData, { refreshToken }));
-    }
+    await accountCollection.updateOne(
+      { _id: new ObjectId(insertedId) },
+      { $set: { refreshToken } }
+    );
+
+    const accountData = await accountCollection.findOne(
+      new ObjectId(insertedId)
+    );
+
+    return mongoHelper.map(accountData);
+  }
 }
