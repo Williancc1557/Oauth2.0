@@ -3,7 +3,7 @@ import request from "supertest";
 import { mongoHelper } from "../../infra/db/mongodb/helpers/mongo-helper";
 import type { AccountModel } from "../../domain/models/account";
 
-describe("SignUp routes", () => {
+describe("RefresbToken routes", () => {
   beforeAll(async () => {
     await mongoHelper.connect();
     const accountCollection = mongoHelper.getCollection("account");
