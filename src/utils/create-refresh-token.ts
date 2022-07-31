@@ -8,7 +8,7 @@ export class UtilCreateRefreshToken {
         aud: userId,
         sub: "user",
       },
-      env.secretJwt,
+      env.secretRefreshTokenJwt
     );
   }
 }
