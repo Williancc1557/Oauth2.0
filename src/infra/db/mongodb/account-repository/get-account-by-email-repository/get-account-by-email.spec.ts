@@ -1,5 +1,5 @@
-import type { AccountModel } from "../../../../domain/models/account";
-import { mongoHelper } from "../helpers/mongo-helper";
+import type { AccountModel } from "../../../../../domain/models/account";
+import { mongoHelper } from "../../helpers/mongo-helper";
 import { GetAccountByEmailMongoRepository } from "./get-account-by-email-repository";
 
 const makeSut = () => {
