@@ -5,6 +5,7 @@ import { GetAccountByEmailMongoRepository } from "../../infra/db/mongodb/account
 import { SignUpController } from "../../presentation/controller/sign-up/sign-up";
 import { UtilCreateAcessToken } from "../../utils/create-acess-token/create-acess-token";
 import { UtilCreateRefreshToken } from "../../utils/create-refresh-token/create-refresh-token";
+import { UtilEncrypter } from "../../utils/encrypter/encrypter";
 import { UtilNameValidator } from "../../utils/name-validator/name-validator";
 import { UtilPasswordValidator } from "../../utils/password-validator/password-validator";
 import { UtilValidateEmail } from "../../utils/validate-email/validate-email";
@@ -21,7 +22,10 @@ export const makeSignUpController = () => {
   const addAccountRepository = new AddAccountMongoRepository(
     createRefreshToken
   );
-  const addAccount = new DbAddAccount(addAccountRepository);
+
+  const SALTS = 10;
+  const encrypter = new UtilEncrypter(SALTS);
+  const addAccount = new DbAddAccount(addAccountRepository, encrypter);
 
   const createAcessToken = new UtilCreateAcessToken();
   const nameValidator = new UtilNameValidator();

@@ -21,11 +21,12 @@ describe("SignUp routes", () => {
     expect(req.body.refreshToken).toBeTruthy();
     expect(req.body.id).toBeTruthy();
     expect(req.body.acessToken).toBeTruthy();
+    expect(req.body.password).toBeTruthy();
+
     expect(req.body).toStrictEqual(
       expect.objectContaining({
         name: "valid_name",
         email: "valid_mail@mail.com",
-        password: "valid_password",
       })
     );
     expect(req.statusCode).toBe(200);
