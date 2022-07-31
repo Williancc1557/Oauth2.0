@@ -5,6 +5,8 @@ import { GetAccountByEmailMongoRepository } from "../../infra/db/mongodb/account
 import { SignUpController } from "../../presentation/controller/sign-up/sign-up";
 import { UtilCreateAcessToken } from "../../utils/create-acess-token";
 import { UtilCreateRefreshToken } from "../../utils/create-refresh-token";
+import { UtilNameValidator } from "../../utils/name-validator";
+import { UtilPasswordValidator } from "../../utils/password-validator";
 import { UtilValidateEmail } from "../../utils/validate-email";
 
 export const makeSignUpController = () => {
@@ -22,11 +24,16 @@ export const makeSignUpController = () => {
   const addAccount = new DbAddAccount(addAccountRepository);
 
   const createAcessToken = new UtilCreateAcessToken();
+  const nameValidator = new UtilNameValidator();
+  const passwordValidator = new UtilPasswordValidator();
+
   const signUpController = new SignUpController(
     validateEmail,
     getAccountByEmail,
     addAccount,
-    createAcessToken
+    createAcessToken,
+    nameValidator,
+    passwordValidator
   );
 
   return signUpController;

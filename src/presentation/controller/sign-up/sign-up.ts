@@ -12,15 +12,19 @@ import {
 import type { Controller } from "../../protocols/controller";
 import type { CreateAcessToken } from "../../protocols/create-acess-token";
 import type { HttpRequest, HttpResponse } from "../../protocols/http";
+import type { NameValidator } from "../../protocols/name-validator";
+import type { PasswordValidator } from "../../protocols/password-validator";
 import type { ValidateEmail } from "../../protocols/validate-email";
 
 export class SignUpController implements Controller {
   public constructor(
-    public readonly validateEmail: ValidateEmail,
-    public readonly getAccountByEmail: GetAccountByEmail,
-    public readonly addAccount: AddAccount,
-    public readonly createAcessToken: CreateAcessToken,
-  ) { }
+    private readonly validateEmail: ValidateEmail,
+    private readonly getAccountByEmail: GetAccountByEmail,
+    private readonly addAccount: AddAccount,
+    private readonly createAcessToken: CreateAcessToken,
+    private readonly nameValidator: NameValidator,
+    private readonly passwordValidator: PasswordValidator
+  ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -34,6 +38,10 @@ export class SignUpController implements Controller {
 
       if (!this.validateEmail.validate(httpRequest.body.email)) {
         return badRequest(new InvalidParamError("email"));
+      } else if (!this.nameValidator.validate(httpRequest.body.name)) {
+        return badRequest(new InvalidParamError("name"));
+      } else if (!this.passwordValidator.validate(httpRequest.body.password)) {
+        return badRequest(new InvalidParamError("password"));
       }
 
       if (await this.getAccountByEmail.get(httpRequest.body.email)) {

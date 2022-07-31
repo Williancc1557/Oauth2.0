@@ -5,8 +5,32 @@ import type {
 } from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { CreateAcessToken } from "../../protocols/create-acess-token";
+import type { NameValidator } from "../../protocols/name-validator";
+import type { PasswordValidator } from "../../protocols/password-validator";
 import type { ValidateEmail } from "../../protocols/validate-email";
 import { SignUpController } from "./sign-up";
+
+const makePasswordValidatorStub = (): PasswordValidator => {
+  class PasswordValidatorStub implements PasswordValidator {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public validate(name: string): boolean {
+      return true;
+    }
+  }
+
+  return new PasswordValidatorStub();
+};
+
+const makeNameValidatorStub = (): NameValidator => {
+  class NameValidatorStub implements NameValidator {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public validate(name: string): boolean {
+      return true;
+    }
+  }
+
+  return new NameValidatorStub();
+};
 
 const makeCreateAcessTokenStub = (): CreateAcessToken => {
   class CreateAcessTokenStub implements CreateAcessToken {
@@ -63,11 +87,16 @@ const makeSut = () => {
   const validateEmailStub = makeValidateEmailStub();
   const getAccountByEmailStub = makeGetAccountByEmailStub();
   const addAccountStub = makeAddAccountStub();
+  const nameValidatorStub = makeNameValidatorStub();
+  const passwordValidatorStub = makePasswordValidatorStub();
+
   const sut = new SignUpController(
     validateEmailStub,
     getAccountByEmailStub,
     addAccountStub,
-    createAcessTokenStub
+    createAcessTokenStub,
+    nameValidatorStub,
+    passwordValidatorStub
   );
 
   return {
@@ -76,6 +105,8 @@ const makeSut = () => {
     getAccountByEmailStub,
     addAccountStub,
     createAcessTokenStub,
+    nameValidatorStub,
+    passwordValidatorStub,
   };
 };
 
@@ -167,6 +198,70 @@ describe("Sign-Up", () => {
     const req = await sut.handle({ body: httpRequest });
 
     expect(req.statusCode).toBe(500);
+  });
+
+  test("should nameValidator is called with correct values", async () => {
+    const { sut, nameValidatorStub } = makeSut();
+
+    const nameValidatorSpy = jest.spyOn(nameValidatorStub, "validate");
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(nameValidatorSpy).toBeCalledWith("valid_name");
+  });
+
+  test("should SignUp returns statusCode 400 if nameValidator return false", async () => {
+    const { sut, nameValidatorStub } = makeSut();
+
+    jest.spyOn(nameValidatorStub, "validate").mockReturnValueOnce(false);
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(400);
+  });
+
+  test("should passwordValidator is called with correct values", async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+
+    const nameValidatorSpy = jest.spyOn(passwordValidatorStub, "validate");
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(nameValidatorSpy).toBeCalledWith("valid_password");
+  });
+
+  test("should SignUp returns statusCode 400 if passwordValidator return false", async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+
+    jest.spyOn(passwordValidatorStub, "validate").mockReturnValueOnce(false);
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(400);
   });
 
   test("should getAccountByEmail is called with correct values", async () => {
