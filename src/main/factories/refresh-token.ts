@@ -2,7 +2,7 @@ import { DbCheckRefreshToken } from "../../data/usecase/check-refresh-token/chec
 import { GetRefreshTokenMongoRepository } from "../../infra/db/mongodb/refresh-token-repository/get-refresh-token";
 import { RefreshTokenController } from "../../presentation/controller/refresh-token/refresh-token";
 import type { Controller } from "../../presentation/protocols/controller";
-import { UtilCreateAcessToken } from "../../utils/create-acess-token";
+import { UtilCreateAcessToken } from "../../utils/create-acess-token/create-acess-token";
 
 export const makeRefreshTokenController = (): Controller => {
   const getRefreshTokenRepository = new GetRefreshTokenMongoRepository();
