@@ -9,16 +9,16 @@ const makeSut = () => {
 };
 
 describe("UtilRequiredParams", () => {
-  test("should return false if requirementParam is not valid in body", () => {
+  test("should return param if requirementParam is not valid in body", () => {
     const { sut } = makeSut();
 
     const requiredParams = ["name", "password"];
     const res = sut.check(requiredParams, {});
 
-    expect(res).toBe(false);
+    expect(res).toBe("name");
   });
 
-  test("should return true if success", () => {
+  test("should return undefined if success", () => {
     const { sut } = makeSut();
 
     const requiredParams = ["name", "password"];
@@ -27,6 +27,6 @@ describe("UtilRequiredParams", () => {
       password: "valid_password",
     });
 
-    expect(res).toBe(true);
+    expect(res).toBeUndefined();
   });
 });

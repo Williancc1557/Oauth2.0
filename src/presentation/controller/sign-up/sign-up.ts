@@ -14,6 +14,7 @@ import type { CreateAcessToken } from "../../protocols/create-acess-token";
 import type { HttpRequest, HttpResponse } from "../../protocols/http";
 import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
+import type { RequiredParams } from "../../protocols/required-params";
 import type { ValidateEmail } from "../../protocols/validate-email";
 
 export class SignUpController implements Controller {
@@ -23,19 +24,20 @@ export class SignUpController implements Controller {
     private readonly addAccount: AddAccount,
     private readonly createAcessToken: CreateAcessToken,
     private readonly nameValidator: NameValidator,
-    private readonly passwordValidator: PasswordValidator
+    private readonly passwordValidator: PasswordValidator,
+    private readonly requiredParams: RequiredParams
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const requiredParams = ["name", "email", "password"];
+      const requiredParam = this.requiredParams.check(
+        ["name", "email", "password"],
+        httpRequest.body
+      );
 
-      for (const param of requiredParams) {
-        if (!httpRequest.body[param]) {
-          return badRequest(new MissingParamError(param));
-        }
+      if (requiredParam) {
+        return badRequest(new MissingParamError(requiredParam));
       }
-
       if (!this.validateEmail.validate(httpRequest.body.email)) {
         return badRequest(new InvalidParamError("email"));
       } else if (!this.nameValidator.validate(httpRequest.body.name)) {

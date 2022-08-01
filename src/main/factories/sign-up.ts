@@ -8,6 +8,7 @@ import { UtilCreateRefreshToken } from "../../utils/create-refresh-token/create-
 import { UtilEncrypter } from "../../utils/encrypter/encrypter";
 import { UtilNameValidator } from "../../utils/name-validator/name-validator";
 import { UtilPasswordValidator } from "../../utils/password-validator/password-validator";
+import { UtilRequiredParams } from "../../utils/required-params/required-params";
 import { UtilValidateEmail } from "../../utils/validate-email/validate-email";
 
 export const makeSignUpController = () => {
@@ -30,6 +31,7 @@ export const makeSignUpController = () => {
   const createAcessToken = new UtilCreateAcessToken();
   const nameValidator = new UtilNameValidator();
   const passwordValidator = new UtilPasswordValidator();
+  const requiredParams = new UtilRequiredParams();
 
   const signUpController = new SignUpController(
     validateEmail,
@@ -37,7 +39,8 @@ export const makeSignUpController = () => {
     addAccount,
     createAcessToken,
     nameValidator,
-    passwordValidator
+    passwordValidator,
+    requiredParams
   );
 
   return signUpController;

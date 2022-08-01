@@ -4,6 +4,7 @@ import type {
   AddAccountInput,
 } from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
+import { UtilRequiredParams } from "../../../utils/required-params/required-params";
 import type { CreateAcessToken } from "../../protocols/create-acess-token";
 import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
@@ -89,6 +90,7 @@ const makeSut = () => {
   const addAccountStub = makeAddAccountStub();
   const nameValidatorStub = makeNameValidatorStub();
   const passwordValidatorStub = makePasswordValidatorStub();
+  const requiredParams = new UtilRequiredParams();
 
   const sut = new SignUpController(
     validateEmailStub,
@@ -96,7 +98,8 @@ const makeSut = () => {
     addAccountStub,
     createAcessTokenStub,
     nameValidatorStub,
-    passwordValidatorStub
+    passwordValidatorStub,
+    requiredParams
   );
 
   return {
