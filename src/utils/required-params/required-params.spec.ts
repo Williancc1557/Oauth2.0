@@ -17,4 +17,16 @@ describe("UtilRequiredParams", () => {
 
     expect(res).toBe(false);
   });
+
+  test("should return true if success", () => {
+    const { sut } = makeSut();
+
+    const requiredParams = ["name", "password"];
+    const res = sut.check(requiredParams, {
+      name: "valid_name",
+      password: "valid_password",
+    });
+
+    expect(res).toBe(true);
+  });
 });
