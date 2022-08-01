@@ -52,7 +52,10 @@ export class SignUpController implements Controller {
 
       const acessToken = this.createAcessToken.create(account.id);
 
-      return ok(Object.assign(account, { acessToken }));
+      return ok({
+        acessToken,
+        refreshToken: account.refreshToken,
+      });
     } catch (err) {
       return serverError();
     }

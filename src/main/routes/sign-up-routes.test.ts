@@ -11,7 +11,7 @@ describe("SignUp routes", () => {
     await mongoHelper.disconnect();
   });
 
-  test("should return an account if success", async () => {
+  test("should return acessToken and refreshToken if success", async () => {
     const req = await request(app).post("/api/sign-up").send({
       name: "valid_name",
       email: "valid_mail@mail.com",
@@ -19,16 +19,7 @@ describe("SignUp routes", () => {
     });
 
     expect(req.body.refreshToken).toBeTruthy();
-    expect(req.body.id).toBeTruthy();
     expect(req.body.acessToken).toBeTruthy();
-    expect(req.body.password).toBeTruthy();
-
-    expect(req.body).toStrictEqual(
-      expect.objectContaining({
-        name: "valid_name",
-        email: "valid_mail@mail.com",
-      })
-    );
     expect(req.statusCode).toBe(200);
   });
 });

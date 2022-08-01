@@ -414,10 +414,6 @@ describe("Sign-Up", () => {
     const req = await sut.handle({ body: httpRequest });
 
     expect(req.body).toStrictEqual({
-      id: "valid_id",
-      name: "valid_name",
-      email: "valid_email@mail.com",
-      password: "valid_password",
       refreshToken: "valid_refreshToken",
       acessToken: "valid_acess_token",
     });
