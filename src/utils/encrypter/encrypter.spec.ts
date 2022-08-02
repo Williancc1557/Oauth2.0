@@ -1,6 +1,15 @@
 import { UtilEncrypter } from "./encrypter";
 import bcrypt from "bcrypt";
 
+jest.mock("bcrypt", () => ({
+  async compare(): Promise<boolean> {
+    return true;
+  },
+  async hash(): Promise<string> {
+    return "hashed_password";
+  },
+}));
+
 const makeSut = () => {
   const sut = new UtilEncrypter(10);
 
@@ -35,6 +44,18 @@ describe("Encrypter", () => {
 
     const res = await sut.compare("valid_value", hashedValue);
 
-    expect(res).toBeTruthy();
+    expect(res).toBe(true);
+  });
+
+  test("should throw if bcrypt.compare throws", async () => {
+    const { sut } = makeSut();
+
+    jest.spyOn(bcrypt, "compare").mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    const res = sut.compare("valid_value", "valid_value");
+
+    await expect(res).rejects.toThrow();
   });
 });
