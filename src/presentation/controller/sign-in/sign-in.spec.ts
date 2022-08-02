@@ -69,4 +69,84 @@ describe("SignIn Controller", () => {
 
     expect(res.statusCode).toBe(400);
   });
+
+  test("should validateEmail is called with correct values", async () => {
+    const { sut, validateEmailStub } = makeSut();
+
+    const validateEmailSpy = jest.spyOn(validateEmailStub, "validate");
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(validateEmailSpy).toBeCalledWith("valid_email@mail.com");
+  });
+
+  test("should returns statusCode 400 if validateEmail returns false", async () => {
+    const { sut, validateEmailStub } = makeSut();
+
+    jest.spyOn(validateEmailStub, "validate").mockReturnValueOnce(false);
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(400);
+  });
+
+  test("should returns statusCode 500 if validateEmail throws", async () => {
+    const { sut, validateEmailStub } = makeSut();
+
+    jest.spyOn(validateEmailStub, "validate").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const httpRequest = {
+      name: "valid_name",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(500);
+  });
+
+  test("should passwordValidator is called with correct values", async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+
+    const nameValidatorSpy = jest.spyOn(passwordValidatorStub, "validate");
+
+    const httpRequest = {
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(nameValidatorSpy).toBeCalledWith("valid_password");
+  });
+
+  test("should SignUp returns statusCode 400 if passwordValidator return false", async () => {
+    const { sut, passwordValidatorStub } = makeSut();
+
+    jest.spyOn(passwordValidatorStub, "validate").mockReturnValueOnce(false);
+
+    const httpRequest = {
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(400);
+  });
 });

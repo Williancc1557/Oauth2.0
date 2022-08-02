@@ -1,3 +1,4 @@
+import { InvalidParamError } from "../../erros/invalid-param-error";
 import { MissingParamError } from "../../erros/missing-param-error";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
 import type { Controller } from "../../protocols/controller";
@@ -22,6 +23,14 @@ export class SignInController implements Controller {
 
       if (requiredParam) {
         return badRequest(new MissingParamError(requiredParam));
+      }
+
+      if (!this.validateEmail.validate(httpRequest.body.email)) {
+        return badRequest(new InvalidParamError("email"));
+      }
+
+      if (!this.passwordValidator.validate(httpRequest.body.password)) {
+        return badRequest(new InvalidParamError("password"));
       }
 
       return ok(null);
