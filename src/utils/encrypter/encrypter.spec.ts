@@ -10,7 +10,7 @@ const makeSut = () => {
 };
 
 describe("Encrypter", () => {
-  test("should return a string if sucess", async () => {
+  test("should return a string if success hash", async () => {
     const { sut } = makeSut();
 
     const res = await sut.hash("valid_value");
@@ -26,5 +26,15 @@ describe("Encrypter", () => {
     const res = sut.hash("valid_value");
 
     await expect(res).rejects.toThrow();
+  });
+
+  test("should return true if success compare", async () => {
+    const { sut } = makeSut();
+
+    const hashedValue = await sut.hash("valid_value");
+
+    const res = await sut.compare("valid_value", hashedValue);
+
+    expect(res).toBeTruthy();
   });
 });
