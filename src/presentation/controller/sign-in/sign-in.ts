@@ -1,5 +1,5 @@
 import { MissingParamError } from "../../erros/missing-param-error";
-import { badRequest, serverError } from "../../helpers/http-helper";
+import { badRequest, ok, serverError } from "../../helpers/http-helper";
 import type { Controller } from "../../protocols/controller";
 import type { HttpRequest, HttpResponse } from "../../protocols/http";
 import type { PasswordValidator } from "../../protocols/password-validator";
@@ -24,7 +24,7 @@ export class SignInController implements Controller {
         return badRequest(new MissingParamError(requiredParam));
       }
 
-      return null;
+      return ok(null);
     } catch (err) {
       return serverError();
     }
