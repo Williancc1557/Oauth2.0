@@ -1,5 +1,7 @@
+import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import { InvalidParamError } from "../../erros/invalid-param-error";
 import { MissingParamError } from "../../erros/missing-param-error";
+import { UserNotExistsError } from "../../erros/user-not-exists";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
 import type { Controller } from "../../protocols/controller";
 import type { HttpRequest, HttpResponse } from "../../protocols/http";
@@ -11,7 +13,8 @@ export class SignInController implements Controller {
   public constructor(
     private readonly validateEmail: ValidateEmail,
     private readonly passwordValidator: PasswordValidator,
-    private readonly requiredParams: RequiredParams
+    private readonly requiredParams: RequiredParams,
+    private readonly getAccountByEmail: GetAccountByEmail
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -31,6 +34,12 @@ export class SignInController implements Controller {
 
       if (!this.passwordValidator.validate(httpRequest.body.password)) {
         return badRequest(new InvalidParamError("password"));
+      }
+
+      const account = await this.getAccountByEmail.get(httpRequest.body.email);
+
+      if (!account) {
+        return badRequest(new UserNotExistsError());
       }
 
       return ok(null);
