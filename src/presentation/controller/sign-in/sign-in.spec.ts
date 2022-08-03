@@ -1,3 +1,5 @@
+import type { AccountModel } from "../../../domain/models/account";
+import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { RequiredParams } from "../../protocols/required-params";
 import type { ValidateEmail } from "../../protocols/validate-email";
@@ -36,15 +38,28 @@ const makeRequiredParams = () => {
   return new RequiredParamsStub();
 };
 
+const makeGetAccountByEmailStub = () => {
+  class GetAccountByEmailStub implements GetAccountByEmail {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public async get(email: string): Promise<AccountModel | null> {
+      return null;
+    }
+  }
+
+  return new GetAccountByEmailStub();
+};
+
 const makeSut = () => {
   const validateEmailStub = makeValidateEmailStub();
   const passwordValidatorStub = makePasswordValidatorStub();
   const requiredParamsStub = makeRequiredParams();
+  const getAccountByEmailStub = makeGetAccountByEmailStub();
 
   const sut = new SignInController(
     validateEmailStub,
     passwordValidatorStub,
-    requiredParamsStub
+    requiredParamsStub,
+    getAccountByEmailStub
   );
 
   return {
@@ -52,6 +67,7 @@ const makeSut = () => {
     validateEmailStub,
     passwordValidatorStub,
     requiredParamsStub,
+    getAccountByEmailStub,
   };
 };
 
@@ -135,10 +151,25 @@ describe("SignIn Controller", () => {
     expect(nameValidatorSpy).toBeCalledWith("valid_password");
   });
 
-  test("should SignUp returns statusCode 400 if passwordValidator return false", async () => {
+  test("should SignIn returns statusCode 400 if passwordValidator return false", async () => {
     const { sut, passwordValidatorStub } = makeSut();
 
     jest.spyOn(passwordValidatorStub, "validate").mockReturnValueOnce(false);
+
+    const httpRequest = {
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const req = await sut.handle({ body: httpRequest });
+
+    expect(req.statusCode).toBe(400);
+  });
+
+  test("should SignIn returns statusCode 400 if account don't exists", async () => {
+    const { sut, getAccountByEmailStub } = makeSut();
+
+    jest.spyOn(getAccountByEmailStub, "get").mockReturnValueOnce(undefined);
 
     const httpRequest = {
       email: "valid_email@mail.com",
