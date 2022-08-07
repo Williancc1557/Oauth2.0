@@ -1,3 +1,4 @@
+import type { Encrypter } from "../../../data/protocols/encrypter";
 import type { AccountModel } from "../../../domain/models/account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
@@ -47,7 +48,7 @@ const makeGetAccountByEmailStub = () => {
         id: "valid_id",
         name: "valid_name",
         email: "valid_email@mail.com",
-        password: "valid_password",
+        password: "hashed_password",
         refreshToken: "valid_refreshToken",
       };
     }
@@ -67,19 +68,34 @@ const makeResetRefreshTokenStub = () => {
   return new ResetRefreshTokenStub();
 };
 
+const makeEncrypterStub = () => {
+  class EncrypterStub implements Encrypter {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public async compare(value: string, hashedValue: string): Promise<boolean> {
+      return true;
+    }
+
+    public hash: (value: string) => Promise<string>;
+  }
+
+  return new EncrypterStub();
+};
+
 const makeSut = () => {
   const validateEmailStub = makeValidateEmailStub();
   const passwordValidatorStub = makePasswordValidatorStub();
   const requiredParamsStub = makeRequiredParams();
   const getAccountByEmailStub = makeGetAccountByEmailStub();
-  const resetRefreshToken = makeResetRefreshTokenStub();
+  const resetRefreshTokenStub = makeResetRefreshTokenStub();
+  const encrypterStub = makeEncrypterStub();
 
   const sut = new SignInController(
     validateEmailStub,
     passwordValidatorStub,
     requiredParamsStub,
     getAccountByEmailStub,
-    resetRefreshToken
+    resetRefreshTokenStub,
+    encrypterStub
   );
 
   return {
@@ -88,7 +104,8 @@ const makeSut = () => {
     passwordValidatorStub,
     requiredParamsStub,
     getAccountByEmailStub,
-    resetRefreshToken,
+    resetRefreshTokenStub,
+    encrypterStub,
   };
 };
 
@@ -203,9 +220,9 @@ describe("SignIn Controller", () => {
   });
 
   test("should resetRefreshToken is called with correct values", async () => {
-    const { sut, resetRefreshToken } = makeSut();
+    const { sut, resetRefreshTokenStub } = makeSut();
 
-    const nameValidatorSpy = jest.spyOn(resetRefreshToken, "reset");
+    const nameValidatorSpy = jest.spyOn(resetRefreshTokenStub, "reset");
 
     const httpRequest = {
       email: "valid_email@mail.com",
@@ -217,10 +234,28 @@ describe("SignIn Controller", () => {
     expect(nameValidatorSpy).toBeCalledWith("valid_id");
   });
 
-  test("should resetRefreshToken not return undefined", async () => {
-    const { sut, resetRefreshToken } = makeSut();
+  test("should encrypter.compare is called with correct values", async () => {
+    const { sut, encrypterStub } = makeSut();
 
-    const nameValidatorSpy = jest.spyOn(resetRefreshToken, "reset");
+    const nameValidatorSpy = jest.spyOn(encrypterStub, "compare");
+
+    const httpRequest = {
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(nameValidatorSpy).toBeCalledWith(
+      "valid_password",
+      "hashed_password"
+    );
+  });
+
+  test("should resetRefreshToken not return undefined", async () => {
+    const { sut, resetRefreshTokenStub } = makeSut();
+
+    const nameValidatorSpy = jest.spyOn(resetRefreshTokenStub, "reset");
 
     const httpRequest = {
       email: "valid_email@mail.com",
