@@ -1,5 +1,6 @@
 import type { AccountModel } from "../../../domain/models/account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
+import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { RequiredParams } from "../../protocols/required-params";
 import type { ValidateEmail } from "../../protocols/validate-email";
@@ -42,11 +43,28 @@ const makeGetAccountByEmailStub = () => {
   class GetAccountByEmailStub implements GetAccountByEmail {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async get(email: string): Promise<AccountModel | null> {
-      return null;
+      return {
+        id: "valid_id",
+        name: "valid_name",
+        email: "valid_email@mail.com",
+        password: "valid_password",
+        refreshToken: "valid_refreshToken",
+      };
     }
   }
 
   return new GetAccountByEmailStub();
+};
+
+const makeResetRefreshTokenStub = () => {
+  class ResetRefreshTokenStub implements ResetRefreshToken {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public async reset(userId: string): Promise<string> {
+      return "new_refresh_token";
+    }
+  }
+
+  return new ResetRefreshTokenStub();
 };
 
 const makeSut = () => {
@@ -54,12 +72,14 @@ const makeSut = () => {
   const passwordValidatorStub = makePasswordValidatorStub();
   const requiredParamsStub = makeRequiredParams();
   const getAccountByEmailStub = makeGetAccountByEmailStub();
+  const resetRefreshToken = makeResetRefreshTokenStub();
 
   const sut = new SignInController(
     validateEmailStub,
     passwordValidatorStub,
     requiredParamsStub,
-    getAccountByEmailStub
+    getAccountByEmailStub,
+    resetRefreshToken
   );
 
   return {
@@ -68,6 +88,7 @@ const makeSut = () => {
     passwordValidatorStub,
     requiredParamsStub,
     getAccountByEmailStub,
+    resetRefreshToken,
   };
 };
 
@@ -179,5 +200,20 @@ describe("SignIn Controller", () => {
     const req = await sut.handle({ body: httpRequest });
 
     expect(req.statusCode).toBe(400);
+  });
+
+  test("should resetRefreshToken is called with correct values", async () => {
+    const { sut, resetRefreshToken } = makeSut();
+
+    const nameValidatorSpy = jest.spyOn(resetRefreshToken, "reset");
+
+    const httpRequest = {
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(nameValidatorSpy).toBeCalledWith("valid_id");
   });
 });
