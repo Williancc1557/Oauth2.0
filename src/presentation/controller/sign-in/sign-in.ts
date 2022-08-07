@@ -1,4 +1,5 @@
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
+import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
 import { InvalidParamError } from "../../erros/invalid-param-error";
 import { MissingParamError } from "../../erros/missing-param-error";
 import { UserNotExistsError } from "../../erros/user-not-exists";
@@ -14,7 +15,8 @@ export class SignInController implements Controller {
     private readonly validateEmail: ValidateEmail,
     private readonly passwordValidator: PasswordValidator,
     private readonly requiredParams: RequiredParams,
-    private readonly getAccountByEmail: GetAccountByEmail
+    private readonly getAccountByEmail: GetAccountByEmail,
+    private readonly resetRefreshToken: ResetRefreshToken
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -42,7 +44,9 @@ export class SignInController implements Controller {
         return badRequest(new UserNotExistsError());
       }
 
-      return ok(null);
+      const newRefreshToken = await this.resetRefreshToken.reset(account.id);
+
+      return ok(newRefreshToken);
     } catch (err) {
       return serverError();
     }
