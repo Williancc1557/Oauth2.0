@@ -4,6 +4,7 @@ import { GetAccountByEmailMongoRepository } from "../../infra/db/mongodb/account
 import { ResetRefreshTokenMongoRepository } from "../../infra/db/mongodb/reset-refresh-token-repository/reset-refresh-token-repository";
 import { SignInController } from "../../presentation/controller/sign-in/sign-in";
 import { UtilCreateRefreshToken } from "../../utils/create-refresh-token/create-refresh-token";
+import { UtilEncrypter } from "../../utils/encrypter/encrypter";
 import { UtilPasswordValidator } from "../../utils/password-validator/password-validator";
 import { UtilRequiredParams } from "../../utils/required-params/required-params";
 import { UtilValidateEmail } from "../../utils/validate-email/validate-email";
@@ -26,12 +27,16 @@ export const makeSignInController = () => {
     resetRefreshTokenRepository
   );
 
+  const SALTS = 10;
+  const encrypter = new UtilEncrypter(SALTS);
+
   const signInController = new SignInController(
     validateEmail,
     passwordValidator,
     requiredParams,
     getAccountByEmail,
-    resetRefreshToken
+    resetRefreshToken,
+    encrypter
   );
 
   return signInController;
