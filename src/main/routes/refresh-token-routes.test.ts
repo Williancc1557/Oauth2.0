@@ -3,7 +3,7 @@ import request from "supertest";
 import { mongoHelper } from "../../infra/db/mongodb/helpers/mongo-helper";
 import type { AccountModel } from "../../domain/models/account";
 
-describe("RefresbToken routes", () => {
+describe("RefreshToken routes", () => {
   beforeAll(async () => {
     await mongoHelper.connect();
     const accountCollection = mongoHelper.getCollection("account");
@@ -18,6 +18,8 @@ describe("RefresbToken routes", () => {
   });
 
   afterAll(async () => {
+    const accountCollection = await mongoHelper.getCollection("account");
+    await accountCollection.deleteMany({});
     await mongoHelper.disconnect();
   });
 
