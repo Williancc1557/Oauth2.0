@@ -37,4 +37,14 @@ describe("DbResetRefreshToken", () => {
 
     expect(resetRefreshTokenRepositorySpy).toBeCalledWith("validUserId");
   });
+
+  test("should return string if success", async () => {
+    const { sut } = makeSut();
+
+    const userId = "validUserId";
+
+    const res = await sut.reset(userId);
+
+    expect(res).toBe("refresh_token");
+  });
 });
