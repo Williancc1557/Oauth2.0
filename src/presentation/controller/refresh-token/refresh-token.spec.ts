@@ -1,6 +1,6 @@
 import { RefreshTokenController } from "./refresh-token";
-import type { CreateAcessToken } from "../../protocols/create-acess-token";
-import type { CheckRefreshToken  } from "../../../domain/usecase/check-refresh-token";
+import type { CreateAcessToken } from "../../../data/protocols/create-acess-token";
+import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
 
 const makeCheckRefreshTokenStub = (): CheckRefreshToken => {
   class CheckRefreshToken implements CheckRefreshToken {

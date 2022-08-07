@@ -1,4 +1,4 @@
-import type { CreateAcessToken } from "../../presentation/protocols/create-acess-token";
+import type { CreateAcessToken } from "../../data/protocols/create-acess-token";
 import jwt from "jsonwebtoken";
 import env from "../../main/config/env";
 

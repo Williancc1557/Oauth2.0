@@ -1,5 +1,5 @@
-import type { CreateAcessToken } from "../../../../../presentation/protocols/create-acess-token";
-import type { CreateRefreshToken } from "../../../../../presentation/protocols/create-refresh-token";
+import type { CreateAcessToken } from "../../../../../data/protocols/create-acess-token";
+import type { CreateRefreshToken } from "../../../../../data/protocols/create-refresh-token";
 import { mongoHelper } from "../../helpers/mongo-helper";
 import { AddAccountMongoRepository } from "./add-account-repository";
 
