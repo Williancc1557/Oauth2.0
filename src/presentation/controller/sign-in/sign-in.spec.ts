@@ -216,4 +216,19 @@ describe("SignIn Controller", () => {
 
     expect(nameValidatorSpy).toBeCalledWith("valid_id");
   });
+
+  test("should resetRefreshToken not return undefined", async () => {
+    const { sut, resetRefreshToken } = makeSut();
+
+    const nameValidatorSpy = jest.spyOn(resetRefreshToken, "reset");
+
+    const httpRequest = {
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(nameValidatorSpy).toBeTruthy();
+  });
 });
