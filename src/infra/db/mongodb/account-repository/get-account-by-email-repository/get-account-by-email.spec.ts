@@ -35,11 +35,11 @@ describe("GetAccountByEmailMongoRepository", () => {
 
     expect(req.refreshToken).toBeTruthy();
     expect(req.id).toBeTruthy();
+    expect(req.password).toBeTruthy();
     expect(req).toStrictEqual(
       expect.objectContaining({
         email: "valid_mail@mail.com",
         name: "valid_name",
-        password: "valid_password",
       })
     );
   });
