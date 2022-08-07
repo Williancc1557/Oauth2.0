@@ -27,6 +27,8 @@ const makeEncrypterStub = () => {
     public async hash(value: string): Promise<string> {
       return "hashed_value";
     }
+
+    public compare: (value: string, hashedValue: string) => Promise<boolean>;
   }
 
   return new EncrypterStub();
