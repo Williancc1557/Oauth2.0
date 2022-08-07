@@ -1,3 +1,4 @@
+import type { Encrypter } from "../../../data/protocols/encrypter";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
 import { InvalidParamError } from "../../erros/invalid-param-error";
@@ -16,7 +17,8 @@ export class SignInController implements Controller {
     private readonly passwordValidator: PasswordValidator,
     private readonly requiredParams: RequiredParams,
     private readonly getAccountByEmail: GetAccountByEmail,
-    private readonly resetRefreshToken: ResetRefreshToken
+    private readonly resetRefreshToken: ResetRefreshToken,
+    private readonly encrypter: Encrypter
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -44,6 +46,14 @@ export class SignInController implements Controller {
         return badRequest(new UserNotExistsError());
       }
 
+      if (
+        !(await this.encrypter.compare(
+          httpRequest.body.password,
+          account.password
+        ))
+      ) {
+        return badRequest(new InvalidParamError("password"));
+      }
       const newRefreshToken = await this.resetRefreshToken.reset(account.id);
 
       return ok({ refreshToken: newRefreshToken });
