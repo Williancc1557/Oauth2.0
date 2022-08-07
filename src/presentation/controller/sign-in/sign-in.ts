@@ -46,7 +46,7 @@ export class SignInController implements Controller {
 
       const newRefreshToken = await this.resetRefreshToken.reset(account.id);
 
-      return ok(newRefreshToken);
+      return ok({ refreshToken: newRefreshToken });
     } catch (err) {
       return serverError();
     }
