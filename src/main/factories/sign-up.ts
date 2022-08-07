@@ -20,15 +20,16 @@ export const makeSignUpController = () => {
   );
 
   const createRefreshToken = new UtilCreateRefreshToken();
+  const createAcessToken = new UtilCreateAcessToken();
   const addAccountRepository = new AddAccountMongoRepository(
-    createRefreshToken
+    createRefreshToken,
+    createAcessToken
   );
 
   const SALTS = 10;
   const encrypter = new UtilEncrypter(SALTS);
   const addAccount = new DbAddAccount(addAccountRepository, encrypter);
 
-  const createAcessToken = new UtilCreateAcessToken();
   const nameValidator = new UtilNameValidator();
   const passwordValidator = new UtilPasswordValidator();
   const requiredParams = new UtilRequiredParams();
@@ -37,7 +38,6 @@ export const makeSignUpController = () => {
     validateEmail,
     getAccountByEmail,
     addAccount,
-    createAcessToken,
     nameValidator,
     passwordValidator,
     requiredParams

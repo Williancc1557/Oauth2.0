@@ -1,3 +1,4 @@
+import type { CreateAcessToken } from "../../../../../presentation/protocols/create-acess-token";
 import type { CreateRefreshToken } from "../../../../../presentation/protocols/create-refresh-token";
 import { mongoHelper } from "../../helpers/mongo-helper";
 import { AddAccountMongoRepository } from "./add-account-repository";
@@ -13,9 +14,24 @@ const makeCreateRefreshTokenStub = () => {
   return new CreateRefreshTokenStub();
 };
 
+const makeCreateAcessTokenStub = () => {
+  class CreateAcessTokenStub implements CreateAcessToken {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public create(userId: string): string {
+      return "valid_refresh_token";
+    }
+  }
+
+  return new CreateAcessTokenStub();
+};
+
 const makeSut = () => {
   const createRefreshTokenStub = makeCreateRefreshTokenStub();
-  const sut = new AddAccountMongoRepository(createRefreshTokenStub);
+  const createAcessTokenStub = makeCreateAcessTokenStub();
+  const sut = new AddAccountMongoRepository(
+    createRefreshTokenStub,
+    createAcessTokenStub
+  );
 
   return {
     sut,
@@ -44,6 +60,7 @@ describe("AddAccountMongoRepository", () => {
     });
 
     expect(req.refreshToken).toBeTruthy();
+    expect(req.acessToken).toBeTruthy();
     expect(req.id).toBeTruthy();
     expect(req).toStrictEqual(
       expect.objectContaining({
