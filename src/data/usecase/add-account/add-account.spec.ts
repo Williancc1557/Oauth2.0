@@ -1,19 +1,25 @@
 import type { AccountModel } from "../../../domain/models/account";
 import type { AddAccountInput } from "../../../domain/usecase/add-account";
-import type { AddAccountRepository } from "../../protocols/add-account-repository";
+import type {
+  AcessTokenType,
+  AddAccountRepository,
+} from "../../protocols/add-account-repository";
 import type { Encrypter } from "../../protocols/encrypter";
 import { DbAddAccount } from "./add-account";
 
 const makeAddAccountRepositoryStub = () => {
   class AddAccountRepositoryStub implements AddAccountRepository {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public async add(account: AddAccountInput): Promise<AccountModel> {
+    public async add(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      account: AddAccountInput
+    ): Promise<AccountModel & AcessTokenType> {
       return {
         id: "valid_id",
         name: "valid_name",
         email: "valid_email@mail.com",
         password: "hashed_password",
         refreshToken: "valid_refreshToken",
+        acessToken: "valid_acessToken",
       };
     }
   }
@@ -81,7 +87,7 @@ describe("DbAddAccount", () => {
     });
   });
 
-  test("should return account if sucess", async () => {
+  test("should return account if success", async () => {
     const { sut } = makeSut();
 
     const req = await sut.add({
@@ -96,6 +102,7 @@ describe("DbAddAccount", () => {
       email: "valid_email@mail.com",
       password: "hashed_password",
       refreshToken: "valid_refreshToken",
+      acessToken: "valid_acessToken",
     });
   });
 });

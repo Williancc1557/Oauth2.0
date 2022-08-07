@@ -6,6 +6,10 @@ export interface AddAccountInput {
   password: string;
 }
 
+export interface AcessTokenType {
+  acessToken: string;
+}
+
 export interface AddAccount {
-  add: (account: AddAccountInput) => Promise<AccountModel>;
+  add: (account: AddAccountInput) => Promise<AccountModel & AcessTokenType>;
 }

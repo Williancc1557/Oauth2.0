@@ -1,11 +1,11 @@
 import type { AccountModel } from "../../../domain/models/account";
 import type {
+  AcessTokenType,
   AddAccount,
   AddAccountInput,
 } from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import { UtilRequiredParams } from "../../../utils/required-params/required-params";
-import type { CreateAcessToken } from "../../protocols/create-acess-token";
 import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { ValidateEmail } from "../../protocols/validate-email";
@@ -33,17 +33,6 @@ const makeNameValidatorStub = (): NameValidator => {
   return new NameValidatorStub();
 };
 
-const makeCreateAcessTokenStub = (): CreateAcessToken => {
-  class CreateAcessTokenStub implements CreateAcessToken {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public create(userId: string): string {
-      return "valid_acess_token";
-    }
-  }
-
-  return new CreateAcessTokenStub();
-};
-
 const makeValidateEmailStub = () => {
   class ValidateEmailStub implements ValidateEmail {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -68,14 +57,17 @@ const makeGetAccountByEmailStub = () => {
 
 const makeAddAccountStub = () => {
   class AddAccountStub implements AddAccount {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public async add(account: AddAccountInput): Promise<AccountModel> {
+    public async add(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      account: AddAccountInput
+    ): Promise<AccountModel & AcessTokenType> {
       return {
         id: "valid_id",
         name: "valid_name",
         email: "valid_email@mail.com",
         password: "valid_password",
         refreshToken: "valid_refreshToken",
+        acessToken: "valid_acessToken",
       };
     }
   }
@@ -84,7 +76,6 @@ const makeAddAccountStub = () => {
 };
 
 const makeSut = () => {
-  const createAcessTokenStub = makeCreateAcessTokenStub();
   const validateEmailStub = makeValidateEmailStub();
   const getAccountByEmailStub = makeGetAccountByEmailStub();
   const addAccountStub = makeAddAccountStub();
@@ -96,7 +87,6 @@ const makeSut = () => {
     validateEmailStub,
     getAccountByEmailStub,
     addAccountStub,
-    createAcessTokenStub,
     nameValidatorStub,
     passwordValidatorStub,
     requiredParams
@@ -107,7 +97,6 @@ const makeSut = () => {
     validateEmailStub,
     getAccountByEmailStub,
     addAccountStub,
-    createAcessTokenStub,
     nameValidatorStub,
     passwordValidatorStub,
   };
@@ -357,40 +346,6 @@ describe("Sign-Up", () => {
     expect(req.statusCode).toBe(500);
   });
 
-  test("should createAcessToken is called with correct values", async () => {
-    const { sut, createAcessTokenStub } = makeSut();
-
-    const createAcessTokenSpy = jest.spyOn(createAcessTokenStub, "create");
-
-    const httpRequest = {
-      name: "valid_name",
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    await sut.handle({ body: httpRequest });
-
-    expect(createAcessTokenSpy).toBeCalledWith("valid_id");
-  });
-
-  test("should returns statusCode 500 if createAcessToken throws", async () => {
-    const { sut, createAcessTokenStub } = makeSut();
-
-    jest.spyOn(createAcessTokenStub, "create").mockImplementation(() => {
-      throw new Error();
-    });
-
-    const httpRequest = {
-      name: "valid_name",
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    const req = await sut.handle({ body: httpRequest });
-
-    expect(req.statusCode).toBe(500);
-  });
-
   test("should returns statusCode 400 if success", async () => {
     const { sut } = makeSut();
 
@@ -418,7 +373,7 @@ describe("Sign-Up", () => {
 
     expect(req.body).toStrictEqual({
       refreshToken: "valid_refreshToken",
-      acessToken: "valid_acess_token",
+      acessToken: "valid_acessToken",
     });
   });
 });

@@ -3,7 +3,10 @@ import type {
   AddAccount,
   AddAccountInput,
 } from "../../../domain/usecase/add-account";
-import type { AddAccountRepository } from "../../protocols/add-account-repository";
+import type {
+  AcessTokenType,
+  AddAccountRepository,
+} from "../../protocols/add-account-repository";
 import type { Encrypter } from "../../protocols/encrypter";
 
 export class DbAddAccount implements AddAccount {
@@ -12,7 +15,9 @@ export class DbAddAccount implements AddAccount {
     private readonly encrypter: Encrypter
   ) {}
 
-  public async add(account: AddAccountInput): Promise<AccountModel> {
+  public async add(
+    account: AddAccountInput
+  ): Promise<AccountModel & AcessTokenType> {
     const hashedPassword = await this.encrypter.hash(account.password);
     const accountData = await this.addAccountRepository.add({
       ...account,

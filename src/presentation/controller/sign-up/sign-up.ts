@@ -10,7 +10,6 @@ import {
   serverError,
 } from "../../helpers/http-helper";
 import type { Controller } from "../../protocols/controller";
-import type { CreateAcessToken } from "../../protocols/create-acess-token";
 import type { HttpRequest, HttpResponse } from "../../protocols/http";
 import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
@@ -22,7 +21,6 @@ export class SignUpController implements Controller {
     private readonly validateEmail: ValidateEmail,
     private readonly getAccountByEmail: GetAccountByEmail,
     private readonly addAccount: AddAccount,
-    private readonly createAcessToken: CreateAcessToken,
     private readonly nameValidator: NameValidator,
     private readonly passwordValidator: PasswordValidator,
     private readonly requiredParams: RequiredParams
@@ -38,11 +36,16 @@ export class SignUpController implements Controller {
       if (requiredParam) {
         return badRequest(new MissingParamError(requiredParam));
       }
+
       if (!this.validateEmail.validate(httpRequest.body.email)) {
         return badRequest(new InvalidParamError("email"));
-      } else if (!this.nameValidator.validate(httpRequest.body.name)) {
+      }
+
+      if (!this.nameValidator.validate(httpRequest.body.name)) {
         return badRequest(new InvalidParamError("name"));
-      } else if (!this.passwordValidator.validate(httpRequest.body.password)) {
+      }
+
+      if (!this.passwordValidator.validate(httpRequest.body.password)) {
         return badRequest(new InvalidParamError("password"));
       }
 
@@ -52,10 +55,8 @@ export class SignUpController implements Controller {
 
       const account = await this.addAccount.add(httpRequest.body);
 
-      const acessToken = this.createAcessToken.create(account.id);
-
       return ok({
-        acessToken,
+        acessToken: account.acessToken,
         refreshToken: account.refreshToken,
       });
     } catch (err) {
