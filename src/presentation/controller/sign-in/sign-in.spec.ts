@@ -252,6 +252,21 @@ describe("SignIn Controller", () => {
     );
   });
 
+  test("should return statusCode 400 if encrypter.compare return false", async () => {
+    const { sut, encrypterStub } = makeSut();
+
+    jest.spyOn(encrypterStub, "compare").mockResolvedValueOnce(false);
+
+    const httpRequest = {
+      email: "valid_email@mail.com",
+      password: "valid_password",
+    };
+
+    const res = await sut.handle({ body: httpRequest });
+
+    expect(res.statusCode).toBe(400);
+  });
+
   test("should resetRefreshToken not return undefined", async () => {
     const { sut, resetRefreshTokenStub } = makeSut();
 
