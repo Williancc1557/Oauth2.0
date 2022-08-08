@@ -2,9 +2,8 @@ import { InvalidParamError } from "../../erros/invalid-param-error";
 import { MissingParamError } from "../../erros/missing-param-error";
 import { badRequest, serverError } from "../../helpers/http-helper";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
-import type { Controller } from "../../protocols/controller";
 import type { CreateAcessToken } from "../../../data/protocols/create-acess-token";
-import type { HttpRequest, HttpResponse } from "../../protocols/http";
+import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
 
 export class RefreshTokenController implements Controller {
   public constructor(

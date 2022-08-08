@@ -5,11 +5,14 @@ import { InvalidParamError } from "../../erros/invalid-param-error";
 import { MissingParamError } from "../../erros/missing-param-error";
 import { UserNotExistsError } from "../../erros/user-not-exists";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
-import type { Controller } from "../../protocols/controller";
-import type { HttpRequest, HttpResponse } from "../../protocols/http";
 import type { PasswordValidator } from "../../protocols/password-validator";
-import type { RequiredParams } from "../../protocols/required-params";
 import type { ValidateEmail } from "../../protocols/validate-email";
+import type {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+  RequiredParams,
+} from "../../protocols/";
 
 export class SignInController implements Controller {
   public constructor(

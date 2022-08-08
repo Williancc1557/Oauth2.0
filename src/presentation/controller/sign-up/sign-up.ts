@@ -9,12 +9,15 @@ import {
   ok,
   serverError,
 } from "../../helpers/http-helper";
-import type { Controller } from "../../protocols/controller";
-import type { HttpRequest, HttpResponse } from "../../protocols/http";
 import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
-import type { RequiredParams } from "../../protocols/required-params";
 import type { ValidateEmail } from "../../protocols/validate-email";
+import type {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+  RequiredParams,
+} from "../../protocols/";
 
 export class SignUpController implements Controller {
   public constructor(
