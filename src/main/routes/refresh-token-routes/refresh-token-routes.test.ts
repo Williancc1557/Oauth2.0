@@ -1,7 +1,7 @@
-import app from "../config/app";
+import app from "../../config/app";
 import request from "supertest";
-import { mongoHelper } from "../../infra/db/mongodb/helpers/mongo-helper";
-import type { AccountModel } from "../../domain/models/account";
+import { mongoHelper } from "../../../infra/db/mongodb/helpers/mongo-helper";
+import type { AccountModel } from "../../../domain/models/account";
 
 describe("RefreshToken routes", () => {
   beforeAll(async () => {

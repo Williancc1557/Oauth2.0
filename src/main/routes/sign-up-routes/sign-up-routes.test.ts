@@ -1,5 +1,5 @@
-import { mongoHelper } from "../../infra/db/mongodb/helpers/mongo-helper";
-import app from "../config/app";
+import { mongoHelper } from "../../../infra/db/mongodb/helpers/mongo-helper";
+import app from "../../config/app";
 import request from "supertest";
 
 describe("SignUp routes", () => {
