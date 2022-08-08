@@ -17,7 +17,6 @@ describe("SignUp routes", () => {
       email: "valid_mail@mail.com",
       password: "valid_password",
     });
-    console.log(req.body);
 
     expect(req.body.refreshToken).toBeTruthy();
     expect(req.body.acessToken).toBeTruthy();

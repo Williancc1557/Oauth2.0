@@ -1,4 +1,5 @@
 import { DbCheckRefreshToken } from "../../data/usecase/check-refresh-token/check-refresh-token";
+import { LogControllerDecorator } from "../../decorators/log";
 import { GetRefreshTokenMongoRepository } from "../../infra/db/mongodb/refresh-token-repository/get-refresh-token";
 import { RefreshTokenController } from "../../presentation/controller/refresh-token/refresh-token";
 import type { Controller } from "../../presentation/protocols/controller";
@@ -15,5 +16,5 @@ export const makeRefreshTokenController = (): Controller => {
     createAcessToken
   );
 
-  return refreshTokenController;
+  return new LogControllerDecorator(refreshTokenController);
 };
