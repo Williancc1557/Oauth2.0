@@ -3,13 +3,16 @@ import { DbGetAccountByEmail } from "../../data/usecase/get-account-by-email/get
 import { AddAccountMongoRepository } from "../../infra/db/mongodb/account-repository/add-account-repository/add-account-repository";
 import { GetAccountByEmailMongoRepository } from "../../infra/db/mongodb/account-repository/get-account-by-email-repository/get-account-by-email-repository";
 import { SignUpController } from "../../presentation/controller/sign-up/sign-up";
-import { UtilCreateAcessToken } from "../../utils/create-acess-token/create-acess-token";
-import { UtilCreateRefreshToken } from "../../utils/create-refresh-token/create-refresh-token";
-import { UtilEncrypter } from "../../utils/encrypter/encrypter";
-import { UtilNameValidator } from "../../utils/name-validator/name-validator";
-import { UtilPasswordValidator } from "../../utils/password-validator/password-validator";
-import { UtilRequiredParams } from "../../utils/required-params/required-params";
-import { UtilValidateEmail } from "../../utils/validate-email/validate-email";
+
+import {
+  UtilCreateAcessToken,
+  UtilCreateRefreshToken,
+  UtilEncrypter,
+  UtilNameValidator,
+  UtilPasswordValidator,
+  UtilRequiredParams,
+  UtilValidateEmail,
+} from "../../utils/";
 
 export const makeSignUpController = () => {
   const validateEmail = new UtilValidateEmail();
