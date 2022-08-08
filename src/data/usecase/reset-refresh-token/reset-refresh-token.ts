@@ -1,5 +1,5 @@
 import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
-import type { ResetRefreshTokenRepository } from "../../protocols/reset-refresh-token-repository";
+import type { ResetRefreshTokenRepository } from "../../protocols";
 
 export class DbResetRefreshToken implements ResetRefreshToken {
   public constructor(
