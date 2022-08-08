@@ -1,5 +1,5 @@
-import { InvalidParamError } from "../../erros/invalid-param-error";
-import { MissingParamError } from "../../erros/missing-param-error";
+import { InvalidParamError } from "../../errors/invalid-param-error";
+import { MissingParamError } from "../../errors/missing-param-error";
 import { badRequest, serverError } from "../../helpers/http-helper";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
 import type { CreateAcessToken } from "../../../data/protocols/create-acess-token";
