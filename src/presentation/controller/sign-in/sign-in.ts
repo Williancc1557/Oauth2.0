@@ -1,9 +1,11 @@
 import type { Encrypter } from "../../../data/protocols/encrypter";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
-import { InvalidParamError } from "../../errors/invalid-param-error";
-import { MissingParamError } from "../../errors/missing-param-error";
-import { UserNotExistsError } from "../../errors/user-not-exists";
+import {
+  UserNotExistsError,
+  InvalidParamError,
+  MissingParamError,
+} from "../../errors";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { ValidateEmail } from "../../protocols/validate-email";

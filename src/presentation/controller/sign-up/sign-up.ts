@@ -1,8 +1,7 @@
 import type { AddAccount } from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import { AccountAlreadyExistsError } from "../../errors/account-already-exists-error";
-import { InvalidParamError } from "../../errors/invalid-param-error";
-import { MissingParamError } from "../../errors/missing-param-error";
+import { MissingParamError, InvalidParamError } from "../../errors";
 import {
   badRequest,
   conflict,
