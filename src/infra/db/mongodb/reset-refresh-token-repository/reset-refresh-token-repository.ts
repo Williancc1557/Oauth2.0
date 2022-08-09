@@ -10,7 +10,7 @@ export class ResetRefreshTokenMongoRepository
 
   public async reset(userId: string): Promise<string> {
     const accountCollection = await mongoHelper.getCollection("account");
-    const newRefreshToken = this.createRefreshToken.create(userId);
+    const newRefreshToken = this.createRefreshToken.create();
 
     await accountCollection.updateOne(
       {

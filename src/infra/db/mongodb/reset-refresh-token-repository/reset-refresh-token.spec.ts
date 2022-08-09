@@ -7,7 +7,7 @@ import { ResetRefreshTokenMongoRepository } from "./reset-refresh-token-reposito
 const makeCreateRefreshTokenStub = () => {
   class CreateRefreshTokenStub implements CreateRefreshToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public create(userId: string): string {
+    public create(): string {
       return "new_refresh_token";
     }
   }

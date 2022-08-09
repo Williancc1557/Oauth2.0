@@ -21,7 +21,7 @@ export class AddAccountMongoRepository implements AddAccountRepository {
     const accountCollection = await mongoHelper.getCollection("account");
     const { insertedId } = await accountCollection.insertOne(account);
 
-    const refreshToken = this.createRefreshToken.create(String(insertedId.id));
+    const refreshToken = this.createRefreshToken.create();
 
     await accountCollection.updateOne(
       { _id: new ObjectId(insertedId) },

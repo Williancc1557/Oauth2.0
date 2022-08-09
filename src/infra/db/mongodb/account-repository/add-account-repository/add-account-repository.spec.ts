@@ -6,7 +6,7 @@ import { AddAccountMongoRepository } from "./add-account-repository";
 const makeCreateRefreshTokenStub = () => {
   class CreateRefreshTokenStub implements CreateRefreshToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public create(userId: string): string {
+    public create(): string {
       return "valid_refresh_token";
     }
   }
