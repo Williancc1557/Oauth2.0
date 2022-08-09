@@ -1,12 +1,10 @@
-import jwt from "jsonwebtoken";
 import { UtilCreateRefreshToken } from "./create-refresh-token";
 
 describe("CreateRefreshToken", () => {
-  test("should return refreshToken if sucess", () => {
+  test("should return refreshToken if success", () => {
     const sut = new UtilCreateRefreshToken();
-    jest.spyOn(jwt, "sign");
 
-    const res = sut.create("user_id");
+    const res = sut.create();
 
     expect(res).toBeTruthy();
   });

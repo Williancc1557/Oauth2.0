@@ -1,14 +1,9 @@
-import jwt from "jsonwebtoken";
-import env from "../../main/config/env";
+import { uid } from "uid";
+import type { CreateRefreshToken } from "../../data/protocols";
 
-export class UtilCreateRefreshToken {
-  public create(userId: string): string {
-    return jwt.sign(
-      {
-        aud: userId,
-        sub: "user",
-      },
-      env.secretRefreshTokenJwt
-    );
+export class UtilCreateRefreshToken implements CreateRefreshToken {
+  public create(): string {
+    const LENGTH = 25;
+    return uid(LENGTH);
   }
 }
