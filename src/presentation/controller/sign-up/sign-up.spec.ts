@@ -1,6 +1,6 @@
 import type { AccountModel } from "../../../domain/models/account";
 import type {
-  AcessTokenType,
+  AccessTokenType,
   AddAccount,
   AddAccountInput,
 } from "../../../domain/usecase/add-account";
@@ -60,14 +60,14 @@ const makeAddAccountStub = () => {
     public async add(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       account: AddAccountInput
-    ): Promise<AccountModel & AcessTokenType> {
+    ): Promise<AccessTokenType & AccountModel> {
       return {
         id: "valid_id",
         name: "valid_name",
         email: "valid_email@mail.com",
         password: "valid_password",
         refreshToken: "valid_refreshToken",
-        acessToken: "valid_acessToken",
+        accessToken: "valid_accessToken",
       };
     }
   }
@@ -373,7 +373,7 @@ describe("Sign-Up", () => {
 
     expect(req.body).toStrictEqual({
       refreshToken: "valid_refreshToken",
-      acessToken: "valid_acessToken",
+      accessToken: "valid_accessToken",
     });
   });
 });

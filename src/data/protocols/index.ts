@@ -1,5 +1,5 @@
 export * from "./add-account-repository";
-export * from "./create-acess-token";
+export * from "./create-access-token";
 export * from "./create-refresh-token";
 export * from "./encrypter";
 export * from "./get-account-by-email-repository";

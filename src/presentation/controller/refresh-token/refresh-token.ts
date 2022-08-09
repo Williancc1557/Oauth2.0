@@ -1,13 +1,13 @@
 import { MissingParamError, InvalidParamError } from "../../errors";
 import { badRequest, serverError } from "../../helpers/http-helper";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
-import type { CreateAcessToken } from "../../../data/protocols/create-acess-token";
+import type { CreateAccessToken } from "../../../data/protocols/create-access-token";
 import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
 
 export class RefreshTokenController implements Controller {
   public constructor(
     private readonly checkRefreshToken: CheckRefreshToken,
-    private readonly createAcessToken: CreateAcessToken
+    private readonly createAccessToken: CreateAccessToken
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -25,12 +25,12 @@ export class RefreshTokenController implements Controller {
         return badRequest(new InvalidParamError("refreshToken"));
       }
 
-      const acessToken = this.createAcessToken.create(userId);
+      const accessToken = this.createAccessToken.create(userId);
 
       return {
         statusCode: 200,
         body: {
-          acessToken,
+          accessToken,
         },
       };
     } catch (err) {

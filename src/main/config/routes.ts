@@ -7,7 +7,10 @@ export const setupRoutes = (app: Express) => {
 
   app.use("/api", router);
 
-  fg.sync("**/src/main/routes/**-router/**.router.ts").map(async (file) => {
+  fg.sync([
+    "**/src/main/routes/**-router/**.router.ts",
+    "**/src/main/routes/**/**-router/**.router.ts",
+  ]).map(async (file) => {
     (await import(`../../../${file}`)).default(router);
   });
 };

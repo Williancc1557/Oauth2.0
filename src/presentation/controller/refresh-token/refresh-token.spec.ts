@@ -1,5 +1,5 @@
 import { RefreshTokenController } from "./refresh-token";
-import type { CreateAcessToken } from "../../../data/protocols/create-acess-token";
+import type { CreateAccessToken } from "../../../data/protocols/create-access-token";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
 
 const makeCheckRefreshTokenStub = (): CheckRefreshToken => {
@@ -13,29 +13,29 @@ const makeCheckRefreshTokenStub = (): CheckRefreshToken => {
   return new CheckRefreshToken();
 };
 
-const makeCreateAcessTokenStub = (): CreateAcessToken => {
-  class CreateAcessToken implements CreateAcessToken {
+const makeCreateAccessTokenStub = (): CreateAccessToken => {
+  class CreateAccessToken implements CreateAccessToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public create(userId: string): string {
-      return "valid_acess_token";
+      return "valid_access_token";
     }
   }
 
-  return new CreateAcessToken();
+  return new CreateAccessToken();
 };
 
 const makeSut = () => {
   const checkRefreshTokenStub = makeCheckRefreshTokenStub();
-  const createAcessTokenStub = makeCreateAcessTokenStub();
+  const createAccessTokenStub = makeCreateAccessTokenStub();
   const sut = new RefreshTokenController(
     checkRefreshTokenStub,
-    createAcessTokenStub
+    createAccessTokenStub
   );
 
   return {
     sut,
     checkRefreshTokenStub,
-    createAcessTokenStub,
+    createAccessTokenStub,
   };
 };
 
@@ -49,23 +49,23 @@ describe("RefreshToken Controller", () => {
 
     const req = await sut.handle({
       body: {
-        refreshToken: "valid_acess_token",
+        refreshToken: "valid_access_token",
       },
     });
 
     expect(req.statusCode).toBe(500);
   });
 
-  test("should return internalServerError if createAcessTokenStub has any error", async () => {
-    const { sut, createAcessTokenStub } = makeSut();
+  test("should return internalServerError if createAccessTokenStub has any error", async () => {
+    const { sut, createAccessTokenStub } = makeSut();
 
-    jest.spyOn(createAcessTokenStub, "create").mockImplementation(() => {
+    jest.spyOn(createAccessTokenStub, "create").mockImplementation(() => {
       throw new Error();
     });
 
     const req = await sut.handle({
       body: {
-        refreshToken: "valid_acess_token",
+        refreshToken: "valid_access_token",
       },
     });
 
@@ -87,7 +87,7 @@ describe("RefreshToken Controller", () => {
 
     const req = await sut.handle({
       body: {
-        refreshToken: "valid_acess_token",
+        refreshToken: "valid_access_token",
       },
     });
 
@@ -101,25 +101,25 @@ describe("RefreshToken Controller", () => {
 
     await sut.handle({
       body: {
-        refreshToken: "valid_acess_token",
+        refreshToken: "valid_access_token",
       },
     });
 
-    expect(checkRefreshTokenSpy).toBeCalledWith("valid_acess_token");
+    expect(checkRefreshTokenSpy).toBeCalledWith("valid_access_token");
   });
 
-  test("should create acess is called with correct values", async () => {
-    const { sut, createAcessTokenStub } = makeSut();
+  test("should create access is called with correct values", async () => {
+    const { sut, createAccessTokenStub } = makeSut();
 
-    const createAcessTokenSpy = jest.spyOn(createAcessTokenStub, "create");
+    const createAccessTokenSpy = jest.spyOn(createAccessTokenStub, "create");
 
     await sut.handle({
       body: {
-        refreshToken: "valid_acess_token",
+        refreshToken: "valid_access_token",
       },
     });
 
-    expect(createAcessTokenSpy).toBeCalledWith("valid_user_id");
+    expect(createAccessTokenSpy).toBeCalledWith("valid_user_id");
   });
 
   test("should return statusCode 200 if succefull", async () => {
@@ -127,7 +127,7 @@ describe("RefreshToken Controller", () => {
 
     const req = await sut.handle({
       body: {
-        refreshToken: "valid_acess_token",
+        refreshToken: "valid_access_token",
       },
     });
 

@@ -4,5 +4,5 @@ export default {
   port: process.env.PORT || 5050,
   secretRefreshTokenJwt:
     process.env.REFRESH_TOKEN_JWT || "secret_refresh_token_jwt",
-  secretJwt: process.env.SECRET_JWT || "secret_jwt",
+  secretAccessTokenJwt: process.env.SECRET_JWT || "secret_jwt",
 };

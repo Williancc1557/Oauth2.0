@@ -1,11 +1,11 @@
-import { mongoHelper } from "../../../infra/db/mongodb/helpers/mongo-helper";
-import app from "../../config/app";
+import { mongoHelper } from "../../../../infra/db/mongodb/helpers/mongo-helper";
+import app from "../../../config/app";
 import request from "supertest";
 
 describe("SignIn routes", () => {
   beforeAll(async () => {
     await mongoHelper.connect();
-    await request(app).post("/api/sign-up").send({
+    await request(app).post("/api/auth/sign-up").send({
       name: "user_name",
       email: "valid_mail@mail.com",
       password: "valid_password",
@@ -19,7 +19,7 @@ describe("SignIn routes", () => {
   });
 
   test("should return new refreshToken if success", async () => {
-    const req = await request(app).post("/api/sign-in").send({
+    const req = await request(app).post("/api/auth/sign-in").send({
       email: "valid_mail@mail.com",
       password: "valid_password",
     });

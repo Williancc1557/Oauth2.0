@@ -1,7 +1,7 @@
 import type { AccountModel } from "../../../domain/models/account";
 import type { AddAccountInput } from "../../../domain/usecase/add-account";
 import type {
-  AcessTokenType,
+  AccessTokenType,
   AddAccountRepository,
 } from "../../protocols/add-account-repository";
 import type { Encrypter } from "../../protocols/encrypter";
@@ -12,14 +12,14 @@ const makeAddAccountRepositoryStub = () => {
     public async add(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       account: AddAccountInput
-    ): Promise<AccountModel & AcessTokenType> {
+    ): Promise<AccessTokenType & AccountModel> {
       return {
         id: "valid_id",
         name: "valid_name",
         email: "valid_email@mail.com",
         password: "hashed_password",
         refreshToken: "valid_refreshToken",
-        acessToken: "valid_acessToken",
+        accessToken: "valid_accessToken",
       };
     }
   }
@@ -102,7 +102,7 @@ describe("DbAddAccount", () => {
       email: "valid_email@mail.com",
       password: "hashed_password",
       refreshToken: "valid_refreshToken",
-      acessToken: "valid_acessToken",
+      accessToken: "valid_accessToken",
     });
   });
 });

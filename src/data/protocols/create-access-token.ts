@@ -1,3 +1,3 @@
-export interface CreateAcessToken {
+export interface CreateAccessToken {
   create: (userId: string) => string;
 }

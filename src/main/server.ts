@@ -15,5 +15,5 @@ const bootstrap = async () => {
 };
 
 bootstrap().then(() => {
-  logger.info("api learning english made by willian");
+  logger.info("api made by (Willian Cavalcanti Coelho)");
 });

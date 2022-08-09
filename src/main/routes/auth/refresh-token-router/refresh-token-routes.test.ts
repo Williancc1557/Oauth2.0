@@ -1,7 +1,7 @@
-import app from "../../config/app";
+import app from "../../../config/app";
 import request from "supertest";
-import { mongoHelper } from "../../../infra/db/mongodb/helpers/mongo-helper";
-import type { AccountModel } from "../../../domain/models/account";
+import { mongoHelper } from "../../../../infra/db/mongodb/helpers/mongo-helper";
+import type { AccountModel } from "../../../../domain/models/account";
 
 describe("RefreshToken routes", () => {
   beforeAll(async () => {
@@ -23,12 +23,12 @@ describe("RefreshToken routes", () => {
     await mongoHelper.disconnect();
   });
 
-  test("should return an acessToken on sucess", async () => {
-    const req = await request(app).post("/api/refresh-token").send({
+  test("should return an accessToken on sucess", async () => {
+    const req = await request(app).post("/api/auth/refresh-token").send({
       refreshToken: "valid_refresh_token",
     });
 
-    expect(req.body.acessToken).toBeTruthy();
+    expect(req.body.accessToken).toBeTruthy();
     expect(req.statusCode).toBe(200);
   });
 });

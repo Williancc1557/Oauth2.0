@@ -5,7 +5,7 @@ import type {
 } from "../../../domain/usecase/add-account";
 
 import type {
-  AcessTokenType,
+  AccessTokenType,
   AddAccountRepository,
   Encrypter,
 } from "../../protocols";
@@ -18,7 +18,7 @@ export class DbAddAccount implements AddAccount {
 
   public async add(
     account: AddAccountInput
-  ): Promise<AccountModel & AcessTokenType> {
+  ): Promise<AccessTokenType & AccountModel> {
     const hashedPassword = await this.encrypter.hash(account.password);
     const accountData = await this.addAccountRepository.add({
       ...account,

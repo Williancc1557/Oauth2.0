@@ -6,7 +6,7 @@ import { GetAccountByEmailMongoRepository } from "../../infra/db/mongodb/account
 import { SignUpController } from "../../presentation/controller/sign-up/sign-up";
 
 import {
-  UtilCreateAcessToken,
+  UtilCreateAccessToken,
   UtilCreateRefreshToken,
   UtilEncrypter,
   UtilNameValidator,
@@ -24,10 +24,10 @@ export const makeSignUpController = () => {
   );
 
   const createRefreshToken = new UtilCreateRefreshToken();
-  const createAcessToken = new UtilCreateAcessToken();
+  const createAccessToken = new UtilCreateAccessToken();
   const addAccountRepository = new AddAccountMongoRepository(
     createRefreshToken,
-    createAcessToken
+    createAccessToken
   );
 
   const SALTS = 10;
