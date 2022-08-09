@@ -28,7 +28,7 @@ describe("GetAccountByEmailMongoRepository", () => {
     await mongoHelper.disconnect();
   });
 
-  test("should return account if sucess", async () => {
+  test("should return account if success", async () => {
     const { sut } = makeSut();
 
     const req = await sut.get("valid_mail@mail.com");

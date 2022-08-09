@@ -50,7 +50,7 @@ describe("CheckRefreshToken", () => {
     expect(getRefreshTokenSpy).toBeCalledWith("valid_refresh_token");
   });
 
-  test("should return account.id if sucess", async () => {
+  test("should return account.id if success", async () => {
     const { sut } = makeSut();
 
     const res = await sut.check("valid_refresh_token");

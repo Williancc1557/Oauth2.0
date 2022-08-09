@@ -9,7 +9,7 @@ const makeSut = () => {
 };
 
 describe("PasswordValidator Util", () => {
-  test("should return true if sucess", () => {
+  test("should return true if success", () => {
     const { sut } = makeSut();
 
     const res = sut.validate("valid_password");

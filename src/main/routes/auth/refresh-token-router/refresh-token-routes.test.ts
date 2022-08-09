@@ -23,7 +23,7 @@ describe("RefreshToken routes", () => {
     await mongoHelper.disconnect();
   });
 
-  test("should return an accessToken on sucess", async () => {
+  test("should return an accessToken on success", async () => {
     const req = await request(app).post("/api/auth/refresh-token").send({
       refreshToken: "valid_refresh_token",
     });
