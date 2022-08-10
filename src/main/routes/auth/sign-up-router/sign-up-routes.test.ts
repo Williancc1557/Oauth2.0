@@ -20,6 +20,7 @@ describe("SignUp routes", () => {
 
     expect(req.body.refreshToken).toBeTruthy();
     expect(req.body.accessToken).toBeTruthy();
+    expect(req.body.expires).toBeTruthy();
     expect(req.statusCode).toBe(200);
   });
 });

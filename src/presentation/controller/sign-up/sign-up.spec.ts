@@ -1,6 +1,6 @@
+import type { CreateAccessTokenOutput } from "../../../data/protocols";
 import type { AccountModel } from "../../../domain/models/account";
 import type {
-  AccessTokenType,
   AddAccount,
   AddAccountInput,
 } from "../../../domain/usecase/add-account";
@@ -60,7 +60,7 @@ const makeAddAccountStub = () => {
     public async add(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       account: AddAccountInput
-    ): Promise<AccessTokenType & AccountModel> {
+    ): Promise<AccountModel & CreateAccessTokenOutput> {
       return {
         id: "valid_id",
         name: "valid_name",
@@ -68,6 +68,7 @@ const makeAddAccountStub = () => {
         password: "valid_password",
         refreshToken: "valid_refreshToken",
         accessToken: "valid_accessToken",
+        expires: 300,
       };
     }
   }
@@ -374,6 +375,7 @@ describe("Sign-Up", () => {
     expect(req.body).toStrictEqual({
       refreshToken: "valid_refreshToken",
       accessToken: "valid_accessToken",
+      expires: 300,
     });
   });
 });

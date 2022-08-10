@@ -25,11 +25,11 @@ export class RefreshTokenController implements Controller {
         return badRequest(new InvalidParamError("refreshToken"));
       }
 
-      const accessToken = this.createAccessToken.create(userId);
+      const tokenInformation = this.createAccessToken.create(userId);
 
       return {
         statusCode: 200,
-        body: accessToken,
+        body: tokenInformation,
       };
     } catch (err) {
       return serverError();
