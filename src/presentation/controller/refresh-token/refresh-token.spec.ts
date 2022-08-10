@@ -1,5 +1,8 @@
 import { RefreshTokenController } from "./refresh-token";
-import type { CreateAccessToken } from "../../../data/protocols/create-access-token";
+import type {
+  CreateAccessToken,
+  CreateAccessTokenOutput,
+} from "../../../data/protocols/create-access-token";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
 
 const makeCheckRefreshTokenStub = (): CheckRefreshToken => {
@@ -16,8 +19,11 @@ const makeCheckRefreshTokenStub = (): CheckRefreshToken => {
 const makeCreateAccessTokenStub = (): CreateAccessToken => {
   class CreateAccessToken implements CreateAccessToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public create(userId: string): string {
-      return "valid_access_token";
+    public create(userId: string): CreateAccessTokenOutput {
+      return {
+        accessToken: "valid_access_token",
+        expires: 300,
+      };
     }
   }
 

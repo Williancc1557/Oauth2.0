@@ -1,18 +1,27 @@
-import type { CreateAccessToken } from "../../data/protocols/create-access-token";
+import type {
+  CreateAccessToken,
+  CreateAccessTokenOutput,
+} from "../../data/protocols/create-access-token";
 import jwt from "jsonwebtoken";
 import env from "../../main/config/env";
 
 export class UtilCreateAccessToken implements CreateAccessToken {
-  public create(userId: string): string {
-    return jwt.sign(
+  public create(userId: string): CreateAccessTokenOutput {
+    const expires = 300;
+    const accessToken = jwt.sign(
       {
         aud: userId,
         sub: "user",
       },
       env.secretAccessTokenJwt,
       {
-        expiresIn: "5m",
+        expiresIn: "300",
       }
     );
+
+    return {
+      expires,
+      accessToken,
+    };
   }
 }

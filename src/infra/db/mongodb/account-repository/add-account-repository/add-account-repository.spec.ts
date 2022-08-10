@@ -1,4 +1,7 @@
-import type { CreateAccessToken } from "../../../../../data/protocols/create-access-token";
+import type {
+  CreateAccessToken,
+  CreateAccessTokenOutput,
+} from "../../../../../data/protocols/create-access-token";
 import type { CreateRefreshToken } from "../../../../../data/protocols/create-refresh-token";
 import { mongoHelper } from "../../helpers/mongo-helper";
 import { AddAccountMongoRepository } from "./add-account-repository";
@@ -17,8 +20,8 @@ const makeCreateRefreshTokenStub = () => {
 const makeCreateAccessTokenStub = () => {
   class CreateAccessTokenStub implements CreateAccessToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public create(userId: string): string {
-      return "valid_refresh_token";
+    public create(userId: string): CreateAccessTokenOutput {
+      return { accessToken: "valid_refresh_token", expires: 300 };
     }
   }
 

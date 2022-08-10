@@ -29,9 +29,7 @@ export class RefreshTokenController implements Controller {
 
       return {
         statusCode: 200,
-        body: {
-          accessToken,
-        },
+        body: accessToken,
       };
     } catch (err) {
       return serverError();
