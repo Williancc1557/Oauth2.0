@@ -128,7 +128,7 @@ describe("RefreshToken Controller", () => {
     expect(createAccessTokenSpy).toBeCalledWith("valid_user_id");
   });
 
-  test("should return statusCode 200 if succefull", async () => {
+  test("should return valid response if success", async () => {
     const { sut } = makeSut();
 
     const req = await sut.handle({
@@ -138,5 +138,7 @@ describe("RefreshToken Controller", () => {
     });
 
     expect(req.statusCode).toBe(200);
+    expect(req.body.accessToken).toBeTruthy();
+    expect(req.body.expires).toBeTruthy();
   });
 });
