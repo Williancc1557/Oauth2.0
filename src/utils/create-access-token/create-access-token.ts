@@ -7,7 +7,7 @@ import env from "../../main/config/env";
 
 export class UtilCreateAccessToken implements CreateAccessToken {
   public create(userId: string): CreateAccessTokenOutput {
-    const expires = 300;
+    const expiresIn = 300;
     const accessToken = jwt.sign(
       {
         aud: userId,
@@ -20,7 +20,7 @@ export class UtilCreateAccessToken implements CreateAccessToken {
     );
 
     return {
-      expires,
+      expiresIn,
       accessToken,
     };
   }

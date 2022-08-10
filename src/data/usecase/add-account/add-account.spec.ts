@@ -18,7 +18,7 @@ const makeAddAccountRepositoryStub = () => {
         password: "hashed_password",
         refreshToken: "valid_refreshToken",
         accessToken: "valid_accessToken",
-        expires: 300,
+        expiresIn: 300,
       };
     }
   }
@@ -102,7 +102,7 @@ describe("DbAddAccount", () => {
       password: "hashed_password",
       refreshToken: "valid_refreshToken",
       accessToken: "valid_accessToken",
-      expires: 300,
+      expiresIn: 300,
     });
   });
 });

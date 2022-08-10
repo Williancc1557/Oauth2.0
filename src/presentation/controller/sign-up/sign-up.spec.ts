@@ -68,7 +68,7 @@ const makeAddAccountStub = () => {
         password: "valid_password",
         refreshToken: "valid_refreshToken",
         accessToken: "valid_accessToken",
-        expires: 300,
+        expiresIn: 300,
       };
     }
   }
@@ -375,7 +375,7 @@ describe("Sign-Up", () => {
     expect(req.body).toStrictEqual({
       refreshToken: "valid_refreshToken",
       accessToken: "valid_accessToken",
-      expires: 300,
+      expiresIn: 300,
     });
   });
 });

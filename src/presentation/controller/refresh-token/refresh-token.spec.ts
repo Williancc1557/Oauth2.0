@@ -22,7 +22,7 @@ const makeCreateAccessTokenStub = (): CreateAccessToken => {
     public create(userId: string): CreateAccessTokenOutput {
       return {
         accessToken: "valid_access_token",
-        expires: 300,
+        expiresIn: 300,
       };
     }
   }
@@ -139,6 +139,6 @@ describe("RefreshToken Controller", () => {
 
     expect(req.statusCode).toBe(200);
     expect(req.body.accessToken).toBeTruthy();
-    expect(req.body.expires).toBeTruthy();
+    expect(req.body.expiresIn).toBeTruthy();
   });
 });

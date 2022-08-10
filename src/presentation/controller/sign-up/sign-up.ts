@@ -58,7 +58,7 @@ export class SignUpController implements Controller {
       const account = await this.addAccount.add(httpRequest.body);
 
       return ok({
-        expires: account.expires,
+        expiresIn: account.expiresIn,
         accessToken: account.accessToken,
         refreshToken: account.refreshToken,
       });

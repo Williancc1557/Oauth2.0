@@ -21,7 +21,7 @@ const makeCreateAccessTokenStub = () => {
   class CreateAccessTokenStub implements CreateAccessToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public create(userId: string): CreateAccessTokenOutput {
-      return { accessToken: "valid_refresh_token", expires: 300 };
+      return { accessToken: "valid_refresh_token", expiresIn: 300 };
     }
   }
 

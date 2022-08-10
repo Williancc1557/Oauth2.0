@@ -1,6 +1,6 @@
 export interface CreateAccessTokenOutput {
   accessToken: string;
-  expires: number;
+  expiresIn: number;
 }
 
 export interface CreateAccessToken {
