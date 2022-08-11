@@ -15,7 +15,7 @@ export class UtilCreateAccessToken implements CreateAccessToken {
       },
       env.secretAccessTokenJwt,
       {
-        expiresIn: "300",
+        expiresIn,
       }
     );
 
