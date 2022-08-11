@@ -83,6 +83,7 @@ describe("TokenInfo controller", () => {
     jest.spyOn(isValidRefreshTokenStub, "check").mockResolvedValueOnce(false);
 
     const httpRequest = {
+      refreshToken: "valid_refresh_token",
       accessToken: "valid_access_token",
     };
 
@@ -91,10 +92,26 @@ describe("TokenInfo controller", () => {
     expect(res.statusCode).toBe(400);
   });
 
+  test("should call isValidRefreshToken with valid values", async () => {
+    const { sut, isValidRefreshTokenStub } = makeSut();
+
+    const isValidRefreshTokenSpy = jest.spyOn(isValidRefreshTokenStub, "check");
+
+    const httpRequest = {
+      refreshToken: "valid_refresh_token",
+      accessToken: "valid_access_token",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(isValidRefreshTokenSpy).toBeCalledWith("valid_refresh_token");
+  });
+
   test("should return statusCode 200 and valid body if success", async () => {
     const { sut } = makeSut();
 
     const httpRequest = {
+      refreshToken: "valid_refresh_token",
       accessToken: "valid_access_token",
     };
 
