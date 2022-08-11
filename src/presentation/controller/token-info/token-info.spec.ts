@@ -122,6 +122,32 @@ describe("TokenInfo controller", () => {
     expect(getTokenInfoSpy).toBeCalledWith("valid_access_token");
   });
 
+  test("should return statusCode 500 if any dependency throws", async () => {
+    const {
+      sut,
+      getTokenInfoStub,
+      isValidRefreshTokenStub,
+      requiredParamsStub,
+    } = makeSut();
+
+    jest.spyOn(getTokenInfoStub, "get").mockImplementation(() => {
+      throw new Error();
+    });
+    jest
+      .spyOn(isValidRefreshTokenStub, "check")
+      .mockRejectedValueOnce(new Error());
+    jest.spyOn(requiredParamsStub, "check").mockImplementation(() => {
+      throw new Error();
+    });
+
+    const httpRequest = {
+      refreshToken: "valid_refresh_token",
+      accessToken: "valid_access_token",
+    };
+
+    expect((await sut.handle({ body: httpRequest })).statusCode).toBe(500);
+  });
+
   test("should return statusCode 200 and valid body if success", async () => {
     const { sut } = makeSut();
 

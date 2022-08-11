@@ -1,6 +1,6 @@
 import type { IsValidRefreshToken } from "../../../domain/usecase/is-valid-refresh-token";
 import { InvalidParamError, MissingParamError } from "../../errors";
-import { badRequest } from "../../helpers/http-helper";
+import { badRequest, serverError } from "../../helpers/http-helper";
 import type {
   Controller,
   HttpRequest,
@@ -17,26 +17,30 @@ export class TokenInfoController implements Controller {
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const requiredParam = this.requiredParams.check(
-      ["refreshToken", "accessToken"],
-      httpRequest.body
-    );
+    try {
+      const requiredParam = this.requiredParams.check(
+        ["refreshToken", "accessToken"],
+        httpRequest.body
+      );
 
-    if (requiredParam) {
-      return badRequest(new MissingParamError(requiredParam));
+      if (requiredParam) {
+        return badRequest(new MissingParamError(requiredParam));
+      }
+
+      if (
+        !(await this.isValidRefreshToken.check(httpRequest.body.refreshToken))
+      ) {
+        return badRequest(new InvalidParamError("refreshToken"));
+      }
+
+      const tokenInfo = this.getTokenInfo.get(httpRequest.body.accessToken);
+
+      return {
+        body: tokenInfo,
+        statusCode: 200,
+      };
+    } catch (err) {
+      return serverError();
     }
-
-    if (
-      !(await this.isValidRefreshToken.check(httpRequest.body.refreshToken))
-    ) {
-      return badRequest(new InvalidParamError("refreshToken"));
-    }
-
-    const tokenInfo = this.getTokenInfo.get(httpRequest.body.accessToken);
-
-    return {
-      body: tokenInfo,
-      statusCode: 200,
-    };
   }
 }
