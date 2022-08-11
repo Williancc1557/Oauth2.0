@@ -10,8 +10,8 @@ export class UtilCreateAccessToken implements CreateAccessToken {
     const expiresIn = 300;
     const accessToken = jwt.sign(
       {
-        aud: userId,
-        sub: "user",
+        accountId: userId,
+        sub: "client",
       },
       env.secretAccessTokenJwt,
       {
