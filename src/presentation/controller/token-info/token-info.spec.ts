@@ -107,6 +107,21 @@ describe("TokenInfo controller", () => {
     expect(isValidRefreshTokenSpy).toBeCalledWith("valid_refresh_token");
   });
 
+  test("should call getTokenInfo with valid values", async () => {
+    const { sut, getTokenInfoStub } = makeSut();
+
+    const getTokenInfoSpy = jest.spyOn(getTokenInfoStub, "get");
+
+    const httpRequest = {
+      refreshToken: "valid_refresh_token",
+      accessToken: "valid_access_token",
+    };
+
+    await sut.handle({ body: httpRequest });
+
+    expect(getTokenInfoSpy).toBeCalledWith("valid_access_token");
+  });
+
   test("should return statusCode 200 and valid body if success", async () => {
     const { sut } = makeSut();
 
