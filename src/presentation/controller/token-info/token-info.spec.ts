@@ -22,7 +22,7 @@ const makeSut = () => {
 };
 
 describe("TokenInfo controller", () => {
-  test("should return statusCode 400 if refreshToken is not provided", async () => {
+  test("should return statusCode 400 if any param requested is not provided", async () => {
     const { sut, requiredParamsStub } = makeSut();
 
     jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("refreshToken");
