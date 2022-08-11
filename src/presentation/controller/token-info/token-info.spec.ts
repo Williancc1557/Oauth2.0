@@ -90,4 +90,21 @@ describe("TokenInfo controller", () => {
 
     expect(res.statusCode).toBe(400);
   });
+
+  test("should return statusCode 200 and valid body if success", async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      accessToken: "valid_access_token",
+    };
+
+    const res = await sut.handle({ body: httpRequest });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toStrictEqual({
+      accountId: "valid_id",
+      exp: 12345,
+      iat: 12345,
+    });
+  });
 });
