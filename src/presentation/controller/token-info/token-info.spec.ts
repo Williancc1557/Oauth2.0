@@ -104,7 +104,10 @@ describe("TokenInfo controller", () => {
 
     await sut.handle({ body: httpRequest });
 
-    expect(isValidRefreshTokenSpy).toBeCalledWith("valid_refresh_token");
+    expect(isValidRefreshTokenSpy).toBeCalledWith(
+      "valid_refresh_token",
+      "valid_id"
+    );
   });
 
   test("should call getTokenInfo with valid values", async () => {
