@@ -27,13 +27,16 @@ export class TokenInfoController implements Controller {
         return badRequest(new MissingParamError(requiredParam));
       }
 
+      const tokenInfo = this.getTokenInfo.get(httpRequest.body.accessToken);
+
       if (
-        !(await this.isValidRefreshToken.check(httpRequest.body.refreshToken))
+        !(await this.isValidRefreshToken.check(
+          httpRequest.body.refreshToken,
+          tokenInfo.accountId
+        ))
       ) {
         return badRequest(new InvalidParamError("refreshToken"));
       }
-
-      const tokenInfo = this.getTokenInfo.get(httpRequest.body.accessToken);
 
       return {
         body: tokenInfo,

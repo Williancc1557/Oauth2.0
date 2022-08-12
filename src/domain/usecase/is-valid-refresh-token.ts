@@ -1,3 +1,3 @@
 export interface IsValidRefreshToken {
-  check: (refreshToken: string) => Promise<boolean>;
+  check: (refreshToken: string, accountId: string) => Promise<boolean>;
 }
