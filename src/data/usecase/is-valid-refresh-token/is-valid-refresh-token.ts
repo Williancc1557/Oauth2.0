@@ -1,8 +1,10 @@
 import type { IsValidRefreshToken } from "../../../domain/usecase/is-valid-refresh-token";
-import type { GetAccountById } from "../../protocols/get-account-by-id";
+import type { GetAccountByIdRepository } from "../../protocols/get-account-by-id-repository";
 
-export class IsValidRefreshTokenRepository implements IsValidRefreshToken {
-  public constructor(private readonly getAccountById: GetAccountById) {}
+export class DbIsValidRefreshToken implements IsValidRefreshToken {
+  public constructor(
+    private readonly getAccountById: GetAccountByIdRepository
+  ) {}
 
   public async check(
     refreshToken: string,

@@ -1,9 +1,9 @@
 import type { AccountModel } from "../../../domain/models/account";
-import type { GetAccountById } from "../../protocols/get-account-by-id";
-import { IsValidRefreshTokenRepository } from "./is-valid-refresh-token";
+import type { GetAccountByIdRepository } from "../../protocols/get-account-by-id-repository";
+import { DbIsValidRefreshToken } from "./is-valid-refresh-token";
 
 const makeGetAccountByIdStub = () => {
-  class GetAccountByIdStub implements GetAccountById {
+  class GetAccountByIdStub implements GetAccountByIdRepository {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async get(accountId: string): Promise<AccountModel> {
       return {
@@ -21,7 +21,7 @@ const makeGetAccountByIdStub = () => {
 
 const makeSut = () => {
   const getAccountByIdStub = makeGetAccountByIdStub();
-  const sut = new IsValidRefreshTokenRepository(getAccountByIdStub);
+  const sut = new DbIsValidRefreshToken(getAccountByIdStub);
 
   return {
     sut,
@@ -29,7 +29,7 @@ const makeSut = () => {
   };
 };
 
-describe("IsValidRefreshTokenRepository", () => {
+describe("DbIsValidRefreshToken", () => {
   test("should return false if getAccountByRefreshToken returns undefined", async () => {
     const { sut, getAccountByIdStub } = makeSut();
 
