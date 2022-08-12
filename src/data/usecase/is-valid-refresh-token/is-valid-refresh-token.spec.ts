@@ -41,4 +41,12 @@ describe("IsValidRefreshTokenRepository", () => {
 
     expect(res).toBe(false);
   });
+
+  test("should return true if success", async () => {
+    const { sut } = makeSut();
+
+    const res = await sut.check("refresh_token");
+
+    expect(res).toBe(true);
+  });
 });
