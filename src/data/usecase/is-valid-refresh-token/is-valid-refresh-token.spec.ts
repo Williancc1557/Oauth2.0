@@ -42,6 +42,16 @@ describe("IsValidRefreshTokenRepository", () => {
     expect(res).toBe(false);
   });
 
+  test("should throws if getAccountByRefreshToken throw", async () => {
+    const { sut, getAccountByRefreshTokenStub } = makeSut();
+
+    jest
+      .spyOn(getAccountByRefreshTokenStub, "get")
+      .mockRejectedValueOnce(new Error());
+
+    await expect(sut.check("refresh_token")).rejects.toThrow();
+  });
+
   test("should return true if success", async () => {
     const { sut } = makeSut();
 
