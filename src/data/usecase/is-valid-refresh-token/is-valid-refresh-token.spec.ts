@@ -1,61 +1,57 @@
 import type { AccountModel } from "../../../domain/models/account";
-import type { GetAccountByRefreshToken } from "../../protocols/get-account-by-refresh-token";
+import type { GetAccountById } from "../../protocols/get-account-by-id";
 import { IsValidRefreshTokenRepository } from "./is-valid-refresh-token";
 
-const makeGetAccountByRefreshTokenStub = () => {
-  class GetAccountByRefreshTokenStub implements GetAccountByRefreshToken {
+const makeGetAccountByIdStub = () => {
+  class GetAccountByIdStub implements GetAccountById {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public async get(refreshToken: string): Promise<AccountModel> {
+    public async get(accountId: string): Promise<AccountModel> {
       return {
         id: "valid_id",
         name: "valid_name",
         email: "valid_email@mail.com",
         password: "valid_password",
-        refreshToken: "valid_refresh_token",
+        refreshToken: "refresh_token",
       };
     }
   }
 
-  return new GetAccountByRefreshTokenStub();
+  return new GetAccountByIdStub();
 };
 
 const makeSut = () => {
-  const getAccountByRefreshTokenStub = makeGetAccountByRefreshTokenStub();
-  const sut = new IsValidRefreshTokenRepository(getAccountByRefreshTokenStub);
+  const getAccountByIdStub = makeGetAccountByIdStub();
+  const sut = new IsValidRefreshTokenRepository(getAccountByIdStub);
 
   return {
     sut,
-    getAccountByRefreshTokenStub,
+    getAccountByIdStub,
   };
 };
 
 describe("IsValidRefreshTokenRepository", () => {
   test("should return false if getAccountByRefreshToken returns undefined", async () => {
-    const { sut, getAccountByRefreshTokenStub } = makeSut();
+    const { sut, getAccountByIdStub } = makeSut();
 
-    jest
-      .spyOn(getAccountByRefreshTokenStub, "get")
-      .mockResolvedValueOnce(undefined);
+    jest.spyOn(getAccountByIdStub, "get").mockResolvedValueOnce(undefined);
 
-    const res = await sut.check("refresh_token");
+    const res = await sut.check("refresh_token", "valid_id");
 
     expect(res).toBe(false);
   });
 
   test("should throws if getAccountByRefreshToken throw", async () => {
-    const { sut, getAccountByRefreshTokenStub } = makeSut();
+    const { sut, getAccountByIdStub } = makeSut();
 
-    jest
-      .spyOn(getAccountByRefreshTokenStub, "get")
-      .mockRejectedValueOnce(new Error());
+    jest.spyOn(getAccountByIdStub, "get").mockRejectedValueOnce(new Error());
 
-    await expect(sut.check("refresh_token")).rejects.toThrow();
+    await expect(sut.check("refresh_token", "valid_id")).rejects.toThrow();
   });
 
   test("should return true if success", async () => {
     const { sut } = makeSut();
 
-    const res = await sut.check("refresh_token");
+    const res = await sut.check("refresh_token", "valid_id");
 
     expect(res).toBe(true);
   });
