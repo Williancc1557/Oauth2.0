@@ -4,6 +4,7 @@ import type {
   GetTokenInfo,
   GetTokenInfoOutput,
 } from "../../protocols/get-token-info";
+import type { VerifyAccessToken } from "../../protocols/verify-access-token";
 import { TokenInfoController } from "./token-info";
 
 const makeRequiredParamsStub = () => {
@@ -15,6 +16,17 @@ const makeRequiredParamsStub = () => {
   }
 
   return new RequiredParamsStub();
+};
+
+const makeVerifyAccessTokenStub = () => {
+  class VerifyAccessTokenStub implements VerifyAccessToken {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public verify(accessToken: string): boolean {
+      return true;
+    }
+  }
+
+  return new VerifyAccessTokenStub();
 };
 
 const makeIsValidRefreshTokenStub = () => {
@@ -47,11 +59,13 @@ const makeSut = () => {
   const requiredParamsStub = makeRequiredParamsStub();
   const getTokenInfoStub = makeGetTokenInfoStub();
   const isValidRefreshTokenStub = makeIsValidRefreshTokenStub();
+  const verifyAccessTokenStub = makeVerifyAccessTokenStub();
 
   const sut = new TokenInfoController(
     requiredParamsStub,
     getTokenInfoStub,
-    isValidRefreshTokenStub
+    isValidRefreshTokenStub,
+    verifyAccessTokenStub
   );
 
   return {
@@ -59,6 +73,7 @@ const makeSut = () => {
     getTokenInfoStub,
     requiredParamsStub,
     isValidRefreshTokenStub,
+    verifyAccessTokenStub,
   };
 };
 
@@ -69,6 +84,21 @@ describe("TokenInfo controller", () => {
     jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("refreshToken");
 
     const httpRequest = {
+      accessToken: "valid_access_token",
+    };
+
+    const res = await sut.handle({ body: httpRequest });
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  test("should return statusCode 400 if accessToken is not valid", async () => {
+    const { sut, verifyAccessTokenStub } = makeSut();
+
+    jest.spyOn(verifyAccessTokenStub, "verify").mockReturnValueOnce(false);
+
+    const httpRequest = {
+      refreshToken: "valid_refresh_token",
       accessToken: "valid_access_token",
     };
 
