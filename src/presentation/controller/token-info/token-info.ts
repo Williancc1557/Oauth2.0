@@ -8,12 +8,14 @@ import type {
   RequiredParams,
 } from "../../protocols";
 import type { GetTokenInfo } from "../../protocols/get-token-info";
+import type { VerifyAccessToken } from "../../protocols/verify-access-token";
 
 export class TokenInfoController implements Controller {
   public constructor(
     private readonly requiredParams: RequiredParams,
     private readonly getTokenInfo: GetTokenInfo,
-    private readonly isValidRefreshToken: IsValidRefreshToken
+    private readonly isValidRefreshToken: IsValidRefreshToken,
+    private readonly verifyAccessToken: VerifyAccessToken
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -25,6 +27,10 @@ export class TokenInfoController implements Controller {
 
       if (requiredParam) {
         return badRequest(new MissingParamError(requiredParam));
+      }
+
+      if (!this.verifyAccessToken.verify(httpRequest.body.accessToken)) {
+        return badRequest(new InvalidParamError("accessToken"));
       }
 
       const tokenInfo = this.getTokenInfo.get(httpRequest.body.accessToken);
