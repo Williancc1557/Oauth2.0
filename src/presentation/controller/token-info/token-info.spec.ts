@@ -21,7 +21,7 @@ const makeRequiredParamsStub = () => {
 const makeVerifyAccessTokenStub = () => {
   class VerifyAccessTokenStub implements VerifyAccessToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public verify(accessToken: string): boolean {
+    public verify(accesstoken: string): boolean {
       return true;
     }
   }
@@ -32,7 +32,7 @@ const makeVerifyAccessTokenStub = () => {
 const makeIsValidRefreshTokenStub = () => {
   class IsValidRefreshTokenStub implements IsValidRefreshToken {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public async check(refreshToken: string): Promise<boolean> {
+    public async check(refreshtoken: string): Promise<boolean> {
       return true;
     }
   }
@@ -84,10 +84,10 @@ describe("TokenInfo controller", () => {
     jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("refreshToken");
 
     const httpRequest = {
-      accessToken: "valid_access_token",
+      accesstoken: "valid_access_token",
     };
 
-    const res = await sut.handle({ body: httpRequest });
+    const res = await sut.handle({ header: httpRequest });
 
     expect(res.statusCode).toBe(400);
   });
@@ -98,11 +98,11 @@ describe("TokenInfo controller", () => {
     jest.spyOn(verifyAccessTokenStub, "verify").mockReturnValueOnce(false);
 
     const httpRequest = {
-      refreshToken: "valid_refresh_token",
-      accessToken: "valid_access_token",
+      refreshtoken: "valid_refresh_token",
+      accesstoken: "valid_access_token",
     };
 
-    const res = await sut.handle({ body: httpRequest });
+    const res = await sut.handle({ header: httpRequest });
 
     expect(res.statusCode).toBe(400);
   });
@@ -113,11 +113,11 @@ describe("TokenInfo controller", () => {
     jest.spyOn(isValidRefreshTokenStub, "check").mockResolvedValueOnce(false);
 
     const httpRequest = {
-      refreshToken: "valid_refresh_token",
-      accessToken: "valid_access_token",
+      refreshtoken: "valid_refresh_token",
+      accesstoken: "valid_access_token",
     };
 
-    const res = await sut.handle({ body: httpRequest });
+    const res = await sut.handle({ header: httpRequest });
 
     expect(res.statusCode).toBe(400);
   });
@@ -128,11 +128,11 @@ describe("TokenInfo controller", () => {
     const isValidRefreshTokenSpy = jest.spyOn(isValidRefreshTokenStub, "check");
 
     const httpRequest = {
-      refreshToken: "valid_refresh_token",
-      accessToken: "valid_access_token",
+      refreshtoken: "valid_refresh_token",
+      accesstoken: "valid_access_token",
     };
 
-    await sut.handle({ body: httpRequest });
+    await sut.handle({ header: httpRequest });
 
     expect(isValidRefreshTokenSpy).toBeCalledWith(
       "valid_refresh_token",
@@ -146,11 +146,11 @@ describe("TokenInfo controller", () => {
     const getTokenInfoSpy = jest.spyOn(getTokenInfoStub, "get");
 
     const httpRequest = {
-      refreshToken: "valid_refresh_token",
-      accessToken: "valid_access_token",
+      refreshtoken: "valid_refresh_token",
+      accesstoken: "valid_access_token",
     };
 
-    await sut.handle({ body: httpRequest });
+    await sut.handle({ header: httpRequest });
 
     expect(getTokenInfoSpy).toBeCalledWith("valid_access_token");
   });
@@ -174,22 +174,23 @@ describe("TokenInfo controller", () => {
     });
 
     const httpRequest = {
-      refreshToken: "valid_refresh_token",
-      accessToken: "valid_access_token",
+      refreshtoken: "valid_refresh_token",
+      accesstoken: "valid_access_token",
     };
 
-    expect((await sut.handle({ body: httpRequest })).statusCode).toBe(500);
+    expect((await sut.handle({ header: httpRequest })).statusCode).toBe(500);
   });
 
   test("should return statusCode 200 and valid body if success", async () => {
     const { sut } = makeSut();
 
     const httpRequest = {
-      refreshToken: "valid_refresh_token",
-      accessToken: "valid_access_token",
+      refreshtoken: "valid_refresh_token",
+      accesstoken: "valid_access_token",
+      coidera: "aaa",
     };
 
-    const res = await sut.handle({ body: httpRequest });
+    const res = await sut.handle({ header: httpRequest });
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toStrictEqual({

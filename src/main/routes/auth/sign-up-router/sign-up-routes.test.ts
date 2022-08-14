@@ -8,6 +8,8 @@ describe("SignUp routes", () => {
   });
 
   afterAll(async () => {
+    const accountCollection = await mongoHelper.getCollection("account");
+    await accountCollection.deleteMany({});
     await mongoHelper.disconnect();
   });
 

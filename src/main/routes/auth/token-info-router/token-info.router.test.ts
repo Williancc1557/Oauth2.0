@@ -21,12 +21,14 @@ describe("TokenInfo routes", () => {
   });
 
   afterAll(async () => {
+    const accountCollection = await mongoHelper.getCollection("account");
+    await accountCollection.deleteMany({});
     await mongoHelper.disconnect();
   });
 
   test("should return valid body if success", async () => {
     const tokens = await makeTokens();
-    const req = await request(app).get("/api/auth/token-info").send({
+    const req = await request(app).get("/api/auth/token-info").set({
       refreshToken: tokens.refreshToken,
       accessToken: tokens.accessToken,
     });
