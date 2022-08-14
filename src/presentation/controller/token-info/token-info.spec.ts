@@ -1,4 +1,3 @@
-import type { IsValidRefreshToken } from "../../../domain/usecase/is-valid-refresh-token";
 import type { RequiredParams } from "../../protocols";
 import type {
   GetTokenInfo,
@@ -29,17 +28,6 @@ const makeVerifyAccessTokenStub = () => {
   return new VerifyAccessTokenStub();
 };
 
-const makeIsValidRefreshTokenStub = () => {
-  class IsValidRefreshTokenStub implements IsValidRefreshToken {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public async check(refreshtoken: string): Promise<boolean> {
-      return true;
-    }
-  }
-
-  return new IsValidRefreshTokenStub();
-};
-
 const makeGetTokenInfoStub = () => {
   class GetTokenInfoStub implements GetTokenInfo {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -58,13 +46,11 @@ const makeGetTokenInfoStub = () => {
 const makeSut = () => {
   const requiredParamsStub = makeRequiredParamsStub();
   const getTokenInfoStub = makeGetTokenInfoStub();
-  const isValidRefreshTokenStub = makeIsValidRefreshTokenStub();
   const verifyAccessTokenStub = makeVerifyAccessTokenStub();
 
   const sut = new TokenInfoController(
     requiredParamsStub,
     getTokenInfoStub,
-    isValidRefreshTokenStub,
     verifyAccessTokenStub
   );
 
@@ -72,7 +58,6 @@ const makeSut = () => {
     sut,
     getTokenInfoStub,
     requiredParamsStub,
-    isValidRefreshTokenStub,
     verifyAccessTokenStub,
   };
 };
@@ -107,39 +92,6 @@ describe("TokenInfo controller", () => {
     expect(res.statusCode).toBe(400);
   });
 
-  test("should return statusCode 400 if refreshToken is not valid", async () => {
-    const { sut, isValidRefreshTokenStub } = makeSut();
-
-    jest.spyOn(isValidRefreshTokenStub, "check").mockResolvedValueOnce(false);
-
-    const httpRequest = {
-      refreshtoken: "valid_refresh_token",
-      accesstoken: "valid_access_token",
-    };
-
-    const res = await sut.handle({ header: httpRequest });
-
-    expect(res.statusCode).toBe(400);
-  });
-
-  test("should call isValidRefreshToken with valid values", async () => {
-    const { sut, isValidRefreshTokenStub } = makeSut();
-
-    const isValidRefreshTokenSpy = jest.spyOn(isValidRefreshTokenStub, "check");
-
-    const httpRequest = {
-      refreshtoken: "valid_refresh_token",
-      accesstoken: "valid_access_token",
-    };
-
-    await sut.handle({ header: httpRequest });
-
-    expect(isValidRefreshTokenSpy).toBeCalledWith(
-      "valid_refresh_token",
-      "valid_id"
-    );
-  });
-
   test("should call getTokenInfo with valid values", async () => {
     const { sut, getTokenInfoStub } = makeSut();
 
@@ -156,19 +108,11 @@ describe("TokenInfo controller", () => {
   });
 
   test("should return statusCode 500 if any dependency throws", async () => {
-    const {
-      sut,
-      getTokenInfoStub,
-      isValidRefreshTokenStub,
-      requiredParamsStub,
-    } = makeSut();
+    const { sut, getTokenInfoStub, requiredParamsStub } = makeSut();
 
     jest.spyOn(getTokenInfoStub, "get").mockImplementation(() => {
       throw new Error();
     });
-    jest
-      .spyOn(isValidRefreshTokenStub, "check")
-      .mockRejectedValueOnce(new Error());
     jest.spyOn(requiredParamsStub, "check").mockImplementation(() => {
       throw new Error();
     });
