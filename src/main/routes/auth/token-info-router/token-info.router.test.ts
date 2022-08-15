@@ -33,9 +33,8 @@ describe("TokenInfo routes", () => {
       accessToken: tokens.accessToken,
     });
 
-    console.log(req.body);
-
     expect(req.body.exp).toBeTruthy();
+    expect(req.body.sub).toBeTruthy();
     expect(req.body.iat).toBeTruthy();
     expect(req.statusCode).toBe(200);
   });
