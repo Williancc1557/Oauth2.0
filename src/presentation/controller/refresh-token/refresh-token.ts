@@ -13,16 +13,16 @@ export class RefreshTokenController implements Controller {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      if (!httpRequest.body?.refreshToken) {
-        return badRequest(new MissingParamError("refreshToken"));
+      if (!httpRequest.header?.refreshtoken) {
+        return badRequest(new MissingParamError("refreshtoken"));
       }
 
       const userId = await this.checkRefreshToken.check(
-        httpRequest.body.refreshToken
+        httpRequest.header.refreshtoken
       );
 
       if (!userId) {
-        return badRequest(new InvalidParamError("refreshToken"));
+        return badRequest(new InvalidParamError("refreshtoken"));
       }
 
       const tokenInformation = this.createAccessToken.create(userId);

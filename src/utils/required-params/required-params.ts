@@ -8,6 +8,5 @@ export class UtilRequiredParams implements RequiredParams {
         return param;
       }
     }
-    console.log("passou");
   }
 }

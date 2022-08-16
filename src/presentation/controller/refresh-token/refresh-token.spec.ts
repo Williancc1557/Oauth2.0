@@ -54,8 +54,8 @@ describe("RefreshToken Controller", () => {
       .mockRejectedValueOnce(new Error());
 
     const req = await sut.handle({
-      body: {
-        refreshToken: "valid_access_token",
+      header: {
+        refreshtoken: "valid_access_token",
       },
     });
 
@@ -70,8 +70,8 @@ describe("RefreshToken Controller", () => {
     });
 
     const req = await sut.handle({
-      body: {
-        refreshToken: "valid_access_token",
+      header: {
+        refreshtoken: "valid_access_token",
       },
     });
 
@@ -92,8 +92,8 @@ describe("RefreshToken Controller", () => {
     jest.spyOn(checkRefreshTokenStub, "check").mockReturnValueOnce(undefined);
 
     const req = await sut.handle({
-      body: {
-        refreshToken: "valid_access_token",
+      header: {
+        refreshtoken: "valid_access_token",
       },
     });
 
@@ -106,8 +106,8 @@ describe("RefreshToken Controller", () => {
     const checkRefreshTokenSpy = jest.spyOn(checkRefreshTokenStub, "check");
 
     await sut.handle({
-      body: {
-        refreshToken: "valid_access_token",
+      header: {
+        refreshtoken: "valid_access_token",
       },
     });
 
@@ -120,8 +120,8 @@ describe("RefreshToken Controller", () => {
     const createAccessTokenSpy = jest.spyOn(createAccessTokenStub, "create");
 
     await sut.handle({
-      body: {
-        refreshToken: "valid_access_token",
+      header: {
+        refreshtoken: "valid_access_token",
       },
     });
 
@@ -132,8 +132,8 @@ describe("RefreshToken Controller", () => {
     const { sut } = makeSut();
 
     const req = await sut.handle({
-      body: {
-        refreshToken: "valid_access_token",
+      header: {
+        refreshtoken: "valid_access_token",
       },
     });
 
