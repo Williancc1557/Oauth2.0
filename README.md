@@ -1,6 +1,8 @@
-# API de Oauth2.0
+# API de autenticação com Oauth2.0
 
 Opa pessoal, tudo certo? Estou apresentando para vocês uma **API** que construi com as seguintes arquitetura e princípios: `Oauth2,0`, `clean archtecture`, `clean code` e `TDD`.
+
+Utilizei também o eslint da techmmunity, a comunidade/plataforma de tecnologia para auxiliar a todos da área. link do servidor: https://discord.gg/NMtAJ6whG7
 
 Vamos iniciar pelas **rotas**? Vamos lá! *(Após isso vou explicar como criei a API)*
 
@@ -21,11 +23,9 @@ Tudo isso que expliquei acima foi o que utilizei para desenvolver o meu sistema 
 
 ## Primeira rota: `/api/auth/sign-up`
 
-Essa rota vai ser a responsável por registrar o usuário, e ela vai te retornar os tokens de acesso do usuário.
+Essa rota vai ser a responsável por registrar o usuário, e ela vai te retornar os tokens de acesso do usuário. Observe o exemplo abaixo:
 
-***Vamos direto ao exemplo:***
-
-BODY:
+**BODY:**
 ```json
 {
     "name": "WillianAccount",
@@ -34,7 +34,7 @@ BODY:
 }
 ```
 
-Saida:
+**Saida:**
 ```json
 {
     "expiresIn": 300,
@@ -49,7 +49,7 @@ Já essa rota vai servir para quando o usuário não tiver mais o refresh-token 
 
 Por exemplo:
 
-BODY:
+**BODY:**
 
 ```json
 {
@@ -58,7 +58,7 @@ BODY:
 }
 ```
 
-Saida:
+**Saida:**
 
 ```json
 {
@@ -72,12 +72,12 @@ Mas ai você se pergunta: "Cadê o access-token???". Calma, tendo o refresh-toke
 
 Então, temos o nosso refresh-token, e não possuimos o access-token, ou ele está inválido. Para isso temos essa rota, onde você vai solicitar um novo access-token enviando pelo header o seu refresh-token. Veja o exemplo abaixo:
 
-HEADER:
+**HEADER:**
 ```json
 "refreshtoken": "ba9910f04e2cbafa604a69e1b"
 ```
 
-Saida:
+**Saida:**
 ```json
 {
     "expiresIn": 300,
@@ -91,10 +91,45 @@ Você deve estar se perguntando para que serve esse expireIn retornado pela API,
 
 Para pegar as informações do access-token, essa rota é a ideal! Para isso passe o seu access-token utilizando o header. Observe o exemplo abaixo:
 
-HEADER:
+**HEADER:**
 ```json
 {
     "accesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MmY4NWE4M2IwMDY0YzExODk0M2JlNzYiLCJzdWIiOiJjbGllbnQiLCJpYXQiOjE2NjA0NDM3MjQsImV4cCI6MTY2MDQ0NDAyNH0.aENfxONnDKOqquMuSMpGTLvnX-T1vcGr5tXclrQfilE"
 }
 ```
+
+**Saida:**
+```json
+{
+    "accountId": "62f85a83b0064c118943be76",
+    "sub": "client",
+    "iat": 1661116870,
+    "exp": 1661117170
+}
+```
+
+* `accountId`: É o id do usuário;
+* `sub`: A quem pertence esse token;
+* `iat`: Serve para visualizar em que tempo o token foi criado;
+* `exp`: Serve para visualizar quando que o token vai ser expirado.
+
+## Variáveis de ambiente
+
+Aqui eu irei falar as variáveis de ambiente que você pode utilizar para dados sensíveis! Não se preocupe, não é obrigatório essas variáveis, pois a API já possuem as variáveis por padrão.
+
+Para poder setar as variáveis crie um arquivo com o nome `.env` fora do `src`, vou demonstrar uma variável abaixo por exemplo:
+
+```env
+    MONGO_URL=http://example.com
+    PORT=1234
+    SECRET_JWT=mysecretjwt
+```
+
+**Variáveis:**
+
+* `MONGO_URL`: Serve para você setar o url do seu mongodb caso exista, caso não ele vai criar um automaticamente na sua máquina. Para isso baixe o mongodb no seu computador.
+
+* `PORT`: A porta que a API vai utilizar
+
+* `SECRET_JWT`: O secret que a API vai utilizar para criar o access-token
 
