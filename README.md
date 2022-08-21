@@ -135,13 +135,11 @@ Para poder setar as variáveis crie um arquivo com o nome `.env` fora do `src`, 
 
 ## Testes
 
-Esse aplicação deixei o máximo coberto de testes possível, para que seja possível realizar mudanças sem se preocupar em que algo tenha sido mudado, realizado alguma mudança inesperada. Para isso utilizei o `jest`, ótima ferramenta para testar partes de código, como essa aplicação é feita a partir do clean archtecture, então existem lugares que contém dependências. Para conseguir testar algo que exige dependências utilizamos o sistema de mockar do jest.
+Nessa aplicação deixei o máximo coberto de testes possível, para que seja possível realizar mudanças sem se preocupar em que algo tenha sido mudado, realizado alguma mudança inesperada. Para isso utilizei o `jest`, ótima ferramenta para testar partes de código, como essa aplicação é feita a partir do clean archtecture, então existem lugares que contém dependências. Para conseguir testar algo que exige dependências utilizamos o sistema de mockar do jest.
 
 Para mockar, o jest lhe proporciona algumas ferramentas, entre elas, existe o spyOn, que foi o que utilizei para mockar nessa API. E também utilizei os stubs, que são tipo umas dependências falsas, e nessas dependências falsas, é possível dar os parâmetros e o retorno.
 
-Podemos utilizar o spyOn para espionar os métodos desses stubs, ou seja, ver a quantidade de vezes que esse método do stub foi chamado, o que entro de parâmetro nesse método, ou até mesmo setar o retorno desse método, e entre mais funcionalidades. Com isso você consegue testar todas as depêndencias, olhando o que entra nela como parâmetro, para onde ela está indo, retorno, se ela dar erro para onde ela vai, e etc.
-
-Um exemplo na lógica abaixo:
+Podemos utilizar o spyOn para espionar os métodos desses stubs, ou seja, ver a quantidade de vezes que esse método do stub foi chamado, o que entro de parâmetro nesse método, ou até mesmo setar o retorno desse método, e entre mais funcionalidades. Com isso você consegue testar todas as depêndencias, olhando o que entra nela como parâmetro, para onde ela está indo, retorno, se ela dar erro para onde ela vai, e etc. Observe o exemplo de teste a seguir:
 
 ```ts
 
@@ -187,3 +185,16 @@ test("should Teste.paragraph is called with valid param", () => {
 ```
 
 E foi assim que fui testando cada classe dessa API.
+
+
+### Comandos
+
+* `yarn test`: Esse comando irá executar todos os testes, mas não irá amostrar as logs;
+
+* `yarn test:unit`: Esse comando irá executar todos os testes unitários com o `.spec.ts` no nome do arquivo e não vai amostrar as logs também;
+
+* `yarn test:integration`: Esse comando irá executar todos os testes de integração com o `.test.ts` no nome do arquivo e não vai amostrar as logs também;
+
+* `yarn test:verbose`: Esse comando irá executar todos os testes, mas diferente do `yarn test`, esse vai mostrar todas as logs;
+
+* `yarn test:ci`: Esse comando irá executar todos os testes e vai criar o coverage, que é o arquivo que gera um html mostrando os arquivos que estão cobertos com testes.
