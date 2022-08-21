@@ -19,7 +19,7 @@ No Oauth2.0 nós possuimos 2 tokens, o `access-token` e o `refresh-token`, esses
 
 Tudo isso que expliquei acima foi o que utilizei para desenvolver o meu sistema Oauth2.0.
 
-## Primeira rota: `sign-up`
+## Primeira rota: `/api/auth/sign-up`
 
 Essa rota vai ser a responsável por registrar o usuário, e ela vai te retornar os tokens de acesso do usuário.
 
@@ -34,12 +34,67 @@ BODY:
 }
 ```
 
-output:
+Saida:
 ```json
 {
     "expiresIn": 300,
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MzAxODU1YzQyMmJkY2Y1M2NjMzQ2YTUiLCJzdWIiOiJjbGllbnQiLCJpYXQiOjE2NjEwNDQwNjAsImV4cCI6MTY2MTA0NDM2MH0.CV_vO_lq0TBz3t7fW_9S1nUFDVpNXOV214_jSURpmbE",
     "refreshToken": "2615de11c12c7bcc3d74f9196"
+}
+```
+
+## Segunda rota `/api/auth/sign-in`
+
+Já essa rota vai servir para quando o usuário não tiver mais o refresh-token válido, você direciona-lo para a tela de login. Retornando e atualizando o seu refresh-token.
+
+Por exemplo:
+
+BODY:
+
+```json
+{
+    "email": "teste123@gmail.com",
+    "password": "Teste123"
+}
+```
+
+Saida:
+
+```json
+{
+    "refreshToken": "sb9910f04e2cbafa604a69e1b"
+}
+```
+
+Mas ai você se pergunta: "Cadê o access-token???". Calma, tendo o refresh-token você pode solicitar o access-token utilizando a próxima rota que vou falar abaixo, observe.
+
+## Terceira rota `/api/auth/refresh-token`
+
+Então, temos o nosso refresh-token, e não possuimos o access-token, ou ele está inválido. Para isso temos essa rota, onde você vai solicitar um novo access-token enviando pelo header o seu refresh-token. Veja o exemplo abaixo:
+
+HEADER:
+```json
+"refreshtoken": "ba9910f04e2cbafa604a69e1b"
+```
+
+Saida:
+```json
+{
+    "expiresIn": 300,
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MmY4NWE4M2IwMDY0YzExODk0M2JlNzYiLCJzdWIiOiJjbGllbnQiLCJpYXQiOjE2NjExMTU5MzAsImV4cCI6MTY2MTExNjIzMH0.HeKmXNam6ds0X_xKskPtbjF68JHeod9TRrA9s_9kWms"
+}
+```
+
+Você deve estar se perguntando para que serve esse expireIn retornado pela API, ela é o tempo em segundos que esse accessToken vai ser expirado.
+
+## Quarta rota `/api/auth/token-info`
+
+Para pegar as informações do access-token, essa rota é a ideal! Para isso passe o seu access-token utilizando o header. Observe o exemplo abaixo:
+
+HEADER:
+```json
+{
+    "accesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MmY4NWE4M2IwMDY0YzExODk0M2JlNzYiLCJzdWIiOiJjbGllbnQiLCJpYXQiOjE2NjA0NDM3MjQsImV4cCI6MTY2MDQ0NDAyNH0.aENfxONnDKOqquMuSMpGTLvnX-T1vcGr5tXclrQfilE"
 }
 ```
 
