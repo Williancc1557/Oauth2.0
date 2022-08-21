@@ -115,7 +115,7 @@ Para pegar as informações do access-token, essa rota é a ideal! Para isso pas
 
 ## Variáveis de ambiente
 
-Aqui eu irei falar as variáveis de ambiente que você pode utilizar para dados sensíveis! Não se preocupe, não é obrigatório essas variáveis, pois a API já possuem as variáveis por padrão.
+Aqui eu irei falar as variáveis de ambiente que você pode utilizar para dados que podem ser sensíveis. Não se preocupe, não é obrigatório essas variáveis, pois a API já possuem as variáveis por padrão.
 
 Para poder setar as variáveis crie um arquivo com o nome `.env` fora do `src`, vou demonstrar uma variável abaixo por exemplo:
 
@@ -125,6 +125,8 @@ Para poder setar as variáveis crie um arquivo com o nome `.env` fora do `src`, 
     SECRET_JWT=mysecretjwt
 ```
 
+[Clicando aqui](https://github.com/Williancc1557/Oauth2.0/blob/master/src/main/config/env.ts) você vai ver as variáveis default (padrão).
+
 ### Variáveis:
 
 * `MONGO_URL`: Serve para você setar o url do seu mongodb caso exista, caso não ele vai criar um automaticamente na sua máquina. Para isso baixe o mongodb no seu computador.
@@ -133,7 +135,7 @@ Para poder setar as variáveis crie um arquivo com o nome `.env` fora do `src`, 
 
 * `SECRET_JWT`: O secret que a API vai utilizar para criar o access-token
 
-## Testes
+## Testes com jest
 
 Nessa aplicação deixei o máximo coberto de testes possível, para que seja possível realizar mudanças sem se preocupar em que algo tenha sido mudado, realizado alguma mudança inesperada. Para isso utilizei o `jest`, ótima ferramenta para testar partes de código, como essa aplicação é feita a partir do clean archtecture, então existem lugares que contém dependências. Para conseguir testar algo que exige dependências utilizamos o sistema de mockar do jest.
 
@@ -144,7 +146,7 @@ Podemos utilizar o spyOn para espionar os métodos desses stubs, ou seja, ver a 
 ```ts
 
 /**
- * Criaremos essa classe que recebe uma dependência que pelo nome vai
+ * Vamos criar essa classe que recebe uma dependência que pelo nome vai
  * fazer algum parágrafo para utilizarmos.
  * */
 class TestDependency {
@@ -173,7 +175,7 @@ test("should Teste.paragraph is called with valid param", () => {
     // aqui eu passei o nosso stub como uma fake dependência
     const sut = new TestDependency(makeParagraphStub) 
 
-    // aqui eu pego a dependência espionada para utilizala depois
+    // aqui eu pego a dependência espionada para utiliza-la depois
     const makeParagraphSpy = jest.spyOn(makeParagraphStub) 
 
     // aqui eu executo a nossa classe
@@ -198,3 +200,24 @@ E foi assim que fui testando cada classe dessa API.
 * `yarn test:verbose`: Esse comando irá executar todos os testes, mas diferente do `yarn test`, esse vai mostrar todas as logs;
 
 * `yarn test:ci`: Esse comando irá executar todos os testes e vai criar o coverage, que é o arquivo que gera um html mostrando os arquivos que estão cobertos com testes.
+
+## Camadas do sistema
+
+É possível visualizar dentro do `src` as camadas dessa API, vou listar elas aqui e explicar qual a função de cada uma.
+
+* `data`: Aqui é a camada em que vai ter as dependências que vão se comunicar com o infra, onde fica a infraestrutura da aplicação;
+
+* `decorators`: Camada no qual tem alguns design patterns que utilizo ao longo da API;
+
+* `domain`: É o core dessa API onde fica as principais interfaces utilizadas na aplicação;
+
+* `infra`: Serve para se comunicar com o banco de dados e pegar dados e enviar dados;
+
+* `main`: Aqui serve para integrar a API com algum framework como o express utilizado nessa API;
+
+* `presentation`: Já nessa camada crio os controllers e as suas dependências em formato de interface;
+
+* `utils`: Nessa camada, coloco classes, métodos, ou outra coisas que sei que serão utilizados constatemente ao longo da API.
+
+
+E foi assim que fui montando cada rota dessa API, utilizando essas camadas listadas acima.
