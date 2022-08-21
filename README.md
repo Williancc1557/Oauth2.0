@@ -125,7 +125,7 @@ Para poder setar as variáveis crie um arquivo com o nome `.env` fora do `src`, 
     SECRET_JWT=mysecretjwt
 ```
 
-**Variáveis:**
+### Variáveis:
 
 * `MONGO_URL`: Serve para você setar o url do seu mongodb caso exista, caso não ele vai criar um automaticamente na sua máquina. Para isso baixe o mongodb no seu computador.
 
@@ -133,3 +133,57 @@ Para poder setar as variáveis crie um arquivo com o nome `.env` fora do `src`, 
 
 * `SECRET_JWT`: O secret que a API vai utilizar para criar o access-token
 
+## Testes
+
+Esse aplicação deixei o máximo coberto de testes possível, para que seja possível realizar mudanças sem se preocupar em que algo tenha sido mudado, realizado alguma mudança inesperada. Para isso utilizei o `jest`, ótima ferramenta para testar partes de código, como essa aplicação é feita a partir do clean archtecture, então existem lugares que contém dependências. Para conseguir testar algo que exige dependências utilizamos o sistema de mockar do jest.
+
+Para mockar, o jest lhe proporciona algumas ferramentas, entre elas, existe o spyOn, que foi o que utilizei para mockar nessa API. E também utilizei os stubs, que são tipo umas dependências falsas, e nessas dependências falsas, é possível dar os parâmetros e o retorno.
+
+Podemos utilizar o spyOn para espionar os métodos desses stubs, ou seja, ver a quantidade de vezes que esse método do stub foi chamado, o que entro de parâmetro nesse método, ou até mesmo setar o retorno desse método, e entre mais funcionalidades. Com isso você consegue testar todas as depêndencias, olhando o que entra nela como parâmetro, para onde ela está indo, retorno, se ela dar erro para onde ela vai, e etc.
+
+Um exemplo na lógica abaixo:
+
+```ts
+
+/**
+ * Criaremos essa classe que recebe uma dependência que pelo nome vai
+ * fazer algum parágrafo para utilizarmos.
+ * */
+class TestDependency {
+    public constructor(
+        private readonly makeParagraph: MakeParagraph
+    ) {}
+    public paragraph(name: string): string {
+        const paragraph = this.makeParagraph.make(name)
+
+        return paragraph
+    }
+}
+
+
+/* teste-dependency.spec.ts (arquivo para testar a classe acima) */
+
+
+test("should Teste.paragraph is called with valid param", () => {
+    // Aqui eu criei o stub (fake dependência)
+    class makeParagraphStub { 
+        public make(name: string): string {
+            return `hello ${name}`
+        }
+    }
+
+    // aqui eu passei o nosso stub como uma fake dependência
+    const sut = new TestDependency(makeParagraphStub) 
+
+    // aqui eu pego a dependência espionada para utilizala depois
+    const makeParagraphSpy = jest.spyOn(makeParagraphStub) 
+
+    // aqui eu executo a nossa classe
+    sut.paragraph("willian") 
+
+    // aqui eu verifico se a dependência foi chamada com o parâmetro correto
+    expect(makeParagraphSpy).toBeCalledWith("willian") 
+})
+```
+
+E foi assim que fui testando cada classe dessa API.
