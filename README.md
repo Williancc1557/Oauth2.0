@@ -6,18 +6,18 @@ Vamos iniciar pelas **rotas**? Vamos lá! *(Após isso vou explicar como criei a
 
 ## Oauth2.0
 
-Bom, justo iniciar falando sobre como montei a lógica do Oauth2.0 nessa aplicação, consultei pessoas que tem experiência em criar esse tipo de sistema, consiste em uma forma de se autenticar com alguma aplicação utilizando também o **OpenId**, um pouco mais a frente explico melhor sobre o OpenId.
+Bom, primeiramente vamos iniciar falando sobre como realizei a montagem da lógica do Oauth2.0 nessa aplicação. Consiste em uma forma de se autenticar com alguma aplicação utilizando o **OpenId**, um pouco mais a frente explico melhor sobre o OpenId.
 
 No Oauth2.0 nós possuimos 2 tokens, o `access-token` e o `refresh-token`, esses tokens são super importantes para construirmos o nosso sistema.
 
-* `access-token`: Ele está associado com o id do usuário e geralmente é temporário por um curto período de tempo, entretanto, nós podemos utilizar o decode nesse token, após isso teremos o ID do usuário. Tendo o id do usuário é possível pegar as informações do banco de dados que estão relacionados com esse ID. Então, acabei de explicar para vocês o conceito de OpenId.
+* `access-token`: Ele está associado com o ID do usuário e geralmente é temporário por um curto período de tempo, entretanto, nós podemos utilizar o decode nesse token e obteremos o ID do usuário. Possuindo em mãos o ID do usuário é possível coletar as informações do banco de dados que estão relacionados com esse ID. Então, acabei de explicar para vocês acidentalmente um pouco sobre OpenId.
 
-* `refresh-token`: Já esse token, que geralmente é salvo no banco de dados relacionado com o id do usuário de quem o pertence. Mas então, para que serve esse token? Serve para quando o access-token ficar inválido nós conseguirmos gerar um novo access-token sem precisar que o usuário tenha que ir para a página de login novamente. Ou seja, em quanto o refresh-token for válido, nós teremos sempre um access-token válido.
+* `refresh-token`: Já nesse token, que geralmente é salvo no banco de dados relacionado com o ID do usuário de quem o pertence. Mas então, para que serve esse token? Serve para que quando o access-token venha ficar inválido seja possível gerar um novo access-token sem precisar que o usuário tenha que ir para a página de login novamente. Ou seja, em quanto o refresh-token for válido, nós sempre teremos um access-token válido.
 
 * `OpenId`: Só para reforçar sobre o OpenId, vamos a um exemplo, sabe aquele site que você consegue realizar login com sua conta do google por exemplo? Então, esse sistema utiliza do OpenId. A partir do momento em que você realiza o login com sua conta do google, ele vai disponibilizar um access-token para a aplicação, que vai estar associado com o seu id. Tendo isso ele pode pegar informações não sensíveis da sua conta enviando esse token para a API do google, pegando por exemplo seu: nome, foto de perfil, email, telefone, e etc...
 
 
-Tudo isso que expliquei acima foi o que utilizei para compor o sistema Oauth2.0 do sistema.
+Tudo isso que expliquei acima foi o que utilizei para desenvolver o meu sistema Oauth2.0.
 
 ## Primeira rota: `sign-up`
 
