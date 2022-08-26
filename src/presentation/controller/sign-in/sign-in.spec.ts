@@ -141,10 +141,10 @@ describe("SignIn Controller", () => {
 
   test("should validateEmail is called with correct values", async () => {
     const { sut, validateEmailStub } = makeSut();
-    const validateEmailSpy = jest.spyOn(validateEmailStub, "validate");
+    const validateSpy = jest.spyOn(validateEmailStub, "validate");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(validateEmailSpy).toBeCalledWith("valid_email@mail.com");
+    expect(validateSpy).toBeCalledWith("valid_email@mail.com");
   });
 
   test("should returns statusCode 400 if validateEmail returns false", async () => {
@@ -169,10 +169,10 @@ describe("SignIn Controller", () => {
 
   test("should passwordValidator is called with correct values", async () => {
     const { sut, passwordValidatorStub } = makeSut();
-    const nameValidatorSpy = jest.spyOn(passwordValidatorStub, "validate");
+    const validateSpy = jest.spyOn(passwordValidatorStub, "validate");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(nameValidatorSpy).toBeCalledWith("valid_password");
+    expect(validateSpy).toBeCalledWith("valid_password");
   });
 
   test("should SignIn returns statusCode 400 if passwordValidator return false", async () => {
@@ -193,21 +193,18 @@ describe("SignIn Controller", () => {
 
   test("should resetRefreshToken is called with correct values", async () => {
     const { sut, resetRefreshTokenStub } = makeSut();
-    const nameValidatorSpy = jest.spyOn(resetRefreshTokenStub, "reset");
+    const resetSpy = jest.spyOn(resetRefreshTokenStub, "reset");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(nameValidatorSpy).toBeCalledWith("valid_id");
+    expect(resetSpy).toBeCalledWith("valid_id");
   });
 
   test("should encrypter.compare is called with correct values", async () => {
     const { sut, encrypterStub } = makeSut();
-    const nameValidatorSpy = jest.spyOn(encrypterStub, "compare");
+    const compareSpy = jest.spyOn(encrypterStub, "compare");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(nameValidatorSpy).toBeCalledWith(
-      "valid_password",
-      "hashed_password"
-    );
+    expect(compareSpy).toBeCalledWith("valid_password", "hashed_password");
   });
 
   test("should return statusCode 400 if encrypter.compare return false", async () => {
@@ -220,9 +217,9 @@ describe("SignIn Controller", () => {
 
   test("should resetRefreshToken not return undefined", async () => {
     const { sut, resetRefreshTokenStub } = makeSut();
-    const nameValidatorSpy = jest.spyOn(resetRefreshTokenStub, "reset");
+    const resetSpy = jest.spyOn(resetRefreshTokenStub, "reset");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(nameValidatorSpy).toBeTruthy();
+    expect(resetSpy).toBeTruthy();
   });
 });
