@@ -221,3 +221,9 @@ E foi assim que fui testando cada classe dessa API.
 
 
 E foi assim que fui montando cada rota dessa API, utilizando essas camadas listadas acima.
+
+## Husky
+
+Essa tecnologia utilizei para evitar mandar commits com algum teste falhando. Como ela funciona? Nele eu posso setar algum comando para ser executado quando alguém da o comando do commit ele vai executar esse tal comando. Se esse comando der erro, o commit vai falhar. Se eu colocar por exemplo o comando `yarn test` no husky ele vai executar o comando para realizar todos os tests antes de commitar algo, se caso algum teste falhar, o commit não será realizado.
+
+A configuração do husky está localizada no arquivo `.husky`.
