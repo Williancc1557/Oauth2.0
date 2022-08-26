@@ -2,10 +2,24 @@ import type { Encrypter } from "../../../data/protocols/encrypter";
 import type { AccountModel } from "../../../domain/models/account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
+import {
+  InvalidParamError,
+  MissingParamError,
+  UserNotExistsError,
+} from "../../errors";
+import { badRequest, serverError } from "../../helpers/http-helper";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { RequiredParams } from "../../protocols/required-params";
 import type { ValidateEmail } from "../../protocols/validate-email";
 import { SignInController } from "./sign-in";
+
+const makeFakeHttpRequest = () => ({
+  body: {
+    name: "valid_name",
+    email: "valid_email@mail.com",
+    password: "valid_password",
+  },
+});
 
 const makeValidateEmailStub = () => {
   class ValidateEmailStub implements ValidateEmail {
@@ -110,50 +124,35 @@ const makeSut = () => {
 };
 
 describe("SignIn Controller", () => {
-  test("should return statusCode 400 if password is not provided", async () => {
+  test("should return statusCode 400 if email is not provided", async () => {
     const { sut, requiredParamsStub } = makeSut();
-
     jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("email");
 
     const httpRequest = {
-      body: {},
+      body: {
+        email: "any_email@gmail.com",
+      },
     };
 
     const res = await sut.handle(httpRequest);
 
-    expect(res.statusCode).toBe(400);
+    expect(res).toStrictEqual(badRequest(new MissingParamError("email")));
   });
 
   test("should validateEmail is called with correct values", async () => {
     const { sut, validateEmailStub } = makeSut();
-
     const validateEmailSpy = jest.spyOn(validateEmailStub, "validate");
-
-    const httpRequest = {
-      name: "valid_name",
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    await sut.handle({ body: httpRequest });
+    await sut.handle(makeFakeHttpRequest());
 
     expect(validateEmailSpy).toBeCalledWith("valid_email@mail.com");
   });
 
   test("should returns statusCode 400 if validateEmail returns false", async () => {
     const { sut, validateEmailStub } = makeSut();
-
     jest.spyOn(validateEmailStub, "validate").mockReturnValueOnce(false);
+    const req = await sut.handle(makeFakeHttpRequest());
 
-    const httpRequest = {
-      name: "valid_name",
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    const req = await sut.handle({ body: httpRequest });
-
-    expect(req.statusCode).toBe(400);
+    expect(req).toStrictEqual(badRequest(new InvalidParamError("email")));
   });
 
   test("should returns statusCode 500 if validateEmail throws", async () => {
@@ -163,88 +162,47 @@ describe("SignIn Controller", () => {
       throw new Error();
     });
 
-    const httpRequest = {
-      name: "valid_name",
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
+    const req = await sut.handle(makeFakeHttpRequest());
 
-    const req = await sut.handle({ body: httpRequest });
-
-    expect(req.statusCode).toBe(500);
+    expect(req).toStrictEqual(serverError());
   });
 
   test("should passwordValidator is called with correct values", async () => {
     const { sut, passwordValidatorStub } = makeSut();
-
     const nameValidatorSpy = jest.spyOn(passwordValidatorStub, "validate");
-
-    const httpRequest = {
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    await sut.handle({ body: httpRequest });
+    await sut.handle(makeFakeHttpRequest());
 
     expect(nameValidatorSpy).toBeCalledWith("valid_password");
   });
 
   test("should SignIn returns statusCode 400 if passwordValidator return false", async () => {
     const { sut, passwordValidatorStub } = makeSut();
-
     jest.spyOn(passwordValidatorStub, "validate").mockReturnValueOnce(false);
+    const res = await sut.handle(makeFakeHttpRequest());
 
-    const httpRequest = {
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    const req = await sut.handle({ body: httpRequest });
-
-    expect(req.statusCode).toBe(400);
+    expect(res).toStrictEqual(badRequest(new InvalidParamError("password")));
   });
 
   test("should SignIn returns statusCode 400 if account don't exists", async () => {
     const { sut, getAccountByEmailStub } = makeSut();
-
     jest.spyOn(getAccountByEmailStub, "get").mockReturnValueOnce(undefined);
+    const res = await sut.handle(makeFakeHttpRequest());
 
-    const httpRequest = {
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    const req = await sut.handle({ body: httpRequest });
-
-    expect(req.statusCode).toBe(400);
+    expect(res).toStrictEqual(badRequest(new UserNotExistsError()));
   });
 
   test("should resetRefreshToken is called with correct values", async () => {
     const { sut, resetRefreshTokenStub } = makeSut();
-
     const nameValidatorSpy = jest.spyOn(resetRefreshTokenStub, "reset");
-
-    const httpRequest = {
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    await sut.handle({ body: httpRequest });
+    await sut.handle(makeFakeHttpRequest());
 
     expect(nameValidatorSpy).toBeCalledWith("valid_id");
   });
 
   test("should encrypter.compare is called with correct values", async () => {
     const { sut, encrypterStub } = makeSut();
-
     const nameValidatorSpy = jest.spyOn(encrypterStub, "compare");
-
-    const httpRequest = {
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    await sut.handle({ body: httpRequest });
+    await sut.handle(makeFakeHttpRequest());
 
     expect(nameValidatorSpy).toBeCalledWith(
       "valid_password",
@@ -254,30 +212,16 @@ describe("SignIn Controller", () => {
 
   test("should return statusCode 400 if encrypter.compare return false", async () => {
     const { sut, encrypterStub } = makeSut();
-
     jest.spyOn(encrypterStub, "compare").mockResolvedValueOnce(false);
+    const res = await sut.handle(makeFakeHttpRequest());
 
-    const httpRequest = {
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    const res = await sut.handle({ body: httpRequest });
-
-    expect(res.statusCode).toBe(400);
+    expect(res).toStrictEqual(badRequest(new InvalidParamError("password")));
   });
 
   test("should resetRefreshToken not return undefined", async () => {
     const { sut, resetRefreshTokenStub } = makeSut();
-
     const nameValidatorSpy = jest.spyOn(resetRefreshTokenStub, "reset");
-
-    const httpRequest = {
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    await sut.handle({ body: httpRequest });
+    await sut.handle(makeFakeHttpRequest());
 
     expect(nameValidatorSpy).toBeTruthy();
   });
