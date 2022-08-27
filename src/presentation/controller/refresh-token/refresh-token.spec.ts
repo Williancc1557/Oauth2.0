@@ -4,6 +4,14 @@ import type {
   CreateAccessTokenOutput,
 } from "../../../data/protocols/create-access-token";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
+import { badRequest, ok, serverError } from "../../helpers/http-helper";
+import { InvalidParamError, MissingParamError } from "../../errors";
+
+const makeFakeHttpRequest = () => ({
+  header: {
+    refreshtoken: "valid_access_token",
+  },
+});
 
 const makeCheckRefreshTokenStub = (): CheckRefreshToken => {
   class CheckRefreshToken implements CheckRefreshToken {
@@ -46,99 +54,74 @@ const makeSut = () => {
 };
 
 describe("RefreshToken Controller", () => {
-  test("should return internalServerError if checkRefreshToken has any error", async () => {
+  test("should return 500 if checkRefreshToken has any error", async () => {
     const { sut, checkRefreshTokenStub } = makeSut();
 
     jest
       .spyOn(checkRefreshTokenStub, "check")
       .mockRejectedValueOnce(new Error());
 
-    const req = await sut.handle({
-      header: {
-        refreshtoken: "valid_access_token",
-      },
-    });
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    expect(req.statusCode).toBe(500);
+    expect(httpResponse).toStrictEqual(serverError());
   });
 
-  test("should return internalServerError if createAccessTokenStub has any error", async () => {
+  test("should return 500 if createAccessTokenStub has any error", async () => {
     const { sut, createAccessTokenStub } = makeSut();
 
     jest.spyOn(createAccessTokenStub, "create").mockImplementation(() => {
       throw new Error();
     });
 
-    const req = await sut.handle({
-      header: {
-        refreshtoken: "valid_access_token",
-      },
-    });
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    expect(req.statusCode).toBe(500);
+    expect(httpResponse).toStrictEqual(serverError());
   });
 
   test("should return 400 if refreshToken is not provided", async () => {
     const { sut } = makeSut();
+    const httpResponse = await sut.handle({});
 
-    const req = await sut.handle({});
-
-    expect(req.statusCode).toBe(400);
+    expect(httpResponse).toStrictEqual(
+      badRequest(new MissingParamError("refreshtoken"))
+    );
   });
 
-  test("should return 400 if refreshToken is invalid", async () => {
+  test("should return 400 if checkRefreshToken returns null", async () => {
     const { sut, checkRefreshTokenStub } = makeSut();
+    jest.spyOn(checkRefreshTokenStub, "check").mockReturnValueOnce(null);
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    jest.spyOn(checkRefreshTokenStub, "check").mockReturnValueOnce(undefined);
-
-    const req = await sut.handle({
-      header: {
-        refreshtoken: "valid_access_token",
-      },
-    });
-
-    expect(req.statusCode).toBe(400);
+    expect(httpResponse).toStrictEqual(
+      badRequest(new InvalidParamError("refreshtoken"))
+    );
   });
 
-  test("should checkRefreshToken is called with correct values", async () => {
+  test("should checkRefreshToken is called with correct accessToken", async () => {
     const { sut, checkRefreshTokenStub } = makeSut();
-
     const checkRefreshTokenSpy = jest.spyOn(checkRefreshTokenStub, "check");
-
-    await sut.handle({
-      header: {
-        refreshtoken: "valid_access_token",
-      },
-    });
+    await sut.handle(makeFakeHttpRequest());
 
     expect(checkRefreshTokenSpy).toBeCalledWith("valid_access_token");
   });
 
-  test("should create access is called with correct values", async () => {
+  test("should create access is called with correct id", async () => {
     const { sut, createAccessTokenStub } = makeSut();
-
     const createAccessTokenSpy = jest.spyOn(createAccessTokenStub, "create");
-
-    await sut.handle({
-      header: {
-        refreshtoken: "valid_access_token",
-      },
-    });
+    await sut.handle(makeFakeHttpRequest());
 
     expect(createAccessTokenSpy).toBeCalledWith("valid_user_id");
   });
 
-  test("should return valid response if success", async () => {
+  test("should return 200 if success", async () => {
     const { sut } = makeSut();
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    const req = await sut.handle({
-      header: {
-        refreshtoken: "valid_access_token",
-      },
-    });
-
-    expect(req.statusCode).toBe(200);
-    expect(req.body.accessToken).toBeTruthy();
-    expect(req.body.expiresIn).toBeTruthy();
+    expect(httpResponse).toStrictEqual(
+      ok({
+        accessToken: "valid_access_token",
+        expiresIn: 300,
+      })
+    );
   });
 });
