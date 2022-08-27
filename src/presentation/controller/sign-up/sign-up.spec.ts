@@ -170,9 +170,7 @@ describe("Sign-Up", () => {
 
   test("should validateEmail is called with correct values", async () => {
     const { sut, validateEmailStub } = makeSut();
-
     const validateEmailSpy = jest.spyOn(validateEmailStub, "validate");
-
     await sut.handle(makeFakeHttpRequest());
 
     expect(validateEmailSpy).toBeCalledWith("valid_email@mail.com");
@@ -201,7 +199,6 @@ describe("Sign-Up", () => {
 
   test("should nameValidator is called with correct values", async () => {
     const { sut, nameValidatorStub } = makeSut();
-
     const nameValidatorSpy = jest.spyOn(nameValidatorStub, "validate");
     await sut.handle(makeFakeHttpRequest());
 
@@ -210,7 +207,6 @@ describe("Sign-Up", () => {
 
   test("should SignUp returns statusCode 400 if nameValidator return false", async () => {
     const { sut, nameValidatorStub } = makeSut();
-
     jest.spyOn(nameValidatorStub, "validate").mockReturnValueOnce(false);
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
@@ -221,7 +217,6 @@ describe("Sign-Up", () => {
 
   test("should passwordValidator is called with correct values", async () => {
     const { sut, passwordValidatorStub } = makeSut();
-
     const nameValidatorSpy = jest.spyOn(passwordValidatorStub, "validate");
     await sut.handle(makeFakeHttpRequest());
 
@@ -230,7 +225,6 @@ describe("Sign-Up", () => {
 
   test("should SignUp returns statusCode 400 if passwordValidator return false", async () => {
     const { sut, passwordValidatorStub } = makeSut();
-
     jest.spyOn(passwordValidatorStub, "validate").mockReturnValueOnce(false);
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
@@ -241,7 +235,6 @@ describe("Sign-Up", () => {
 
   test("should getAccountByEmail is called with correct values", async () => {
     const { sut, getAccountByEmailStub } = makeSut();
-
     const getAccountByEmailSpy = jest.spyOn(getAccountByEmailStub, "get");
     await sut.handle(makeFakeHttpRequest());
 
@@ -267,7 +260,6 @@ describe("Sign-Up", () => {
 
   test("should returns statusCode 500 if getAccountByEmail throws", async () => {
     const { sut, getAccountByEmailStub } = makeSut();
-
     jest.spyOn(getAccountByEmailStub, "get").mockRejectedValueOnce(Error);
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
@@ -276,7 +268,6 @@ describe("Sign-Up", () => {
 
   test("should AddAccount is called with correct values", async () => {
     const { sut, addAccountStub } = makeSut();
-
     const addAccountSpy = jest.spyOn(addAccountStub, "add");
     await sut.handle(makeFakeHttpRequest());
 
@@ -289,7 +280,6 @@ describe("Sign-Up", () => {
 
   test("should returns statusCode 500 if addAccount throws", async () => {
     const { sut, addAccountStub } = makeSut();
-
     jest.spyOn(addAccountStub, "add").mockRejectedValueOnce(Error);
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
