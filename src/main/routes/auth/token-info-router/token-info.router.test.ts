@@ -29,8 +29,8 @@ describe("TokenInfo routes", () => {
   test("should return valid body if success", async () => {
     const tokens = await makeTokens();
     const req = await request(app).get("/api/auth/token-info").set({
-      refreshToken: tokens.refreshToken,
-      accessToken: tokens.accessToken,
+      refreshtoken: tokens.refreshToken,
+      accesstoken: tokens.accessToken,
     });
 
     expect(req.body.exp).toBeTruthy();
