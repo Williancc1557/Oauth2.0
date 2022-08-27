@@ -1,5 +1,10 @@
-import { InvalidParamError, MissingParamError } from "../../errors";
-import { badRequest, ok, serverError } from "../../helpers/http-helper";
+import { MissingParamError } from "../../errors";
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from "../../helpers/http-helper";
 import type {
   Controller,
   HttpRequest,
@@ -23,15 +28,17 @@ export class TokenInfoController implements Controller {
         httpRequest.header
       );
 
+      const { accesstoken } = httpRequest.header;
+
       if (requiredParam) {
         return badRequest(new MissingParamError(requiredParam));
       }
 
-      if (!this.verifyAccessToken.verify(httpRequest.header.accesstoken)) {
-        return badRequest(new InvalidParamError("accessToken"));
+      if (!this.verifyAccessToken.verify(accesstoken)) {
+        return unauthorized();
       }
 
-      const tokenInfo = this.getTokenInfo.get(httpRequest.header.accesstoken);
+      const tokenInfo = this.getTokenInfo.get(accesstoken);
 
       return ok(tokenInfo);
     } catch (err) {

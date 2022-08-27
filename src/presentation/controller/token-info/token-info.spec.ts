@@ -1,5 +1,10 @@
-import { InvalidParamError, MissingParamError } from "../../errors";
-import { badRequest, ok, serverError } from "../../helpers/http-helper";
+import { MissingParamError } from "../../errors";
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from "../../helpers/http-helper";
 import type { RequiredParams } from "../../protocols";
 import type {
   GetTokenInfo,
@@ -92,9 +97,7 @@ describe("TokenInfo controller", () => {
     jest.spyOn(verifyAccessTokenStub, "verify").mockReturnValueOnce(false);
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    expect(httpResponse).toStrictEqual(
-      badRequest(new InvalidParamError("accessToken"))
-    );
+    expect(httpResponse).toStrictEqual(unauthorized());
   });
 
   test("should call getTokenInfo with valid values", async () => {
