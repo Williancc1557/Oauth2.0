@@ -15,9 +15,12 @@ const makeTokens = async () => {
   };
 };
 
+let tokens: { refreshToken: string; accessToken: string };
+
 describe("TokenInfo routes", () => {
   beforeAll(async () => {
     await mongoHelper.connect();
+    tokens = await makeTokens();
   });
 
   afterAll(async () => {
@@ -27,7 +30,6 @@ describe("TokenInfo routes", () => {
   });
 
   test("should return valid body if success", async () => {
-    const tokens = await makeTokens();
     const req = await request(app).get("/api/auth/token-info").set({
       refreshtoken: tokens.refreshToken,
       accesstoken: tokens.accessToken,
