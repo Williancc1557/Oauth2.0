@@ -6,7 +6,12 @@ import {
   InvalidParamError,
   MissingParamError,
 } from "../../errors";
-import { badRequest, ok, serverError } from "../../helpers/http-helper";
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from "../../helpers/http-helper";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { ValidateEmail } from "../../protocols/validate-email";
 import type {
@@ -42,7 +47,7 @@ export class SignInController implements Controller {
       }
 
       if (!this.passwordValidator.validate(httpRequest.body.password)) {
-        return badRequest(new InvalidParamError("password"));
+        return unauthorized();
       }
 
       const account = await this.getAccountByEmail.get(httpRequest.body.email);

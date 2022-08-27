@@ -7,7 +7,11 @@ import {
   MissingParamError,
   UserNotExistsError,
 } from "../../errors";
-import { badRequest, serverError } from "../../helpers/http-helper";
+import {
+  badRequest,
+  serverError,
+  unauthorized,
+} from "../../helpers/http-helper";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { RequiredParams } from "../../protocols/required-params";
 import type { ValidateEmail } from "../../protocols/validate-email";
@@ -180,7 +184,7 @@ describe("SignIn Controller", () => {
     jest.spyOn(passwordValidatorStub, "validate").mockReturnValueOnce(false);
     const res = await sut.handle(makeFakeHttpRequest());
 
-    expect(res).toStrictEqual(badRequest(new InvalidParamError("password")));
+    expect(res).toStrictEqual(unauthorized());
   });
 
   test("should SignIn returns statusCode 400 if account don't exists", async () => {
