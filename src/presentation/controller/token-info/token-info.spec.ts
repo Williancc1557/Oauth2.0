@@ -1,3 +1,5 @@
+import { InvalidParamError, MissingParamError } from "../../errors";
+import { badRequest, ok, serverError } from "../../helpers/http-helper";
 import type { RequiredParams } from "../../protocols";
 import type {
   GetTokenInfo,
@@ -5,6 +7,13 @@ import type {
 } from "../../protocols/get-token-info";
 import type { VerifyAccessToken } from "../../protocols/verify-access-token";
 import { TokenInfoController } from "./token-info";
+
+const makeFakeHttpRequest = () => ({
+  header: {
+    refreshtoken: "valid_refresh_token",
+    accesstoken: "valid_access_token",
+  },
+});
 
 const makeRequiredParamsStub = () => {
   class RequiredParamsStub implements RequiredParams {
@@ -65,44 +74,33 @@ const makeSut = () => {
 describe("TokenInfo controller", () => {
   test("should return statusCode 400 if any param requested is not provided", async () => {
     const { sut, requiredParamsStub } = makeSut();
-
-    jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("refreshToken");
+    jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("refreshtoken");
 
     const httpRequest = {
       accesstoken: "valid_access_token",
     };
 
-    const res = await sut.handle({ header: httpRequest });
+    const httpResponse = await sut.handle({ header: httpRequest });
 
-    expect(res.statusCode).toBe(400);
+    expect(httpResponse).toStrictEqual(
+      badRequest(new MissingParamError("refreshtoken"))
+    );
   });
 
   test("should return statusCode 400 if accessToken is not valid", async () => {
     const { sut, verifyAccessTokenStub } = makeSut();
-
     jest.spyOn(verifyAccessTokenStub, "verify").mockReturnValueOnce(false);
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    const httpRequest = {
-      refreshtoken: "valid_refresh_token",
-      accesstoken: "valid_access_token",
-    };
-
-    const res = await sut.handle({ header: httpRequest });
-
-    expect(res.statusCode).toBe(400);
+    expect(httpResponse).toStrictEqual(
+      badRequest(new InvalidParamError("accessToken"))
+    );
   });
 
   test("should call getTokenInfo with valid values", async () => {
     const { sut, getTokenInfoStub } = makeSut();
-
     const getTokenInfoSpy = jest.spyOn(getTokenInfoStub, "get");
-
-    const httpRequest = {
-      refreshtoken: "valid_refresh_token",
-      accesstoken: "valid_access_token",
-    };
-
-    await sut.handle({ header: httpRequest });
+    await sut.handle(makeFakeHttpRequest());
 
     expect(getTokenInfoSpy).toBeCalledWith("valid_access_token");
   });
@@ -113,34 +111,26 @@ describe("TokenInfo controller", () => {
     jest.spyOn(getTokenInfoStub, "get").mockImplementation(() => {
       throw new Error();
     });
+
     jest.spyOn(requiredParamsStub, "check").mockImplementation(() => {
       throw new Error();
     });
 
-    const httpRequest = {
-      refreshtoken: "valid_refresh_token",
-      accesstoken: "valid_access_token",
-    };
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    expect((await sut.handle({ header: httpRequest })).statusCode).toBe(500);
+    expect(httpResponse).toStrictEqual(serverError());
   });
 
   test("should return statusCode 200 and valid body if success", async () => {
     const { sut } = makeSut();
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    const httpRequest = {
-      refreshtoken: "valid_refresh_token",
-      accesstoken: "valid_access_token",
-      coidera: "aaa",
-    };
-
-    const res = await sut.handle({ header: httpRequest });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toStrictEqual({
-      accountId: "valid_id",
-      exp: 12345,
-      iat: 12345,
-    });
+    expect(httpResponse).toStrictEqual(
+      ok({
+        accountId: "valid_id",
+        exp: 12345,
+        iat: 12345,
+      })
+    );
   });
 });
