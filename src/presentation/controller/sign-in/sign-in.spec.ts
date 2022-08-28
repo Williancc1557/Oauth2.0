@@ -85,6 +85,7 @@ const makeSut = () => {
     getAccountByEmailStub,
     resetRefreshTokenStub,
     encrypterStub,
+    validationStub,
   };
 };
 
@@ -127,5 +128,19 @@ describe("SignIn Controller", () => {
     await sut.handle(makeFakeHttpRequest());
 
     expect(resetSpy).toBeTruthy();
+  });
+
+  test("should return 400 if validation returns an error", async () => {
+    const { sut, validationStub } = makeSut();
+
+    jest
+      .spyOn(validationStub, "validate")
+      .mockReturnValueOnce(new InvalidParamError("email"));
+
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
+
+    expect(httpResponse).toStrictEqual(
+      badRequest(new InvalidParamError("email"))
+    );
   });
 });
