@@ -25,7 +25,12 @@ export class TokenInfoController implements Controller {
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      this.validation.validate(httpRequest.header);
+      const error = this.validation.validate(httpRequest.header);
+
+      if (error) {
+        return badRequest(error);
+      }
+
       const requiredParam = this.requiredParams.check(
         ["accesstoken"],
         httpRequest.header
