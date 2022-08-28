@@ -9,7 +9,6 @@ import {
   UtilCreateAccessToken,
   UtilCreateRefreshToken,
   UtilEncrypter,
-  UtilNameValidator,
   UtilPasswordValidator,
 } from "../../utils/";
 import { makeSignUpValidation } from "./sign-up-validation";
@@ -19,7 +18,6 @@ export const makeSignUpController = () => {
   const getAccountByEmail = new DbGetAccountByEmail(
     getAccountByEmailRepository
   );
-
   const createRefreshToken = new UtilCreateRefreshToken();
   const createAccessToken = new UtilCreateAccessToken();
   const addAccountRepository = new AddAccountMongoRepository(
@@ -29,15 +27,13 @@ export const makeSignUpController = () => {
 
   const SALTS = 10;
   const encrypter = new UtilEncrypter(SALTS);
-  const addAccount = new DbAddAccount(addAccountRepository, encrypter);
 
-  const nameValidator = new UtilNameValidator();
+  const addAccount = new DbAddAccount(addAccountRepository, encrypter);
   const passwordValidator = new UtilPasswordValidator();
 
   const signUpController = new SignUpController(
     getAccountByEmail,
     addAccount,
-    nameValidator,
     passwordValidator,
     makeSignUpValidation()
   );

@@ -1,8 +1,9 @@
 import { EmailValidation } from "../../presentation/helpers/validators/email-validation";
+import { NameValidation } from "../../presentation/helpers/validators/name-validation";
 import { RequiredFieldValidation } from "../../presentation/helpers/validators/required-fields-validation";
 import type { Validation } from "../../presentation/helpers/validators/validation";
 import { ValidationComposite } from "../../presentation/helpers/validators/validation-composite";
-import { UtilValidateEmail } from "../../utils";
+import { UtilNameValidator, UtilValidateEmail } from "../../utils";
 import { makeSignUpValidation } from "./sign-up-validation";
 
 jest.mock("../../presentation/helpers/validators/validation-composite");
@@ -16,6 +17,7 @@ describe("TokenInfo Validation", () => {
       validations.push(new RequiredFieldValidation(field));
     }
     validations.push(new EmailValidation("email", new UtilValidateEmail()));
+    validations.push(new NameValidation("name", new UtilNameValidator()));
 
     expect(ValidationComposite).toBeCalledWith(validations);
   });

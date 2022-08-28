@@ -13,7 +13,6 @@ import {
   serverError,
 } from "../../helpers/http-helper";
 import type { Validation } from "../../helpers/validators/validation";
-import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import { SignUpController } from "./sign-up";
 
@@ -34,17 +33,6 @@ const makePasswordValidatorStub = (): PasswordValidator => {
   }
 
   return new PasswordValidatorStub();
-};
-
-const makeNameValidatorStub = (): NameValidator => {
-  class NameValidatorStub implements NameValidator {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public validate(name: string): boolean {
-      return true;
-    }
-  }
-
-  return new NameValidatorStub();
 };
 
 const makeGetAccountByEmailStub = () => {
@@ -93,14 +81,12 @@ const makeValidationStub = (): Validation => {
 const makeSut = () => {
   const getAccountByEmailStub = makeGetAccountByEmailStub();
   const addAccountStub = makeAddAccountStub();
-  const nameValidatorStub = makeNameValidatorStub();
   const passwordValidatorStub = makePasswordValidatorStub();
   const validationStub = makeValidationStub();
 
   const sut = new SignUpController(
     getAccountByEmailStub,
     addAccountStub,
-    nameValidatorStub,
     passwordValidatorStub,
     validationStub
   );
@@ -109,31 +95,12 @@ const makeSut = () => {
     sut,
     getAccountByEmailStub,
     addAccountStub,
-    nameValidatorStub,
     passwordValidatorStub,
     validationStub,
   };
 };
 
 describe("Sign-Up", () => {
-  test("should nameValidator is called with correct values", async () => {
-    const { sut, nameValidatorStub } = makeSut();
-    const nameValidatorSpy = jest.spyOn(nameValidatorStub, "validate");
-    await sut.handle(makeFakeHttpRequest());
-
-    expect(nameValidatorSpy).toBeCalledWith("valid_name");
-  });
-
-  test("should SignUp returns statusCode 400 if nameValidator return false", async () => {
-    const { sut, nameValidatorStub } = makeSut();
-    jest.spyOn(nameValidatorStub, "validate").mockReturnValueOnce(false);
-    const httpResponse = await sut.handle(makeFakeHttpRequest());
-
-    expect(httpResponse).toStrictEqual(
-      badRequest(new InvalidParamError("name"))
-    );
-  });
-
   test("should passwordValidator is called with correct values", async () => {
     const { sut, passwordValidatorStub } = makeSut();
     const nameValidatorSpy = jest.spyOn(passwordValidatorStub, "validate");
