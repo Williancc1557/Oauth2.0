@@ -10,13 +10,11 @@ import {
 } from "../../helpers/http-helper";
 import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
-import type { ValidateEmail } from "../../protocols/validate-email";
 import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
-import type { Validation } from "../../helpers/validatiors/validation";
+import type { Validation } from "../../helpers/validators/validation";
 
 export class SignUpController implements Controller {
   public constructor(
-    private readonly validateEmail: ValidateEmail,
     private readonly getAccountByEmail: GetAccountByEmail,
     private readonly addAccount: AddAccount,
     private readonly nameValidator: NameValidator,
@@ -28,10 +26,6 @@ export class SignUpController implements Controller {
     try {
       const error = this.validation.validate(httpRequest.body);
       if (error) return badRequest(error);
-
-      if (!this.validateEmail.validate(httpRequest.body.email)) {
-        return badRequest(new InvalidParamError("email"));
-      }
 
       if (!this.nameValidator.validate(httpRequest.body.name)) {
         return badRequest(new InvalidParamError("name"));

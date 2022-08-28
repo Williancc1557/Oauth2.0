@@ -11,13 +11,10 @@ import {
   UtilEncrypter,
   UtilNameValidator,
   UtilPasswordValidator,
-  UtilValidateEmail,
 } from "../../utils/";
 import { makeSignUpValidation } from "./sign-up-validation";
 
 export const makeSignUpController = () => {
-  const validateEmail = new UtilValidateEmail();
-
   const getAccountByEmailRepository = new GetAccountByEmailMongoRepository();
   const getAccountByEmail = new DbGetAccountByEmail(
     getAccountByEmailRepository
@@ -38,7 +35,6 @@ export const makeSignUpController = () => {
   const passwordValidator = new UtilPasswordValidator();
 
   const signUpController = new SignUpController(
-    validateEmail,
     getAccountByEmail,
     addAccount,
     nameValidator,

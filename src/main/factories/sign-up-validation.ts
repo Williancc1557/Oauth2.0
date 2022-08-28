@@ -1,6 +1,8 @@
-import { RequiredFieldValidation } from "../../presentation/helpers/validatiors/required-fields-validation";
-import type { Validation } from "../../presentation/helpers/validatiors/validation";
-import { ValidationComposite } from "../../presentation/helpers/validatiors/validation-composite";
+import { EmailValidation } from "../../presentation/helpers/validators/email-validation";
+import { RequiredFieldValidation } from "../../presentation/helpers/validators/required-fields-validation";
+import type { Validation } from "../../presentation/helpers/validators/validation";
+import { ValidationComposite } from "../../presentation/helpers/validators/validation-composite";
+import { UtilValidateEmail } from "../../utils";
 
 export const makeSignUpValidation = () => {
   const validations: Array<Validation> = [];
@@ -8,6 +10,7 @@ export const makeSignUpValidation = () => {
   for (const field of ["name", "password", "email"]) {
     validations.push(new RequiredFieldValidation(field));
   }
+  validations.push(new EmailValidation("email", new UtilValidateEmail()));
 
   return new ValidationComposite(validations);
 };

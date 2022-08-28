@@ -1,6 +1,6 @@
-import { RequiredFieldValidation } from "../../presentation/helpers/validatiors/required-fields-validation";
-import type { Validation } from "../../presentation/helpers/validatiors/validation";
-import { ValidationComposite } from "../../presentation/helpers/validatiors/validation-composite";
+import { RequiredFieldValidation } from "../../presentation/helpers/validators/required-fields-validation";
+import type { Validation } from "../../presentation/helpers/validators/validation";
+import { ValidationComposite } from "../../presentation/helpers/validators/validation-composite";
 
 export const makeTokenInfoValidation = () => {
   const validations: Array<Validation> = [];
