@@ -5,7 +5,7 @@ import { ValidationComposite } from "../../presentation/helpers/validatiors/vali
 export const makeTokenInfoValidation = () => {
   const validations: Array<Validation> = [];
 
-  for (const field of ["accessToken"]) {
+  for (const field of ["accesstoken"]) {
     validations.push(new RequiredFieldValidation(field));
   }
 

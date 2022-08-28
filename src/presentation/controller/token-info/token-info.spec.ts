@@ -5,8 +5,7 @@ import {
   serverError,
   unauthorized,
 } from "../../helpers/http-helper";
-import type { Validation } from "../../helpers/validations/validation";
-import type { RequiredParams } from "../../protocols";
+import type { Validation } from "../../helpers/validatiors/validation";
 import type {
   GetTokenInfo,
   GetTokenInfoOutput,
@@ -29,17 +28,6 @@ const makeValidationStub = (): Validation => {
   }
 
   return new ValidationStub();
-};
-
-const makeRequiredParamsStub = () => {
-  class RequiredParamsStub implements RequiredParams {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public check(requiredParams: Array<string>, body: any): string {
-      return;
-    }
-  }
-
-  return new RequiredParamsStub();
 };
 
 const makeVerifyAccessTokenStub = () => {
@@ -69,13 +57,11 @@ const makeGetTokenInfoStub = () => {
 };
 
 const makeSut = () => {
-  const requiredParamsStub = makeRequiredParamsStub();
   const getTokenInfoStub = makeGetTokenInfoStub();
   const verifyAccessTokenStub = makeVerifyAccessTokenStub();
   const validationStub = makeValidationStub();
 
   const sut = new TokenInfoController(
-    requiredParamsStub,
     getTokenInfoStub,
     verifyAccessTokenStub,
     validationStub
@@ -84,28 +70,12 @@ const makeSut = () => {
   return {
     sut,
     getTokenInfoStub,
-    requiredParamsStub,
     verifyAccessTokenStub,
     validationStub,
   };
 };
 
 describe("TokenInfo controller", () => {
-  test("should return statusCode 400 if any param requested is not provided", async () => {
-    const { sut, requiredParamsStub } = makeSut();
-    jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("accessToken");
-
-    const httpRequest = {
-      accesstoken: "valid_access_token",
-    };
-
-    const httpResponse = await sut.handle({ header: httpRequest });
-
-    expect(httpResponse).toStrictEqual(
-      badRequest(new MissingParamError("accessToken"))
-    );
-  });
-
   test("should return statusCode 400 if accessToken is not valid", async () => {
     const { sut, verifyAccessTokenStub } = makeSut();
     jest.spyOn(verifyAccessTokenStub, "verify").mockReturnValueOnce(false);
@@ -122,14 +92,10 @@ describe("TokenInfo controller", () => {
     expect(getTokenInfoSpy).toBeCalledWith("valid_access_token");
   });
 
-  test("should return statusCode 500 if any dependency throws", async () => {
-    const { sut, getTokenInfoStub, requiredParamsStub } = makeSut();
+  test("should return statusCode 500 if GetTokenInfo dependency throws", async () => {
+    const { sut, getTokenInfoStub } = makeSut();
 
     jest.spyOn(getTokenInfoStub, "get").mockImplementation(() => {
-      throw new Error();
-    });
-
-    jest.spyOn(requiredParamsStub, "check").mockImplementation(() => {
       throw new Error();
     });
 
