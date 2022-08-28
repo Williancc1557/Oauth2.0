@@ -1,5 +1,9 @@
-import { InvalidParamError } from "../../errors";
-import { badRequest, ok, serverError } from "../../helpers/http-helper";
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from "../../helpers/http-helper";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
 import type { CreateAccessToken } from "../../../data/protocols/create-access-token";
 import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
@@ -24,7 +28,7 @@ export class RefreshTokenController implements Controller {
       );
 
       if (!userId) {
-        return badRequest(new InvalidParamError("refreshtoken"));
+        return unauthorized();
       }
 
       const tokenInformation = this.createAccessToken.create(userId);

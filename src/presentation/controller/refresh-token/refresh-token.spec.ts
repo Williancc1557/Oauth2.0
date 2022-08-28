@@ -4,7 +4,12 @@ import type {
   CreateAccessTokenOutput,
 } from "../../../data/protocols/create-access-token";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
-import { badRequest, ok, serverError } from "../../helpers/http-helper";
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from "../../helpers/http-helper";
 import { InvalidParamError } from "../../errors";
 import type { Validation } from "../../helpers/validators/validation";
 
@@ -99,9 +104,7 @@ describe("RefreshToken Controller", () => {
     jest.spyOn(checkRefreshTokenStub, "check").mockReturnValueOnce(null);
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
-    expect(httpResponse).toStrictEqual(
-      badRequest(new InvalidParamError("refreshtoken"))
-    );
+    expect(httpResponse).toStrictEqual(unauthorized());
   });
 
   test("should checkRefreshToken is called with correct accessToken", async () => {
