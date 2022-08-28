@@ -1,5 +1,5 @@
-import { InvalidParamError } from "../../errors";
-import type { PasswordValidator } from "../../protocols/password-validator";
+import { InvalidParamError } from "../../../errors";
+import type { PasswordValidator } from "../../../protocols/password-validator";
 import { PasswordValidation } from "./password-validation";
 
 const makePasswordValidator = (): PasswordValidator => {

@@ -1,7 +1,7 @@
-import { EmailValidation } from "../../../presentation/helpers/validators/email-validation";
-import { NameValidation } from "../../../presentation/helpers/validators/name-validation";
-import { PasswordValidation } from "../../../presentation/helpers/validators/password-validation";
-import { RequiredFieldValidation } from "../../../presentation/helpers/validators/required-fields-validation";
+import { EmailValidation } from "../../../presentation/helpers/validators/email-validation/email-validation";
+import { NameValidation } from "../../../presentation/helpers/validators/name-validation/name-validation";
+import { PasswordValidation } from "../../../presentation/helpers/validators/password-validation/password-validation";
+import { RequiredFieldValidation } from "../../../presentation/helpers/validators/required-fields-validation/required-fields-validation";
 import type { Validation } from "../../../presentation/helpers/validators/validation";
 import { ValidationComposite } from "../../../presentation/helpers/validators/validation-composite";
 import {

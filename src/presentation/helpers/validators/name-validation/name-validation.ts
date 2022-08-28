@@ -1,6 +1,6 @@
-import { InvalidParamError } from "../../errors";
-import type { NameValidator } from "../../protocols/name-validator";
-import type { Validation } from "./validation";
+import { InvalidParamError } from "../../../errors";
+import type { NameValidator } from "../../../protocols/name-validator";
+import type { Validation } from "../validation";
 
 export class NameValidation implements Validation {
   public constructor(

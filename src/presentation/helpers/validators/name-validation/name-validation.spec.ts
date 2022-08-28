@@ -1,5 +1,5 @@
-import { InvalidParamError } from "../../errors";
-import type { NameValidator } from "../../protocols/name-validator";
+import { InvalidParamError } from "../../../errors";
+import type { NameValidator } from "../../../protocols/name-validator";
 import { NameValidation } from "./name-validation";
 
 const makeNameValidator = (): NameValidator => {
