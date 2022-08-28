@@ -5,7 +5,8 @@ import type {
 } from "../../../data/protocols/create-access-token";
 import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
-import { InvalidParamError, MissingParamError } from "../../errors";
+import { InvalidParamError } from "../../errors";
+import type { Validation } from "../../helpers/validators/validation";
 
 const makeFakeHttpRequest = () => ({
   header: {
@@ -38,18 +39,33 @@ const makeCreateAccessTokenStub = (): CreateAccessToken => {
   return new CreateAccessToken();
 };
 
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public validate(input: any): Error {
+      return null;
+    }
+  }
+
+  return new ValidationStub();
+};
+
 const makeSut = () => {
   const checkRefreshTokenStub = makeCheckRefreshTokenStub();
   const createAccessTokenStub = makeCreateAccessTokenStub();
+  const validationStub = makeValidationStub();
+
   const sut = new RefreshTokenController(
     checkRefreshTokenStub,
-    createAccessTokenStub
+    createAccessTokenStub,
+    validationStub
   );
 
   return {
     sut,
     checkRefreshTokenStub,
     createAccessTokenStub,
+    validationStub,
   };
 };
 
@@ -76,15 +92,6 @@ describe("RefreshToken Controller", () => {
     const httpResponse = await sut.handle(makeFakeHttpRequest());
 
     expect(httpResponse).toStrictEqual(serverError());
-  });
-
-  test("should return 400 if refreshToken is not provided", async () => {
-    const { sut } = makeSut();
-    const httpResponse = await sut.handle({});
-
-    expect(httpResponse).toStrictEqual(
-      badRequest(new MissingParamError("refreshtoken"))
-    );
   });
 
   test("should return 400 if checkRefreshToken returns null", async () => {
@@ -122,6 +129,20 @@ describe("RefreshToken Controller", () => {
         accessToken: "valid_access_token",
         expiresIn: 300,
       })
+    );
+  });
+
+  test("should return 400 if validation returns an error", async () => {
+    const { sut, validationStub } = makeSut();
+
+    jest
+      .spyOn(validationStub, "validate")
+      .mockReturnValueOnce(new InvalidParamError("refreshtoken"));
+
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
+
+    expect(httpResponse).toStrictEqual(
+      badRequest(new InvalidParamError("refreshtoken"))
     );
   });
 });

@@ -4,6 +4,7 @@ import { GetRefreshTokenMongoRepository } from "../../../infra/db/mongodb/refres
 import { RefreshTokenController } from "../../../presentation/controller/refresh-token/refresh-token";
 import type { Controller } from "../../../presentation/protocols/controller";
 import { UtilCreateAccessToken } from "../../../utils/";
+import { makeRefreshTokenValidation } from "./refresh-token-validation";
 
 export const makeRefreshTokenController = (): Controller => {
   const getRefreshTokenRepository = new GetRefreshTokenMongoRepository();
@@ -13,7 +14,8 @@ export const makeRefreshTokenController = (): Controller => {
 
   const refreshTokenController = new RefreshTokenController(
     checkRefreshToken,
-    createAccessToken
+    createAccessToken,
+    makeRefreshTokenValidation()
   );
 
   return new LogControllerDecorator(refreshTokenController);
