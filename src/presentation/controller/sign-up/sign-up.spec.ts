@@ -5,18 +5,14 @@ import type {
   AddAccountInput,
 } from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
-import { UtilRequiredParams } from "../../../utils/required-params/required-params";
-import {
-  AccountAlreadyExistsError,
-  InvalidParamError,
-  MissingParamError,
-} from "../../errors";
+import { AccountAlreadyExistsError, InvalidParamError } from "../../errors";
 import {
   badRequest,
   conflict,
   ok,
   serverError,
 } from "../../helpers/http-helper";
+import type { Validation } from "../../helpers/validatiors/validation";
 import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { ValidateEmail } from "../../protocols/validate-email";
@@ -95,13 +91,24 @@ const makeAddAccountStub = () => {
   return new AddAccountStub();
 };
 
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public validate(input: any): Error {
+      return null;
+    }
+  }
+
+  return new ValidationStub();
+};
+
 const makeSut = () => {
   const validateEmailStub = makeValidateEmailStub();
   const getAccountByEmailStub = makeGetAccountByEmailStub();
   const addAccountStub = makeAddAccountStub();
   const nameValidatorStub = makeNameValidatorStub();
   const passwordValidatorStub = makePasswordValidatorStub();
-  const requiredParams = new UtilRequiredParams();
+  const validationStub = makeValidationStub();
 
   const sut = new SignUpController(
     validateEmailStub,
@@ -109,7 +116,7 @@ const makeSut = () => {
     addAccountStub,
     nameValidatorStub,
     passwordValidatorStub,
-    requiredParams
+    validationStub
   );
 
   return {
@@ -119,55 +126,11 @@ const makeSut = () => {
     addAccountStub,
     nameValidatorStub,
     passwordValidatorStub,
+    validationStub,
   };
 };
 
 describe("Sign-Up", () => {
-  test("should returns statusCode 400 if name is not provided", async () => {
-    const { sut } = makeSut();
-
-    const httpRequest = {
-      email: "valid_email@mail.com",
-      password: "valid_password",
-    };
-
-    const httpResponse = await sut.handle({ body: httpRequest });
-
-    expect(httpResponse).toStrictEqual(
-      badRequest(new MissingParamError("name"))
-    );
-  });
-
-  test("should returns statusCode 400 if email is not provided", async () => {
-    const { sut } = makeSut();
-
-    const httpRequest = {
-      name: "valid_name",
-      password: "valid_password",
-    };
-
-    const httpResponse = await sut.handle({ body: httpRequest });
-
-    expect(httpResponse).toStrictEqual(
-      badRequest(new MissingParamError("email"))
-    );
-  });
-
-  test("should returns statusCode 400 if password is not provided", async () => {
-    const { sut } = makeSut();
-
-    const httpRequest = {
-      name: "valid_name",
-      email: "valid_email@mail.com",
-    };
-
-    const httpResponse = await sut.handle({ body: httpRequest });
-
-    expect(httpResponse).toStrictEqual(
-      badRequest(new MissingParamError("password"))
-    );
-  });
-
   test("should validateEmail is called with correct values", async () => {
     const { sut, validateEmailStub } = makeSut();
     const validateEmailSpy = jest.spyOn(validateEmailStub, "validate");
@@ -308,5 +271,19 @@ describe("Sign-Up", () => {
       accessToken: "valid_accessToken",
       expiresIn: 300,
     });
+  });
+
+  test("should return 400 if validation returns an error", async () => {
+    const { sut, validationStub } = makeSut();
+
+    jest
+      .spyOn(validationStub, "validate")
+      .mockReturnValueOnce(new InvalidParamError("email"));
+
+    const httpResponse = await sut.handle(makeFakeHttpRequest());
+
+    expect(httpResponse).toStrictEqual(
+      badRequest(new InvalidParamError("email"))
+    );
   });
 });

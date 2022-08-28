@@ -11,9 +11,9 @@ import {
   UtilEncrypter,
   UtilNameValidator,
   UtilPasswordValidator,
-  UtilRequiredParams,
   UtilValidateEmail,
 } from "../../utils/";
+import { makeSignUpValidation } from "./sign-up-validation";
 
 export const makeSignUpController = () => {
   const validateEmail = new UtilValidateEmail();
@@ -36,7 +36,6 @@ export const makeSignUpController = () => {
 
   const nameValidator = new UtilNameValidator();
   const passwordValidator = new UtilPasswordValidator();
-  const requiredParams = new UtilRequiredParams();
 
   const signUpController = new SignUpController(
     validateEmail,
@@ -44,7 +43,7 @@ export const makeSignUpController = () => {
     addAccount,
     nameValidator,
     passwordValidator,
-    requiredParams
+    makeSignUpValidation()
   );
 
   return new LogControllerDecorator(signUpController);

@@ -1,7 +1,7 @@
 import type { AddAccount } from "../../../domain/usecase/add-account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import { AccountAlreadyExistsError } from "../../errors/account-already-exists-error";
-import { MissingParamError, InvalidParamError } from "../../errors";
+import { InvalidParamError } from "../../errors";
 import {
   badRequest,
   conflict,
@@ -11,12 +11,8 @@ import {
 import type { NameValidator } from "../../protocols/name-validator";
 import type { PasswordValidator } from "../../protocols/password-validator";
 import type { ValidateEmail } from "../../protocols/validate-email";
-import type {
-  Controller,
-  HttpRequest,
-  HttpResponse,
-  RequiredParams,
-} from "../../protocols/";
+import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
+import type { Validation } from "../../helpers/validatiors/validation";
 
 export class SignUpController implements Controller {
   public constructor(
@@ -25,19 +21,13 @@ export class SignUpController implements Controller {
     private readonly addAccount: AddAccount,
     private readonly nameValidator: NameValidator,
     private readonly passwordValidator: PasswordValidator,
-    private readonly requiredParams: RequiredParams
+    private readonly validation: Validation
   ) {}
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const requiredParam = this.requiredParams.check(
-        ["name", "email", "password"],
-        httpRequest.body
-      );
-
-      if (requiredParam) {
-        return badRequest(new MissingParamError(requiredParam));
-      }
+      const error = this.validation.validate(httpRequest.body);
+      if (error) return badRequest(error);
 
       if (!this.validateEmail.validate(httpRequest.body.email)) {
         return badRequest(new InvalidParamError("email"));
