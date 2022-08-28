@@ -5,6 +5,7 @@ import {
   serverError,
   unauthorized,
 } from "../../helpers/http-helper";
+import type { Validation } from "../../helpers/validations/validation";
 import type { RequiredParams } from "../../protocols";
 import type {
   GetTokenInfo,
@@ -15,10 +16,20 @@ import { TokenInfoController } from "./token-info";
 
 const makeFakeHttpRequest = () => ({
   header: {
-    refreshtoken: "valid_refresh_token",
     accesstoken: "valid_access_token",
   },
 });
+
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public validate(input: any): Error {
+      return null;
+    }
+  }
+
+  return new ValidationStub();
+};
 
 const makeRequiredParamsStub = () => {
   class RequiredParamsStub implements RequiredParams {
@@ -61,11 +72,13 @@ const makeSut = () => {
   const requiredParamsStub = makeRequiredParamsStub();
   const getTokenInfoStub = makeGetTokenInfoStub();
   const verifyAccessTokenStub = makeVerifyAccessTokenStub();
+  const validationStub = makeValidationStub();
 
   const sut = new TokenInfoController(
     requiredParamsStub,
     getTokenInfoStub,
-    verifyAccessTokenStub
+    verifyAccessTokenStub,
+    validationStub
   );
 
   return {
@@ -73,13 +86,14 @@ const makeSut = () => {
     getTokenInfoStub,
     requiredParamsStub,
     verifyAccessTokenStub,
+    validationStub,
   };
 };
 
 describe("TokenInfo controller", () => {
   test("should return statusCode 400 if any param requested is not provided", async () => {
     const { sut, requiredParamsStub } = makeSut();
-    jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("refreshtoken");
+    jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("accessToken");
 
     const httpRequest = {
       accesstoken: "valid_access_token",
@@ -88,7 +102,7 @@ describe("TokenInfo controller", () => {
     const httpResponse = await sut.handle({ header: httpRequest });
 
     expect(httpResponse).toStrictEqual(
-      badRequest(new MissingParamError("refreshtoken"))
+      badRequest(new MissingParamError("accessToken"))
     );
   });
 
@@ -134,6 +148,26 @@ describe("TokenInfo controller", () => {
         exp: 12345,
         iat: 12345,
       })
+    );
+  });
+
+  test("should call Validation with valid values", async () => {
+    const { sut, validationStub } = makeSut();
+    const validateSpy = jest.spyOn(validationStub, "validate");
+    await sut.handle(makeFakeHttpRequest());
+
+    expect(validateSpy).toBeCalledWith(makeFakeHttpRequest().header);
+  });
+
+  test("should return 400 if Validation returns an error", async () => {
+    const { sut, validationStub } = makeSut();
+    jest
+      .spyOn(validationStub, "validate")
+      .mockReturnValueOnce(new MissingParamError("email"));
+    const httpRequest = await sut.handle(makeFakeHttpRequest());
+
+    expect(httpRequest).toStrictEqual(
+      badRequest(new MissingParamError("email"))
     );
   });
 });
