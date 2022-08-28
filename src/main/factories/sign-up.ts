@@ -9,7 +9,6 @@ import {
   UtilCreateAccessToken,
   UtilCreateRefreshToken,
   UtilEncrypter,
-  UtilPasswordValidator,
 } from "../../utils/";
 import { makeSignUpValidation } from "./sign-up-validation";
 
@@ -29,12 +28,10 @@ export const makeSignUpController = () => {
   const encrypter = new UtilEncrypter(SALTS);
 
   const addAccount = new DbAddAccount(addAccountRepository, encrypter);
-  const passwordValidator = new UtilPasswordValidator();
 
   const signUpController = new SignUpController(
     getAccountByEmail,
     addAccount,
-    passwordValidator,
     makeSignUpValidation()
   );
 
