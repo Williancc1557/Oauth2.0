@@ -5,19 +5,10 @@ import { GetAccountByEmailMongoRepository } from "../../../infra/db/mongodb/acco
 import { ResetRefreshTokenMongoRepository } from "../../../infra/db/mongodb/reset-refresh-token-repository/reset-refresh-token-repository";
 import { SignInController } from "../../../presentation/controller/sign-in/sign-in";
 
-import {
-  UtilCreateRefreshToken,
-  UtilEncrypter,
-  UtilPasswordValidator,
-  UtilRequiredParams,
-  UtilValidateEmail,
-} from "../../../utils/";
+import { UtilCreateRefreshToken, UtilEncrypter } from "../../../utils/";
+import { makeSignInValidation } from "./sign-in-validation";
 
 export const makeSignInController = () => {
-  const validateEmail = new UtilValidateEmail();
-  const passwordValidator = new UtilPasswordValidator();
-  const requiredParams = new UtilRequiredParams();
-
   const getAccountByEmailRepository = new GetAccountByEmailMongoRepository();
   const getAccountByEmail = new DbGetAccountByEmail(
     getAccountByEmailRepository
@@ -35,12 +26,10 @@ export const makeSignInController = () => {
   const encrypter = new UtilEncrypter(SALTS);
 
   const signInController = new SignInController(
-    validateEmail,
-    passwordValidator,
-    requiredParams,
     getAccountByEmail,
     resetRefreshToken,
-    encrypter
+    encrypter,
+    makeSignInValidation()
   );
 
   return new LogControllerDecorator(signInController);

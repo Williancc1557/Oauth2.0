@@ -2,19 +2,9 @@ import type { Encrypter } from "../../../data/protocols/encrypter";
 import type { AccountModel } from "../../../domain/models/account";
 import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
 import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
-import {
-  InvalidParamError,
-  MissingParamError,
-  UserNotExistsError,
-} from "../../errors";
-import {
-  badRequest,
-  serverError,
-  unauthorized,
-} from "../../helpers/http-helper";
-import type { PasswordValidator } from "../../protocols/password-validator";
-import type { RequiredParams } from "../../protocols/required-params";
-import type { ValidateEmail } from "../../protocols/validate-email";
+import { InvalidParamError, UserNotExistsError } from "../../errors";
+import { badRequest } from "../../helpers/http-helper";
+import type { Validation } from "../../helpers/validators/validation";
 import { SignInController } from "./sign-in";
 
 const makeFakeHttpRequest = () => ({
@@ -24,39 +14,6 @@ const makeFakeHttpRequest = () => ({
     password: "valid_password",
   },
 });
-
-const makeValidateEmailStub = () => {
-  class ValidateEmailStub implements ValidateEmail {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public validate(email: string): boolean {
-      return true;
-    }
-  }
-
-  return new ValidateEmailStub();
-};
-
-const makePasswordValidatorStub = () => {
-  class PasswordValidatorStub implements PasswordValidator {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public validate(password: string): boolean {
-      return true;
-    }
-  }
-
-  return new PasswordValidatorStub();
-};
-
-const makeRequiredParams = () => {
-  class RequiredParamsStub implements RequiredParams {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public check(requiredParams: Array<string>, body: any): string {
-      return;
-    }
-  }
-
-  return new RequiredParamsStub();
-};
 
 const makeGetAccountByEmailStub = () => {
   class GetAccountByEmailStub implements GetAccountByEmail {
@@ -99,28 +56,32 @@ const makeEncrypterStub = () => {
   return new EncrypterStub();
 };
 
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public validate(input: any): Error {
+      return null;
+    }
+  }
+
+  return new ValidationStub();
+};
+
 const makeSut = () => {
-  const validateEmailStub = makeValidateEmailStub();
-  const passwordValidatorStub = makePasswordValidatorStub();
-  const requiredParamsStub = makeRequiredParams();
   const getAccountByEmailStub = makeGetAccountByEmailStub();
   const resetRefreshTokenStub = makeResetRefreshTokenStub();
   const encrypterStub = makeEncrypterStub();
+  const validationStub = makeValidationStub();
 
   const sut = new SignInController(
-    validateEmailStub,
-    passwordValidatorStub,
-    requiredParamsStub,
     getAccountByEmailStub,
     resetRefreshTokenStub,
-    encrypterStub
+    encrypterStub,
+    validationStub
   );
 
   return {
     sut,
-    validateEmailStub,
-    passwordValidatorStub,
-    requiredParamsStub,
     getAccountByEmailStub,
     resetRefreshTokenStub,
     encrypterStub,
@@ -128,65 +89,6 @@ const makeSut = () => {
 };
 
 describe("SignIn Controller", () => {
-  test("should return statusCode 400 if email is not provided", async () => {
-    const { sut, requiredParamsStub } = makeSut();
-    jest.spyOn(requiredParamsStub, "check").mockReturnValueOnce("email");
-
-    const httpRequest = {
-      body: {
-        email: "any_email@gmail.com",
-      },
-    };
-
-    const res = await sut.handle(httpRequest);
-
-    expect(res).toStrictEqual(badRequest(new MissingParamError("email")));
-  });
-
-  test("should validateEmail is called with correct values", async () => {
-    const { sut, validateEmailStub } = makeSut();
-    const validateSpy = jest.spyOn(validateEmailStub, "validate");
-    await sut.handle(makeFakeHttpRequest());
-
-    expect(validateSpy).toBeCalledWith("valid_email@mail.com");
-  });
-
-  test("should returns statusCode 400 if validateEmail returns false", async () => {
-    const { sut, validateEmailStub } = makeSut();
-    jest.spyOn(validateEmailStub, "validate").mockReturnValueOnce(false);
-    const req = await sut.handle(makeFakeHttpRequest());
-
-    expect(req).toStrictEqual(badRequest(new InvalidParamError("email")));
-  });
-
-  test("should returns statusCode 500 if validateEmail throws", async () => {
-    const { sut, validateEmailStub } = makeSut();
-
-    jest.spyOn(validateEmailStub, "validate").mockImplementation(() => {
-      throw new Error();
-    });
-
-    const req = await sut.handle(makeFakeHttpRequest());
-
-    expect(req).toStrictEqual(serverError());
-  });
-
-  test("should passwordValidator is called with correct values", async () => {
-    const { sut, passwordValidatorStub } = makeSut();
-    const validateSpy = jest.spyOn(passwordValidatorStub, "validate");
-    await sut.handle(makeFakeHttpRequest());
-
-    expect(validateSpy).toBeCalledWith("valid_password");
-  });
-
-  test("should SignIn returns statusCode 400 if passwordValidator return false", async () => {
-    const { sut, passwordValidatorStub } = makeSut();
-    jest.spyOn(passwordValidatorStub, "validate").mockReturnValueOnce(false);
-    const res = await sut.handle(makeFakeHttpRequest());
-
-    expect(res).toStrictEqual(unauthorized());
-  });
-
   test("should SignIn returns statusCode 400 if account don't exists", async () => {
     const { sut, getAccountByEmailStub } = makeSut();
     jest.spyOn(getAccountByEmailStub, "get").mockReturnValueOnce(undefined);
