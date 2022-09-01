@@ -4,7 +4,7 @@ import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-to
 import { UserNotExistsError, InvalidParamError } from "../../errors";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
 import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
-import type { Validation } from "../../helpers/validators/validation";
+import type { Validation } from "../../protocols/validation";
 
 export class SignInController implements Controller {
   public constructor(

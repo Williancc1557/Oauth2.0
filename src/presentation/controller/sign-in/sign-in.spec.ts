@@ -4,7 +4,7 @@ import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-e
 import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
 import { InvalidParamError, UserNotExistsError } from "../../errors";
 import { badRequest } from "../../helpers/http-helper";
-import type { Validation } from "../../helpers/validators/validation";
+import type { Validation } from "../../protocols/validation";
 import { SignInController } from "./sign-in";
 
 const makeFakeHttpRequest = () => ({

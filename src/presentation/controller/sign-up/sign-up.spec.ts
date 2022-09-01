@@ -12,7 +12,7 @@ import {
   ok,
   serverError,
 } from "../../helpers/http-helper";
-import type { Validation } from "../../helpers/validators/validation";
+import type { Validation } from "../../protocols/validation";
 import { SignUpController } from "./sign-up";
 
 const makeFakeHttpRequest = () => ({

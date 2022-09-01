@@ -4,7 +4,7 @@ import {
   serverError,
   unauthorized,
 } from "../../helpers/http-helper";
-import type { Validation } from "../../helpers/validators/validation";
+import type { Validation } from "../../protocols/validation";
 import type { Controller, HttpRequest, HttpResponse } from "../../protocols";
 import type { GetTokenInfo } from "../../protocols/get-token-info";
 import type { VerifyAccessToken } from "../../protocols/verify-access-token";

@@ -8,7 +8,7 @@ import {
   serverError,
 } from "../../helpers/http-helper";
 import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
-import type { Validation } from "../../helpers/validators/validation";
+import type { Validation } from "../../protocols/validation";
 
 export class SignUpController implements Controller {
   public constructor(

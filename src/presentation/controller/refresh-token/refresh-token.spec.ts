@@ -11,7 +11,7 @@ import {
   unauthorized,
 } from "../../helpers/http-helper";
 import { InvalidParamError } from "../../errors";
-import type { Validation } from "../../helpers/validators/validation";
+import type { Validation } from "../../protocols/validation";
 
 const makeFakeHttpRequest = () => ({
   header: {

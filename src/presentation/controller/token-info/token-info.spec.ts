@@ -5,7 +5,7 @@ import {
   serverError,
   unauthorized,
 } from "../../helpers/http-helper";
-import type { Validation } from "../../helpers/validators/validation";
+import type { Validation } from "../../protocols/validation";
 import type {
   GetTokenInfo,
   GetTokenInfoOutput,

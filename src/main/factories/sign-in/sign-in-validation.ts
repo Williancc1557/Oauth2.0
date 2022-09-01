@@ -1,7 +1,7 @@
 import { EmailValidation } from "../../../presentation/helpers/validators/email-validation/email-validation";
 import { PasswordValidation } from "../../../presentation/helpers/validators/password-validation/password-validation";
 import { RequiredFieldValidation } from "../../../presentation/helpers/validators/required-field-validation/required-field-validation";
-import type { Validation } from "../../../presentation/helpers/validators/validation";
+import type { Validation } from "../../../presentation/protocols/validation";
 import { ValidationComposite } from "../../../presentation/helpers/validators/validation-composite";
 import { UtilPasswordValidator, UtilValidateEmail } from "../../../utils";
 

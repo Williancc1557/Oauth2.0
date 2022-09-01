@@ -1,5 +1,5 @@
 import { RequiredFieldValidation } from "../../../presentation/helpers/validators/required-field-validation/required-field-validation";
-import type { Validation } from "../../../presentation/helpers/validators/validation";
+import type { Validation } from "../../../presentation/protocols/validation";
 import { ValidationComposite } from "../../../presentation/helpers/validators/validation-composite";
 
 export const makeRefreshTokenValidation = () => {
