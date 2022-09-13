@@ -5,10 +5,6 @@ export class UtilPasswordValidator implements PasswordValidator {
     const MIN_LENGTH = 6;
     const MAX_LENGTH = 30;
 
-    if (password.length >= MAX_LENGTH || password.length <= MIN_LENGTH) {
-      return false;
-    }
-
-    return true;
+    return !(password.length >= MAX_LENGTH || password.length <= MIN_LENGTH);
   }
 }
