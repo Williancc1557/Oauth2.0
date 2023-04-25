@@ -13,7 +13,7 @@ export class GetRefreshTokenMongoRepository
     });
 
     if (!account) {
-      return undefined;
+      return;
     }
 
     return mongoHelper.map(account);
