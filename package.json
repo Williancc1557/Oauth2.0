@@ -5,8 +5,9 @@
   "author": "Willian Cavalcanti Coelho",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd ./src/main/server.ts",
-    "deploy": "tsc && node ./dist/src/main/server.js",
+    "dev": "tsx src/main/server.ts",
+    "build": "tsup src",
+    "start": "node dist/src/main/server.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test -- --watch -c jest-unit-config.js",
@@ -34,7 +35,7 @@
     "prettier": "^2.7.1",
     "supertest": "^6.2.4",
     "ts-jest": "^28.0.7",
-    "ts-node-dev": "^2.0.0",
+    "tsx": "^3.12.7",
     "typescript": "^4.7.4"
   },
   "dependencies": {
@@ -47,6 +48,7 @@
     "pino": "^8.3.0",
     "pino-http": "^8.1.1",
     "pino-pretty": "^8.1.0",
+    "tsup": "^6.7.0",
     "uid": "^2.0.0",
     "validator": "^13.7.0"
   }
