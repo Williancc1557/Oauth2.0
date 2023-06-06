@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx src/main/server.ts",
+    "deploy": "yarn build && yarn start",
     "build": "tsup src",
     "start": "node dist/src/main/server.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
