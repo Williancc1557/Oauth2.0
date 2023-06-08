@@ -3,5 +3,5 @@ import { adaptRoute } from "../../../adapters/express-route-adapter";
 import { makeRefreshTokenController } from "../../../factories/refresh-token/refresh-token";
 
 export default (router: Router) => {
-  router.post("/auth/refresh-token", adaptRoute(makeRefreshTokenController()));
+  router.get("/auth/refresh-token", adaptRoute(makeRefreshTokenController()));
 };

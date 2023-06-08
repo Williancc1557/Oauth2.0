@@ -16,6 +16,12 @@ export const setupRoutes = (app: Express) => {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     const index = fileList.length - 1;
     logger.info(`Loading the file router ${fileList[index]} ...`);
-    (await import(`../../../${file.replace("ts", "js")}`)).default(router);
+    (
+      await import(
+        `../../../${
+          process.env.JEST_WORKER_ID ? file : file.replace("ts", "js")
+        }`
+      )
+    ).default(router);
   });
 };
