@@ -1,10 +1,39 @@
-version: "3"
+version: "3.8"
 
 services:
-  app:
-    build: .
-    command: yarn start
+  mongodb:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=database
+      - MONGODB_DATA_DIR=/data/db
+      - MONDODB_LOG_DIR=/dev/null
+    volumes:
+      - mongo:/data/db
+    networks:
+      - oauth-api_network
+
+  api:
+    env_file:
+      - .env.docker
+    build:
+      context: "."
+      dockerfile: Dockerfile
+    container_name: oauth-api
+    command: yarn dev
+    depends_on:
+      - mongodb
     ports:
       - "8080:8080"
     volumes:
-      - .:/usr/app
+      - ./:/app/
+    networks:
+      - oauth-api_network
+
+volumes:
+  mongo:
+
+networks:
+  oauth-api_network:
+    driver: bridge
