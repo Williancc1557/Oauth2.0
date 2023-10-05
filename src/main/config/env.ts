@@ -7,4 +7,5 @@ export default {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   port: process.env.PORT || 8080,
   secretAccessTokenJwt: process.env.SECRET_JWT || "secret_jwt",
+  state: process.env.STATE || "development",
 };

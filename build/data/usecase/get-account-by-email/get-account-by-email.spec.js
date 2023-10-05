@@ -1,0 +1,53 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const get_account_by_email_1 = require("./get-account-by-email");
+const makeGetAccountByEmailRepositoryStub = () => {
+    class GetAccountByEmailRepositoryStub {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        async get(email) {
+            return {
+                id: "valid_id",
+                email: "valid_email@mail.com",
+                name: "valid_name",
+                password: "valid_password",
+                refreshToken: "valid_refresh_token",
+            };
+        }
+    }
+    return new GetAccountByEmailRepositoryStub();
+};
+const makeSut = () => {
+    const getAccountByEmailRepositoryStub = makeGetAccountByEmailRepositoryStub();
+    const sut = new get_account_by_email_1.DbGetAccountByEmail(getAccountByEmailRepositoryStub);
+    return {
+        sut,
+        getAccountByEmailRepositoryStub,
+    };
+};
+describe("GetAccountByEmail", () => {
+    test("should getAccountByEmailRepository is called with correct values", async () => {
+        const { sut, getAccountByEmailRepositoryStub } = makeSut();
+        const getAccountByEmailRepositorySpy = jest.spyOn(getAccountByEmailRepositoryStub, "get");
+        await sut.get("valid_email@email.com");
+        expect(getAccountByEmailRepositorySpy).toBeCalledWith("valid_email@email.com");
+    });
+    test("should return null if email is not found", async () => {
+        const { sut, getAccountByEmailRepositoryStub } = makeSut();
+        jest
+            .spyOn(getAccountByEmailRepositoryStub, "get")
+            .mockResolvedValueOnce(null);
+        const req = await sut.get("valid_email@email.com");
+        expect(req).not.toBeTruthy();
+    });
+    test("should return account if success", async () => {
+        const { sut } = makeSut();
+        const req = await sut.get("valid_email@email.com");
+        expect(req).toStrictEqual({
+            id: "valid_id",
+            email: "valid_email@mail.com",
+            name: "valid_name",
+            password: "valid_password",
+            refreshToken: "valid_refresh_token",
+        });
+    });
+});
