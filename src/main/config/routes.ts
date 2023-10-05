@@ -7,7 +7,7 @@ import env from "./env";
 export const setupRoutes = (app: Express) => {
   const router = Router();
 
-  app.use(router);
+  app.use("/api", router);
 
   const fileRule =
     env.state === "production"
