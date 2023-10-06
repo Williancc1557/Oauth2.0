@@ -24,6 +24,7 @@
     "@types/pino": "^7.0.5",
     "@types/pino-http": "^5.8.1",
     "@types/pino-pretty": "^4.7.5",
+    "@types/request-ip": "^0.0.39",
     "@types/supertest": "^2.0.12",
     "@types/uuidv4": "^5.0.0",
     "@types/validator": "^13.7.4",
@@ -49,6 +50,7 @@
     "pino": "^8.3.0",
     "pino-http": "^8.1.1",
     "pino-pretty": "^8.1.0",
+    "request-ip": "^3.3.0",
     "tsup": "^6.7.0",
     "uid": "^2.0.0",
     "validator": "^13.7.0"
