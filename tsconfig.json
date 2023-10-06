@@ -1,13 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "src",
     "module": "commonjs",
     "target": "es2019",
     "esModuleInterop": true,
-    "allowJs": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  },
-  "exclude": ["**/*.spec.ts", "**/*.js"]
+    "allowJs": true
+  }
 }
