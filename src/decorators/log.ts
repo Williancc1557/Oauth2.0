@@ -39,6 +39,8 @@ export class LogControllerDecorator implements Controller {
       body: controller.body.error,
       userAgent: httpRequest.header["user-agent"],
       userSystemOperation: httpRequest.header["sec-ch-ua-platform"],
+      url: httpRequest.header.url,
+      method: httpRequest.header.method,
     });
 
     return controller;
