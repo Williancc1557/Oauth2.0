@@ -41,6 +41,7 @@ export class LogControllerDecorator implements Controller {
       userSystemOperation: httpRequest.header["sec-ch-ua-platform"],
       url: httpRequest.header.url,
       method: httpRequest.header.method,
+      ip: httpRequest.header.ip,
     });
 
     return controller;

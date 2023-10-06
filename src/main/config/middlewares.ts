@@ -3,12 +3,12 @@ import { bodyParser } from "../middlewares/body-parse";
 import { contentType } from "../middlewares/content-type";
 import { cors } from "../middlewares/cors";
 import { passContentHeaderMiddleware } from "../middlewares/pass-content-header";
-import rateLimit from "express-rate-limit";
+import { limiter } from "../middlewares/rate-limit";
 
 export const setupMiddlewares = (app: Express): void => {
   app.use(bodyParser);
   app.use(contentType);
   app.use(cors);
   app.use(passContentHeaderMiddleware);
-  app.use(rateLimit);
+  app.use(limiter);
 };

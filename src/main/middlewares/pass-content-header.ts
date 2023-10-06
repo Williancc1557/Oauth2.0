@@ -7,5 +7,6 @@ export const passContentHeaderMiddleware = (
 ) => {
   req.headers.url = req.url;
   req.headers.method = req.method;
+  req.headers.ip = req.ip;
   next();
 };
