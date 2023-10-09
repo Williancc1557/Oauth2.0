@@ -32,11 +32,11 @@ export class LogControllerDecorator implements Controller {
       logger.warn(bodyResponse);
     }
 
-    const indexExists = await logsCollection.indexExists("seuCampoDeData_1");
+    const indexExists = await logsCollection.indexExists("expiresIn_1");
 
     if (!indexExists) {
       await logsCollection.createIndex(
-        { seuCampoDeData: 1 },
+        { expiresIn: 1 },
         { expireAfterSeconds: 604800 }
       );
     }
