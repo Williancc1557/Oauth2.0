@@ -1,5 +1,4 @@
 import type { NextFunction, Request, Response } from "express";
-import requestIp from "request-ip";
 
 export const passContentHeaderMiddleware = (
   req: Request,
@@ -8,7 +7,6 @@ export const passContentHeaderMiddleware = (
 ) => {
   req.headers.url = req.url;
   req.headers.method = req.method;
-  req.headers.ip = requestIp.getClientIp(req);
 
   next();
 };
