@@ -19,6 +19,8 @@ export class LogControllerDecorator implements Controller {
     const OK = 200;
     const MULTIPLE_CHOICES = 300;
     const INTERNAL_SERVER_ERROR = 500;
+    console.log("teste1");
+
     const logsCollection = await mongoHelper.getCollection("logs");
 
     if (
@@ -32,15 +34,6 @@ export class LogControllerDecorator implements Controller {
       logger.warn(bodyResponse);
     }
 
-    const indexExists = await logsCollection.indexExists("expiresIn_1");
-
-    if (!indexExists) {
-      await logsCollection.createIndex(
-        { expiresIn: 1 },
-        { expireAfterSeconds: 604800 }
-      );
-    }
-
     await logsCollection.insertOne({
       createdAt: new Date(),
       statusCode: controller.statusCode,
@@ -52,6 +45,15 @@ export class LogControllerDecorator implements Controller {
       method: httpRequest.header.method,
       expiresIn: new Date(),
     });
+
+    const indexExists = await logsCollection.indexExists("expiresIn_1");
+
+    if (!indexExists) {
+      await logsCollection.createIndex(
+        { expiresIn: 1 },
+        { expireAfterSeconds: 604800 }
+      );
+    }
 
     return controller;
   }
