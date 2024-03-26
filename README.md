@@ -182,7 +182,7 @@ test("should Teste.paragraph is called with valid param", () => {
   sut.paragraph("willian");
 
   // aqui eu verifico se a dependência foi chamada com o parâmetro correto
-  expect(makeParagraphSpy).toBeCalledWith("willian");
+  expect(makeParagraphSpy).toHaveBeenCalledWith("willian");
 });
 ```
 

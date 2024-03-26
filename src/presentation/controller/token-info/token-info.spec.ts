@@ -89,7 +89,7 @@ describe("TokenInfo controller", () => {
     const getTokenInfoSpy = jest.spyOn(getTokenInfoStub, "get");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(getTokenInfoSpy).toBeCalledWith("valid_access_token");
+    expect(getTokenInfoSpy).toHaveBeenCalledWith("valid_access_token");
   });
 
   test("should return statusCode 500 if GetTokenInfo dependency throws", async () => {
@@ -122,7 +122,7 @@ describe("TokenInfo controller", () => {
     const validateSpy = jest.spyOn(validationStub, "validate");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(validateSpy).toBeCalledWith(makeFakeHttpRequest().header);
+    expect(validateSpy).toHaveBeenCalledWith(makeFakeHttpRequest().header);
   });
 
   test("should return 400 if Validation returns an error", async () => {

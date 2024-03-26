@@ -21,6 +21,6 @@ describe("TokenInfo Validation", () => {
       new PasswordValidation("password", new UtilPasswordValidator())
     );
 
-    expect(ValidationComposite).toBeCalledWith(validations);
+    expect(ValidationComposite).toHaveBeenCalledWith(validations);
   });
 });

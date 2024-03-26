@@ -40,7 +40,7 @@ describe("GetAccountByEmail", () => {
 
     await sut.get("valid_email@email.com");
 
-    expect(getAccountByEmailRepositorySpy).toBeCalledWith(
+    expect(getAccountByEmailRepositorySpy).toHaveBeenCalledWith(
       "valid_email@email.com"
     );
   });

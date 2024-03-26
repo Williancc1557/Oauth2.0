@@ -35,7 +35,7 @@ describe("DbResetRefreshToken", () => {
 
     await sut.reset(userId);
 
-    expect(resetRefreshTokenRepositorySpy).toBeCalledWith("validUserId");
+    expect(resetRefreshTokenRepositorySpy).toHaveBeenCalledWith("validUserId");
   });
 
   test("should return string if success", async () => {

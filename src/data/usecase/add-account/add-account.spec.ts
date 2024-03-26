@@ -79,7 +79,7 @@ describe("DbAddAccount", () => {
       password: "valid_password",
     });
 
-    expect(addAccountRepositorySpy).toBeCalledWith({
+    expect(addAccountRepositorySpy).toHaveBeenCalledWith({
       name: "valid_name",
       email: "valid_email@mail.com",
       password: "hashed_value",

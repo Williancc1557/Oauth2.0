@@ -76,7 +76,7 @@ describe("RefreshToken Controller", () => {
     const checkRefreshTokenSpy = checkRefreshTokenStub.check;
     await sut.handle(makeFakeHttpRequest());
 
-    expect(checkRefreshTokenSpy).toBeCalledWith("valid_access_token");
+    expect(checkRefreshTokenSpy).toHaveBeenCalledWith("valid_access_token");
   });
 
   test("should create access is called with correct id", async () => {
@@ -84,7 +84,7 @@ describe("RefreshToken Controller", () => {
     const createAccessTokenSpy = createAccessTokenStub.create;
     await sut.handle(makeFakeHttpRequest());
 
-    expect(createAccessTokenSpy).toBeCalledWith("valid_user_id");
+    expect(createAccessTokenSpy).toHaveBeenCalledWith("valid_user_id");
   });
 
   test("should return 200 if success", async () => {

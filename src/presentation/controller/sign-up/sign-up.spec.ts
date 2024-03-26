@@ -91,7 +91,7 @@ describe("Sign-Up", () => {
     const getAccountByEmailSpy = jest.spyOn(getAccountByEmailStub, "get");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(getAccountByEmailSpy).toBeCalledWith("valid_email@mail.com");
+    expect(getAccountByEmailSpy).toHaveBeenCalledWith("valid_email@mail.com");
   });
 
   test("should returns statusCode 409 if account already exists", async () => {
@@ -124,7 +124,7 @@ describe("Sign-Up", () => {
     const addAccountSpy = jest.spyOn(addAccountStub, "add");
     await sut.handle(makeFakeHttpRequest());
 
-    expect(addAccountSpy).toBeCalledWith({
+    expect(addAccountSpy).toHaveBeenCalledWith({
       name: "valid_name",
       email: "valid_email@mail.com",
       password: "valid_password",

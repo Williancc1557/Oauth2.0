@@ -60,14 +60,14 @@ describe("SignIn Controller", () => {
     const { sut, resetRefreshTokenStub } = makeSut();
     await sut.handle(makeFakeHttpRequest());
 
-    expect(resetRefreshTokenStub.reset).toBeCalledWith("valid_id");
+    expect(resetRefreshTokenStub.reset).toHaveBeenCalledWith("valid_id");
   });
 
   test("should encrypter.compare is called with correct values", async () => {
     const { sut, encrypterStub } = makeSut();
     await sut.handle(makeFakeHttpRequest());
 
-    expect(encrypterStub.compare).toBeCalledWith(
+    expect(encrypterStub.compare).toHaveBeenCalledWith(
       "valid_password",
       "hashed_password"
     );
