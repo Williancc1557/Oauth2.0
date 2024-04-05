@@ -21,12 +21,13 @@ export class TokenInfoController implements Controller {
       const error = this.validation.validate(httpRequest.header);
       if (error) return badRequest(error);
 
-      const { accesstoken } = httpRequest.header;
-      if (!this.verifyAccessToken.verify(accesstoken)) {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { authorization } = httpRequest.header;
+      if (!this.verifyAccessToken.verify(authorization)) {
         return unauthorized();
       }
 
-      const tokenInfo = this.getTokenInfo.get(accesstoken);
+      const tokenInfo = this.getTokenInfo.get(authorization);
 
       return ok(tokenInfo);
     } catch (err) {

@@ -10,7 +10,7 @@ describe("TokenInfo Validation", () => {
     makeTokenInfoValidation();
     const validations: Array<Validation> = [];
 
-    for (const field of ["accesstoken"]) {
+    for (const field of ["authorization"]) {
       validations.push(new RequiredFieldValidation(field));
     }
 

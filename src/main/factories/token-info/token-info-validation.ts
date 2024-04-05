@@ -5,7 +5,7 @@ import type { Validation } from "../../../presentation/protocols/validation";
 export const makeTokenInfoValidation = () => {
   const validations: Array<Validation> = [];
 
-  for (const field of ["accesstoken"]) {
+  for (const field of ["authorization"]) {
     validations.push(new RequiredFieldValidation(field));
   }
 

@@ -15,7 +15,8 @@ import { TokenInfoController } from "./token-info";
 
 const makeFakeHttpRequest = () => ({
   header: {
-    accesstoken: "valid_access_token",
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    authorization: "valid_access_token",
   },
 });
 

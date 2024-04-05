@@ -19,7 +19,6 @@ export class LogControllerDecorator implements Controller {
     const OK = 200;
     const MULTIPLE_CHOICES = 300;
     const INTERNAL_SERVER_ERROR = 500;
-    console.log("teste1");
 
     const logsCollection = await mongoHelper.getCollection("logs");
 
