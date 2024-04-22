@@ -19,7 +19,7 @@ pre-commit:
       glob: "*.{js,ts,jsx,tsx}"
       run: yarn eslint {staged_files}
     test:
-      glob: "*.{spec,test}.ts"
+      glob: "*.ts"
       run: yarn test
 #     rubocop:
 #       tags: backend style
