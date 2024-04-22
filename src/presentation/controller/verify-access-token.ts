@@ -10,6 +10,8 @@ export class VerifyAccessTokenController implements Controller {
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     const isValidToken = this.utilVerifyAccessToken.verify(httpRequest.header);
 
+    if (!isValidToken) return ok(isValidToken);
+
     return ok(isValidToken);
   }
 }
