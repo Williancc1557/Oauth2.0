@@ -12,7 +12,8 @@
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test -- --watch -c jest-unit-config.js",
     "test:integration": "yarn test -- --watch -c jest-integration-config.js",
-    "test:ci": "yarn test -- --coverage"
+    "test:ci": "yarn test -- --coverage",
+    "vercel-build": "echo hello world"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^4.2.0",
