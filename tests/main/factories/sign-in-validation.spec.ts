@@ -1,12 +1,12 @@
-import { EmailValidation } from "../../../presentation/helpers/validators/email-validation/email-validation";
-import { PasswordValidation } from "../../../presentation/helpers/validators/password-validation/password-validation";
-import { RequiredFieldValidation } from "../../../presentation/helpers/validators/required-field-validation/required-field-validation";
-import type { Validation } from "../../../presentation/protocols/validation";
-import { ValidationComposite } from "../../../presentation/helpers/validators/validation-composite";
-import { UtilPasswordValidator, UtilValidateEmail } from "../../../utils";
-import { makeSignInValidation } from "./sign-in-validation";
+import { makeSignInValidation } from "../../../src/main/factories/sign-in/sign-in-validation";
+import { EmailValidation } from "../../../src/presentation/helpers/validators/email-validation/email-validation";
+import { PasswordValidation } from "../../../src/presentation/helpers/validators/password-validation/password-validation";
+import { RequiredFieldValidation } from "../../../src/presentation/helpers/validators/required-field-validation/required-field-validation";
+import { ValidationComposite } from "../../../src/presentation/helpers/validators/validation-composite";
+import type { Validation } from "../../../src/presentation/protocols/validation";
+import { UtilPasswordValidator, UtilValidateEmail } from "../../../src/utils";
 
-jest.mock("../../../presentation/helpers/validators/validation-composite");
+jest.mock("../../../src/presentation/helpers/validators/validation-composite");
 
 describe("TokenInfo Validation", () => {
   test("should call ValidationComposite with valid Validations", () => {

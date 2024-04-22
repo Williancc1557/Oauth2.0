@@ -1,9 +1,9 @@
-import { RequiredFieldValidation } from "../../../presentation/helpers/validators/required-field-validation/required-field-validation";
-import type { Validation } from "../../../presentation/protocols/validation";
-import { ValidationComposite } from "../../../presentation/helpers/validators/validation-composite";
-import { makeRefreshTokenValidation } from "./refresh-token-validation";
+import { makeRefreshTokenValidation } from "../../../src/main/factories/refresh-token/refresh-token-validation";
+import { RequiredFieldValidation } from "../../../src/presentation/helpers/validators/required-field-validation/required-field-validation";
+import { ValidationComposite } from "../../../src/presentation/helpers/validators/validation-composite";
+import type { Validation } from "../../../src/presentation/protocols/validation";
 
-jest.mock("../../../presentation/helpers/validators/validation-composite");
+jest.mock("../../../src/presentation/helpers/validators/validation-composite");
 
 describe("TokenInfo Validation", () => {
   test("should call ValidationComposite with valid Validations", () => {

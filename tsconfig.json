@@ -5,6 +5,5 @@
     "target": "es2019",
     "esModuleInterop": true,
     "allowJs": true
-  },
-  "exclude": ["node_modules", "**/*.js"]
+  }
 }

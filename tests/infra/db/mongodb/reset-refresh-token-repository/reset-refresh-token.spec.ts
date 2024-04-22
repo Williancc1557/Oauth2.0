@@ -1,8 +1,8 @@
 import { ObjectId } from "mongodb";
-import type { CreateRefreshToken } from "../../../../data/protocols/create-refresh-token";
-import type { AccountModel } from "../../../../domain/models/account";
-import { mongoHelper } from "../helpers/mongo-helper";
-import { ResetRefreshTokenMongoRepository } from "./reset-refresh-token-repository";
+import type { CreateRefreshToken } from "../../../../../src/data/protocols";
+import { ResetRefreshTokenMongoRepository } from "../../../../../src/infra/db/mongodb/reset-refresh-token-repository/reset-refresh-token-repository";
+import { mongoHelper } from "../../../../../src/infra/db/mongodb/helpers/mongo-helper";
+import type { AccountModel } from "../../../../../src/domain/models/account";
 
 const makeCreateRefreshTokenStub = () => {
   class CreateRefreshTokenStub implements CreateRefreshToken {

@@ -1,6 +1,6 @@
-import type { AccountModel } from "../../../../domain/models/account";
-import { mongoHelper } from "../helpers/mongo-helper";
-import { GetRefreshTokenMongoRepository } from "./get-refresh-token";
+import type { AccountModel } from "../../../../../src/domain/models/account";
+import { mongoHelper } from "../../../../../src/infra/db/mongodb/helpers/mongo-helper";
+import { GetRefreshTokenMongoRepository } from "../../../../../src/infra/db/mongodb/refresh-token-repository/get-refresh-token";
 
 const makeSut = () => {
   const sut = new GetRefreshTokenMongoRepository();
