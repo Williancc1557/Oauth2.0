@@ -11,8 +11,7 @@ describe("UtilGetTokenInfo", () => {
 
     expect(res).toStrictEqual(
       expect.objectContaining({
-        accountId: "valid_id",
-        sub: "client",
+        sub: "valid_id",
       })
     );
     expect(res.exp).toBeTruthy();
