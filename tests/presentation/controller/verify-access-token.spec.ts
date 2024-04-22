@@ -39,4 +39,14 @@ describe("VerifyAccessToken Controller", () => {
 
     expect(data).toStrictEqual(ok(false));
   });
+
+  test("should call verify with correct values", () => {
+    const { sut, verifyAccessTokenStub } = makeSut();
+
+    sut.handle(fakeData);
+
+    expect(verifyAccessTokenStub.verify).toHaveBeenCalledWith(
+      fakeData.header.authorization
+    );
+  });
 });
