@@ -1,6 +1,6 @@
-import type { AccountModel } from "../../../domain/models/account";
-import type { GetRefreshTokenRepository } from "../../protocols/get-refresh-token-repository";
-import { DbCheckRefreshToken } from "../check-refresh-token";
+import type { GetRefreshTokenRepository } from "../../../src/data/protocols";
+import { DbCheckRefreshToken } from "../../../src/data/usecase/check-refresh-token";
+import type { AccountModel } from "../../../src/domain/models/account";
 
 const makeGetRefreshTokenStub = () => {
   class GetRefreshTokenStub implements GetRefreshTokenRepository {
@@ -47,7 +47,7 @@ describe("CheckRefreshToken", () => {
 
     await sut.check("valid_refresh_token");
 
-    expect(getRefreshTokenSpy).toBeCalledWith("valid_refresh_token");
+    expect(getRefreshTokenSpy).toHaveBeenCalledWith("valid_refresh_token");
   });
 
   test("should return account.id if success", async () => {
