@@ -1,6 +1,6 @@
-import { InvalidParamError } from "../../../errors";
-import type { NameValidator } from "../../../protocols/name-validator";
-import { NameValidation } from "./name-validation";
+import { InvalidParamError } from "../../../../src/presentation/errors";
+import type { NameValidator } from "../../../../src/presentation/protocols/name-validator";
+import { NameValidation } from "../../../../src/presentation/helpers/validators/name-validation";
 
 const makeNameValidator = (): NameValidator => {
   class NameValidatorStub implements NameValidator {

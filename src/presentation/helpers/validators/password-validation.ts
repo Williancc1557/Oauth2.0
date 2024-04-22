@@ -1,6 +1,6 @@
-import { InvalidParamError } from "../../../errors";
-import type { PasswordValidator } from "../../../protocols/password-validator";
-import type { Validation } from "../../../protocols/validation";
+import { InvalidParamError } from "../../errors";
+import type { PasswordValidator } from "../../protocols/password-validator";
+import type { Validation } from "../../protocols/validation";
 
 export class PasswordValidation implements Validation {
   public constructor(

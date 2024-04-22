@@ -1,6 +1,6 @@
-import { InvalidParamError } from "../../../errors";
-import type { PasswordValidator } from "../../../protocols/password-validator";
-import { PasswordValidation } from "./password-validation";
+import { InvalidParamError } from "../../../../src/presentation/errors";
+import type { PasswordValidator } from "../../../../src/presentation/protocols/password-validator";
+import { PasswordValidation } from "../../../../src/presentation/helpers/validators/password-validation";
 
 const makePasswordValidator = (): PasswordValidator => {
   class PasswordValidatorStub implements PasswordValidator {

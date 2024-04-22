@@ -1,7 +1,7 @@
 import { makeSignInValidation } from "../../../src/main/factories/sign-in/sign-in-validation";
-import { EmailValidation } from "../../../src/presentation/helpers/validators/email-validation/email-validation";
-import { PasswordValidation } from "../../../src/presentation/helpers/validators/password-validation/password-validation";
-import { RequiredFieldValidation } from "../../../src/presentation/helpers/validators/required-field-validation/required-field-validation";
+import { EmailValidation } from "../../../src/presentation/helpers/validators/email-validation";
+import { PasswordValidation } from "../../../src/presentation/helpers/validators/password-validation";
+import { RequiredFieldValidation } from "../../../src/presentation/helpers/validators/required-field-validation";
 import { ValidationComposite } from "../../../src/presentation/helpers/validators/validation-composite";
 import type { Validation } from "../../../src/presentation/protocols/validation";
 import { UtilPasswordValidator, UtilValidateEmail } from "../../../src/utils";
