@@ -20,7 +20,7 @@ No Oauth2.0 nós possuimos 2 tokens, o `access-token` e o `refresh-token`, esses
 
 Tudo isso que expliquei acima foi o que utilizei para desenvolver o meu sistema Oauth2.0.
 
-## Primeira rota: `/api/auth/sign-up` **(POST)**
+## `/api/auth/sign-up` **(POST)**
 
 Essa rota vai ser a responsável por registrar o usuário, e ela vai te retornar os tokens de acesso do usuário. Observe o exemplo abaixo:
 
@@ -44,7 +44,7 @@ Essa rota vai ser a responsável por registrar o usuário, e ela vai te retornar
 }
 ```
 
-## Segunda rota `/api/auth/sign-in` **(POST)**
+## `/api/auth/sign-in` **(POST)**
 
 Já essa rota vai servir para quando o usuário não tiver mais o refresh-token válido, você direciona-lo para a tela de login. Retornando e atualizando o seu refresh-token.
 
@@ -69,7 +69,7 @@ Por exemplo:
 
 Mas ai você se pergunta: "Cadê o access-token???". Calma, tendo o refresh-token você pode solicitar o access-token utilizando a próxima rota que vou falar abaixo, observe.
 
-## Terceira rota `/api/auth/refresh-token` **(GET)**
+## `/api/auth/refresh-token` **(GET)**
 
 Então, temos o nosso refresh-token, e não possuimos o access-token, ou ele está inválido. Para isso temos essa rota, onde você vai solicitar um novo access-token enviando pelo header o seu refresh-token. Veja o exemplo abaixo:
 
@@ -90,7 +90,7 @@ Então, temos o nosso refresh-token, e não possuimos o access-token, ou ele est
 
 Você deve estar se perguntando para que serve esse expireIn retornado pela API, ela é o tempo em segundos que esse accessToken vai ser expirado.
 
-## Quarta rota `/api/auth/token-info` **(GET)**
+## `/api/auth/token-info` **(GET)**
 
 Para pegar as informações do access-token, essa rota é a ideal! Para isso passe o seu access-token utilizando o header. Observe o exemplo abaixo:
 
@@ -98,7 +98,7 @@ Para pegar as informações do access-token, essa rota é a ideal! Para isso pas
 
 ```json
 {
-  "accesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MmY4NWE4M2IwMDY0YzExODk0M2JlNzYiLCJzdWIiOiJjbGllbnQiLCJpYXQiOjE2NjA0NDM3MjQsImV4cCI6MTY2MDQ0NDAyNH0.aENfxONnDKOqquMuSMpGTLvnX-T1vcGr5tXclrQfilE"
+  "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MmY4NWE4M2IwMDY0YzExODk0M2JlNzYiLCJzdWIiOiJjbGllbnQiLCJpYXQiOjE2NjA0NDM3MjQsImV4cCI6MTY2MDQ0NDAyNH0.aENfxONnDKOqquMuSMpGTLvnX-T1vcGr5tXclrQfilE"
 }
 ```
 
@@ -117,6 +117,24 @@ Para pegar as informações do access-token, essa rota é a ideal! Para isso pas
 - `sub`: A quem pertence esse token;
 - `iat`: Serve para visualizar em que tempo o token foi criado;
 - `exp`: Serve para visualizar quando que o token vai ser expirado.
+
+## `/api/auth/check-token` (GET)
+
+This router will be important because when we have a middleware in other application we need to verify if the token is valid. Because this I created this router to keep the responsibility of the token in this api.
+
+Just put the token in the header as in the example below:
+
+**HEADER:**
+
+```json
+"authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MmY4NWE4M2IwMDY0YzExODk0M2JlNzYiLCJzdWIiOiJjbGllbnQiLCJpYXQiOjE2NjA0NDM3MjQsImV4cCI6MTY2MDQ0NDAyNH0.aENfxONnDKOqquMuSMpGTLvnX-T1vcGr5tXclrQfilE"
+```
+
+**OUTPUT:**
+
+```json
+true or false
+```
 
 ## Variáveis de ambiente
 
@@ -220,8 +238,8 @@ E foi assim que fui testando cada classe dessa API.
 
 E foi assim que fui montando cada rota dessa API, utilizando essas camadas listadas acima.
 
-## Husky
+## Lefthook
 
-Essa tecnologia utilizei para evitar mandar commits com algum teste falhando. Como ela funciona? Nele eu posso setar algum comando para ser executado quando alguém da o comando do commit ele vai executar esse tal comando. Se esse comando der erro, o commit vai falhar. Se eu colocar por exemplo o comando `yarn test` no husky ele vai executar o comando para realizar todos os tests antes de commitar algo, se caso algum teste falhar, o commit não será realizado.
+Essa tecnologia utilizei para evitar mandar commits com algum teste falhando. Como ela funciona? Nele eu posso setar algum comando para ser executado quando alguém da o comando do commit ele vai executar esse tal comando. Se esse comando der erro, o commit vai falhar. Se eu colocar por exemplo o comando `yarn test` no lefthook ele vai executar o comando para realizar todos os tests antes de commitar algo, se caso algum teste falhar, o commit não será realizado.
 
-A configuração do husky está localizada no arquivo `.husky`.
+A configuração do lefthook está localizada no arquivo `.lefthook.yml`.
