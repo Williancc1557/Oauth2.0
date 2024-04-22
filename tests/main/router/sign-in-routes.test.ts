@@ -1,6 +1,6 @@
-import { mongoHelper } from "../../../../infra/db/mongodb/helpers/mongo-helper";
-import app from "../../../config/app";
 import request from "supertest";
+import { mongoHelper } from "../../../src/infra/db/mongodb/helpers/mongo-helper";
+import app from "../../../api";
 
 describe("SignIn routes", () => {
   beforeAll(async () => {

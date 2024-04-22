@@ -1,5 +1,5 @@
-import type { ResetRefreshTokenRepository } from "../../protocols/reset-refresh-token-repository";
-import { DbResetRefreshToken } from "../reset-refresh-token";
+import type { ResetRefreshTokenRepository } from "../../../src/data/protocols";
+import { DbResetRefreshToken } from "../../../src/data/usecase/reset-refresh-token";
 
 const makeResetRefreshTokenRepositoryStub = () => {
   class ResetRefreshTokenRepositoryStub implements ResetRefreshTokenRepository {
