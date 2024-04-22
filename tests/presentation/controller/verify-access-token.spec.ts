@@ -1,5 +1,5 @@
 import { VerifyAccessTokenController } from "../../../src/presentation/controller/verify-access-token";
-import { ok } from "../../../src/presentation/helpers/http-helper";
+import { ok, serverError } from "../../../src/presentation/helpers/http-helper";
 import type { HttpRequest } from "../../../src/presentation/protocols";
 
 const makeSut = () => {
@@ -48,5 +48,16 @@ describe("VerifyAccessToken Controller", () => {
     expect(verifyAccessTokenStub.verify).toHaveBeenCalledWith(
       fakeData.header.authorization
     );
+  });
+
+  test("should return server error if verify method throws", async () => {
+    const { sut, verifyAccessTokenStub } = makeSut();
+    verifyAccessTokenStub.verify.mockImplementation(() => {
+      throw new Error();
+    });
+
+    const data = await sut.handle(fakeData);
+
+    expect(data).toStrictEqual(serverError());
   });
 });
