@@ -1,17 +1,17 @@
-import { MissingParamError } from "../../errors";
+import { MissingParamError } from "../../../src/presentation/errors";
 import {
   badRequest,
   ok,
   serverError,
   unauthorized,
-} from "../../helpers/http-helper";
-import type { Validation } from "../../protocols/validation";
+} from "../../../src/presentation/helpers/http-helper";
+import type { Validation } from "../../../src/presentation/protocols/validation";
 import type {
   GetTokenInfo,
   GetTokenInfoOutput,
-} from "../../protocols/get-token-info";
-import type { VerifyAccessToken } from "../../protocols/verify-access-token";
-import { TokenInfoController } from "./token-info";
+} from "../../../src/presentation/protocols/get-token-info";
+import type { VerifyAccessToken } from "../../../src/presentation/protocols/verify-access-token";
+import { TokenInfoController } from "../../../src/presentation/controller/token-info";
 
 const makeFakeHttpRequest = () => ({
   header: {

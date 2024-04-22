@@ -3,11 +3,11 @@ import {
   ok,
   serverError,
   unauthorized,
-} from "../../helpers/http-helper";
-import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
-import type { CreateAccessToken } from "../../../data/protocols/create-access-token";
-import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
-import type { Validation } from "../../protocols/validation";
+} from "../helpers/http-helper";
+import type { CheckRefreshToken } from "../../domain/usecase/check-refresh-token";
+import type { CreateAccessToken } from "../../data/protocols/create-access-token";
+import type { Controller, HttpRequest, HttpResponse } from "../protocols";
+import type { Validation } from "../protocols/validation";
 
 export class RefreshTokenController implements Controller {
   public constructor(

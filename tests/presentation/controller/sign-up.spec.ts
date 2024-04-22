@@ -1,19 +1,22 @@
-import type { CreateAccessTokenOutput } from "../../../data/protocols";
-import type { AccountModel } from "../../../domain/models/account";
+import type { CreateAccessTokenOutput } from "../../../src/data/protocols";
+import type { AccountModel } from "../../../src/domain/models/account";
 import type {
   AddAccount,
   AddAccountInput,
-} from "../../../domain/usecase/add-account";
-import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
-import { AccountAlreadyExistsError, InvalidParamError } from "../../errors";
+} from "../../../src/domain/usecase/add-account";
+import type { GetAccountByEmail } from "../../../src/domain/usecase/get-account-by-email";
+import {
+  AccountAlreadyExistsError,
+  InvalidParamError,
+} from "../../../src/presentation/errors";
 import {
   badRequest,
   conflict,
   ok,
   serverError,
-} from "../../helpers/http-helper";
-import type { Validation } from "../../protocols/validation";
-import { SignUpController } from "./sign-up";
+} from "../../../src/presentation/helpers/http-helper";
+import type { Validation } from "../../../src/presentation/protocols/validation";
+import { SignUpController } from "../../../src/presentation/controller/sign-up";
 
 const makeFakeHttpRequest = () => ({
   body: {

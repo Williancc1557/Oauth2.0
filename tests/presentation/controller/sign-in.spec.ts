@@ -1,6 +1,9 @@
-import { InvalidParamError, UserNotExistsError } from "../../errors";
-import { badRequest } from "../../helpers/http-helper";
-import { SignInController } from "./sign-in";
+import {
+  InvalidParamError,
+  UserNotExistsError,
+} from "../../../src/presentation/errors";
+import { badRequest } from "../../../src/presentation/helpers/http-helper";
+import { SignInController } from "../../../src/presentation/controller/sign-in";
 
 const makeFakeHttpRequest = () => ({
   body: {

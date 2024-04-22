@@ -1,10 +1,10 @@
-import type { Encrypter } from "../../../data/protocols/encrypter";
-import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
-import type { ResetRefreshToken } from "../../../domain/usecase/reset-refresh-token";
-import { UserNotExistsError, InvalidParamError } from "../../errors";
-import { badRequest, ok, serverError } from "../../helpers/http-helper";
-import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
-import type { Validation } from "../../protocols/validation";
+import type { Encrypter } from "../../data/protocols/encrypter";
+import type { GetAccountByEmail } from "../../domain/usecase/get-account-by-email";
+import type { ResetRefreshToken } from "../../domain/usecase/reset-refresh-token";
+import { UserNotExistsError, InvalidParamError } from "../errors";
+import { badRequest, ok, serverError } from "../helpers/http-helper";
+import type { Controller, HttpRequest, HttpResponse } from "../protocols";
+import type { Validation } from "../protocols/validation";
 
 export class SignInController implements Controller {
   public constructor(

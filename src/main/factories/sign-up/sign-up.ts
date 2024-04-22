@@ -3,7 +3,7 @@ import { DbGetAccountByEmail } from "../../../data/usecase/get-account-by-email/
 import { LogControllerDecorator } from "../../../decorators/log";
 import { AddAccountMongoRepository } from "../../../infra/db/mongodb/account-repository/add-account-repository/add-account-repository";
 import { GetAccountByEmailMongoRepository } from "../../../infra/db/mongodb/account-repository/get-account-by-email-repository/get-account-by-email-repository";
-import { SignUpController } from "../../../presentation/controller/sign-up/sign-up";
+import { SignUpController } from "../../../presentation/controller/sign-up";
 
 import {
   UtilCreateAccessToken,

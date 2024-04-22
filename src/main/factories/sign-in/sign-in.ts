@@ -3,7 +3,7 @@ import { DbResetRefreshToken } from "../../../data/usecase/reset-refresh-token/r
 import { LogControllerDecorator } from "../../../decorators/log";
 import { GetAccountByEmailMongoRepository } from "../../../infra/db/mongodb/account-repository/get-account-by-email-repository/get-account-by-email-repository";
 import { ResetRefreshTokenMongoRepository } from "../../../infra/db/mongodb/reset-refresh-token-repository/reset-refresh-token-repository";
-import { SignInController } from "../../../presentation/controller/sign-in/sign-in";
+import { SignInController } from "../../../presentation/controller/sign-in";
 
 import { UtilCreateRefreshToken, UtilEncrypter } from "../../../utils/";
 import { makeSignInValidation } from "./sign-in-validation";

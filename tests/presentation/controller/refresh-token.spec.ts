@@ -1,11 +1,11 @@
-import { RefreshTokenController } from "./refresh-token";
+import { RefreshTokenController } from "../../../src/presentation/controller/refresh-token";
 import {
   badRequest,
   ok,
   serverError,
   unauthorized,
-} from "../../helpers/http-helper";
-import { InvalidParamError } from "../../errors";
+} from "../../../src/presentation/helpers/http-helper";
+import { InvalidParamError } from "../../../src/presentation/errors";
 
 const makeFakeHttpRequest = () => ({
   header: {

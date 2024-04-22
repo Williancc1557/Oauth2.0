@@ -1,14 +1,9 @@
-import type { AddAccount } from "../../../domain/usecase/add-account";
-import type { GetAccountByEmail } from "../../../domain/usecase/get-account-by-email";
-import { AccountAlreadyExistsError } from "../../errors/account-already-exists-error";
-import {
-  badRequest,
-  conflict,
-  ok,
-  serverError,
-} from "../../helpers/http-helper";
-import type { Controller, HttpRequest, HttpResponse } from "../../protocols/";
-import type { Validation } from "../../protocols/validation";
+import type { AddAccount } from "../../domain/usecase/add-account";
+import type { GetAccountByEmail } from "../../domain/usecase/get-account-by-email";
+import { AccountAlreadyExistsError } from "../errors/account-already-exists-error";
+import { badRequest, conflict, ok, serverError } from "../helpers/http-helper";
+import type { Controller, HttpRequest, HttpResponse } from "../protocols";
+import type { Validation } from "../protocols/validation";
 
 export class SignUpController implements Controller {
   public constructor(
