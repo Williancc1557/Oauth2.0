@@ -1,13 +1,12 @@
 import { VerifyAccessTokenController } from "../../../src/presentation/controller/verify-access-token";
 import { ok } from "../../../src/presentation/helpers/http-helper";
 import type { HttpRequest } from "../../../src/presentation/protocols";
-import type { VerifyAccessToken } from "../../../src/presentation/protocols/verify-access-token";
 
 const makeSut = () => {
   const verifyAccessTokenStub = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     verify: jest.fn((accessToken: string) => true),
-  } as VerifyAccessToken;
+  };
 
   const sut = new VerifyAccessTokenController(verifyAccessTokenStub);
 
@@ -30,5 +29,14 @@ describe("VerifyAccessToken Controller", () => {
     const data = await sut.handle(fakeData);
 
     expect(data).toStrictEqual(ok(true));
+  });
+
+  test("should return false if access token is not valid", async () => {
+    const { sut, verifyAccessTokenStub } = makeSut();
+    verifyAccessTokenStub.verify.mockReturnValue(false);
+
+    const data = await sut.handle(fakeData);
+
+    expect(data).toStrictEqual(ok(false));
   });
 });
