@@ -1,10 +1,10 @@
 import type {
   CreateAccessToken,
   CreateAccessTokenOutput,
-} from "../../../../../data/protocols/create-access-token";
-import type { CreateRefreshToken } from "../../../../../data/protocols/create-refresh-token";
-import { mongoHelper } from "../../helpers/mongo-helper";
-import { AddAccountMongoRepository } from "./add-account-repository";
+} from "../../../../../src/data/protocols/create-access-token";
+import type { CreateRefreshToken } from "../../../../../src/data/protocols/create-refresh-token";
+import { mongoHelper } from "../../../../../src/infra/db/mongodb/helpers/mongo-helper";
+import { AddAccountMongoRepository } from "../../../../../src/infra/db/mongodb/account-repository/add-account-repository";
 
 const makeCreateRefreshTokenStub = () => {
   class CreateRefreshTokenStub implements CreateRefreshToken {

@@ -1,7 +1,7 @@
 import { DbGetAccountByEmail } from "../../../data/usecase/get-account-by-email";
 import { DbResetRefreshToken } from "../../../data/usecase/reset-refresh-token";
 import { LogControllerDecorator } from "../../../decorators/log";
-import { GetAccountByEmailMongoRepository } from "../../../infra/db/mongodb/account-repository/get-account-by-email-repository/get-account-by-email-repository";
+import { GetAccountByEmailMongoRepository } from "../../../infra/db/mongodb/account-repository/get-account-by-email-repository";
 import { ResetRefreshTokenMongoRepository } from "../../../infra/db/mongodb/reset-refresh-token-repository/reset-refresh-token-repository";
 import { SignInController } from "../../../presentation/controller/sign-in";
 

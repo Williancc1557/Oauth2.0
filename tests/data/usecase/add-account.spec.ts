@@ -1,9 +1,9 @@
-import type { AccountModel } from "../../../domain/models/account";
-import type { AddAccountInput } from "../../../domain/usecase/add-account";
-import type { CreateAccessTokenOutput } from "../../protocols";
-import type { AddAccountRepository } from "../../protocols/add-account-repository";
-import type { Encrypter } from "../../protocols/encrypter";
-import { DbAddAccount } from "../add-account";
+import type { AccountModel } from "../../../src/domain/models/account";
+import type { AddAccountInput } from "../../../src/domain/usecase/add-account";
+import type { CreateAccessTokenOutput } from "../../../src/data/protocols";
+import type { AddAccountRepository } from "../../../src/data/protocols/add-account-repository";
+import type { Encrypter } from "../../../src/data/protocols/encrypter";
+import { DbAddAccount } from "../../../src/data/usecase/add-account";
 
 const makeAddAccountRepositoryStub = () => {
   class AddAccountRepositoryStub implements AddAccountRepository {

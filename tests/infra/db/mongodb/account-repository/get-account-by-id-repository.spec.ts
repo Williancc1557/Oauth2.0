@@ -1,20 +1,22 @@
-import type { AccountModel } from "../../../../../domain/models/account";
-import { mongoHelper } from "../../helpers/mongo-helper";
-import { GetAccountByEmailMongoRepository } from "./get-account-by-email-repository";
+import type { AccountModel } from "../../../../../src/domain/models/account";
+import { mongoHelper } from "../../../../../src/infra/db/mongodb/helpers/mongo-helper";
+import { GetAccountByIdMongoRepository } from "../../../../../src/infra/db/mongodb/account-repository/get-account-by-id-repository";
 
 const makeSut = () => {
-  const sut = new GetAccountByEmailMongoRepository();
+  const sut = new GetAccountByIdMongoRepository();
 
   return {
     sut,
   };
 };
 
-describe("GetAccountByEmailMongoRepository", () => {
+describe("GetAccountByIdMongoRepository", () => {
+  let id: string;
+
   beforeAll(async () => {
     await mongoHelper.connect();
     const accountCollection = mongoHelper.getCollection("account");
-    await (
+    const { insertedId } = await (
       await accountCollection
     ).insertOne({
       email: "valid_mail@mail.com",
@@ -22,6 +24,8 @@ describe("GetAccountByEmailMongoRepository", () => {
       password: "valid_password",
       refreshToken: "1234",
     } as AccountModel);
+
+    id = String(insertedId);
   });
 
   afterAll(async () => {
@@ -31,7 +35,7 @@ describe("GetAccountByEmailMongoRepository", () => {
   test("should return account if success", async () => {
     const { sut } = makeSut();
 
-    const req = await sut.get("valid_mail@mail.com");
+    const req = await sut.get(id);
 
     expect(req.refreshToken).toBeTruthy();
     expect(req.id).toBeTruthy();
