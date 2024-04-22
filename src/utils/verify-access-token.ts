@@ -1,6 +1,6 @@
-import type { VerifyAccessToken } from "../../presentation/protocols/verify-access-token";
+import type { VerifyAccessToken } from "../presentation/protocols/verify-access-token";
 import jwt from "jsonwebtoken";
-import env from "../../main/config/env";
+import env from "../main/config/env";
 
 export class UtilVerifyAccessToken implements VerifyAccessToken {
   public verify(accessToken: string): boolean {

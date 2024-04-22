@@ -1,4 +1,4 @@
-import { UtilRequiredParams } from "./required-params";
+import { UtilRequiredParams } from "../../src/utils/required-params";
 
 const makeSut = () => {
   const sut = new UtilRequiredParams();

@@ -1,4 +1,4 @@
-import type { PasswordValidator } from "../../presentation/protocols/password-validator";
+import type { PasswordValidator } from "../presentation/protocols/password-validator";
 
 export class UtilPasswordValidator implements PasswordValidator {
   public validate(password: string): boolean {

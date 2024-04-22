@@ -1,4 +1,4 @@
-import type { Encrypter } from "../../data/protocols/encrypter";
+import type { Encrypter } from "../data/protocols/encrypter";
 import bcrypt from "bcrypt";
 
 export class UtilEncrypter implements Encrypter {

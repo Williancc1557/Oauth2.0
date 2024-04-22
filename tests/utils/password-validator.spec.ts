@@ -1,23 +1,23 @@
-import { UtilNameValidator } from "./name-validator";
+import { UtilPasswordValidator } from "../../src/utils/password-validator";
 
 const makeSut = () => {
-  const sut = new UtilNameValidator();
+  const sut = new UtilPasswordValidator();
 
   return {
     sut,
   };
 };
 
-describe("NameValidator Util", () => {
+describe("PasswordValidator Util", () => {
   test("should return true if success", () => {
     const { sut } = makeSut();
 
-    const res = sut.validate("valid_name");
+    const res = sut.validate("valid_password");
 
     expect(res).toBe(true);
   });
 
-  test("should return false if email is not valid", () => {
+  test("should return false if password is not valid", () => {
     const { sut } = makeSut();
 
     const res = sut.validate("a");

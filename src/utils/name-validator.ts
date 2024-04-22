@@ -1,4 +1,4 @@
-import type { NameValidator } from "../../presentation/protocols/name-validator";
+import type { NameValidator } from "../presentation/protocols/name-validator";
 
 export class UtilNameValidator implements NameValidator {
   public validate(name: string): boolean {

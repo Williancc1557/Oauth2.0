@@ -1,4 +1,4 @@
-import { UtilEncrypter } from "./encrypter";
+import { UtilEncrypter } from "../../src/utils/encrypter";
 import bcrypt from "bcrypt";
 
 jest.mock("bcrypt", () => ({

@@ -1,4 +1,4 @@
-import { UtilVerifyAccessToken } from "./verify-access-token";
+import { UtilVerifyAccessToken } from "../../src/utils/verify-access-token";
 import jwt from "jsonwebtoken";
 
 jest.mock("jsonwebtoken", () => ({

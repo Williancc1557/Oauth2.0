@@ -1,4 +1,4 @@
-import type { RequiredParams } from "../../presentation/protocols/required-params";
+import type { RequiredParams } from "../presentation/protocols/required-params";
 
 export class UtilRequiredParams implements RequiredParams {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,4 +1,4 @@
-import { UtilCreateAccessToken } from "./create-access-token";
+import { UtilCreateAccessToken } from "../../src/utils/create-access-token";
 import jwt from "jsonwebtoken";
 
 describe("CreateAccessToken", () => {

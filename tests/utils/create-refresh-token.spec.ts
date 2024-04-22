@@ -1,4 +1,4 @@
-import { UtilCreateRefreshToken } from "./create-refresh-token";
+import { UtilCreateRefreshToken } from "../../src/utils/create-refresh-token";
 
 describe("CreateRefreshToken", () => {
   test("should return refreshToken if success", () => {

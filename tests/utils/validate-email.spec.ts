@@ -1,4 +1,4 @@
-import { UtilValidateEmail } from "./validate-email";
+import { UtilValidateEmail } from "../../src/utils/validate-email";
 import validator from "validator";
 
 jest.mock("validator", () => ({

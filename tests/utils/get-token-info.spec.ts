@@ -1,5 +1,5 @@
-import { UtilCreateAccessToken } from "../create-access-token/create-access-token";
-import { UtilGetTokenInfo } from "./get-token-info";
+import { UtilCreateAccessToken } from "../../src/utils/create-access-token";
+import { UtilGetTokenInfo } from "../../src/utils/get-token-info";
 
 const { accessToken } = new UtilCreateAccessToken().create("valid_id");
 

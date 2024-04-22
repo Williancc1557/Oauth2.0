@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import type {
   GetTokenInfo,
   GetTokenInfoOutput,
-} from "../../presentation/protocols/get-token-info";
+} from "../presentation/protocols/get-token-info";
 
 export class UtilGetTokenInfo implements GetTokenInfo {
   public get(token: string): GetTokenInfoOutput {
