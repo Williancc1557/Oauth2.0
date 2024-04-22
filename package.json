@@ -1,13 +1,13 @@
 {
   "name": "auth2.0_api",
   "version": "2.0.0",
-  "main": "index.js",
+  "main": "server.ts",
   "author": "Willian Cavalcanti Coelho",
   "license": "MIT",
   "scripts": {
     "dev": "tsnd src/main/server.ts",
     "build": "tsc",
-    "start": "node dist/src/main/server.js",
+    "start": "node dist/main/server.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test -- --watch -c jest-unit-config.js",
