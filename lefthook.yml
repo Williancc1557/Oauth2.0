@@ -13,7 +13,7 @@
 #       run: bundle audit
 #
 pre-commit:
-  parallel: false
+  parallel: true
   commands:
     eslint:
       glob: "*.{js,ts,jsx,tsx}"
