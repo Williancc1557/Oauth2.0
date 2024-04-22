@@ -1,4 +1,4 @@
-import { DbCheckRefreshToken } from "../../../data/usecase/check-refresh-token/check-refresh-token";
+import { DbCheckRefreshToken } from "../../../data/usecase/check-refresh-token";
 import { LogControllerDecorator } from "../../../decorators/log";
 import { GetRefreshTokenMongoRepository } from "../../../infra/db/mongodb/refresh-token-repository/get-refresh-token";
 import { RefreshTokenController } from "../../../presentation/controller/refresh-token";

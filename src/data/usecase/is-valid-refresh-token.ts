@@ -1,5 +1,5 @@
-import type { IsValidRefreshToken } from "../../../domain/usecase/is-valid-refresh-token";
-import type { GetAccountByIdRepository } from "../../protocols/get-account-by-id-repository";
+import type { IsValidRefreshToken } from "../../domain/usecase/is-valid-refresh-token";
+import type { GetAccountByIdRepository } from "../protocols/get-account-by-id-repository";
 
 export class DbIsValidRefreshToken implements IsValidRefreshToken {
   public constructor(

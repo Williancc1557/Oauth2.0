@@ -1,6 +1,6 @@
 import type { AccountModel } from "../../../domain/models/account";
 import type { GetAccountByEmailRepository } from "../../protocols/get-account-by-email-repository";
-import { DbGetAccountByEmail } from "./get-account-by-email";
+import { DbGetAccountByEmail } from "../get-account-by-email";
 
 const makeGetAccountByEmailRepositoryStub = () => {
   class GetAccountByEmailRepositoryStub implements GetAccountByEmailRepository {

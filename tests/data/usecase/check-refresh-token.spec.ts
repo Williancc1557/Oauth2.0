@@ -1,6 +1,6 @@
 import type { AccountModel } from "../../../domain/models/account";
 import type { GetRefreshTokenRepository } from "../../protocols/get-refresh-token-repository";
-import { DbCheckRefreshToken } from "./check-refresh-token";
+import { DbCheckRefreshToken } from "../check-refresh-token";
 
 const makeGetRefreshTokenStub = () => {
   class GetRefreshTokenStub implements GetRefreshTokenRepository {

@@ -1,14 +1,14 @@
-import type { AccountModel } from "../../../domain/models/account";
+import type { AccountModel } from "../../domain/models/account";
 import type {
   AddAccount,
   AddAccountInput,
-} from "../../../domain/usecase/add-account";
+} from "../../domain/usecase/add-account";
 
 import type {
   CreateAccessTokenOutput,
   AddAccountRepository,
   Encrypter,
-} from "../../protocols";
+} from "../protocols";
 
 export class DbAddAccount implements AddAccount {
   public constructor(

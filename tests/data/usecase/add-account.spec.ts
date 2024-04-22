@@ -3,7 +3,7 @@ import type { AddAccountInput } from "../../../domain/usecase/add-account";
 import type { CreateAccessTokenOutput } from "../../protocols";
 import type { AddAccountRepository } from "../../protocols/add-account-repository";
 import type { Encrypter } from "../../protocols/encrypter";
-import { DbAddAccount } from "./add-account";
+import { DbAddAccount } from "../add-account";
 
 const makeAddAccountRepositoryStub = () => {
   class AddAccountRepositoryStub implements AddAccountRepository {

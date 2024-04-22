@@ -1,5 +1,5 @@
-import type { CheckRefreshToken } from "../../../domain/usecase/check-refresh-token";
-import type { GetRefreshTokenRepository } from "../../protocols";
+import type { CheckRefreshToken } from "../../domain/usecase/check-refresh-token";
+import type { GetRefreshTokenRepository } from "../protocols";
 
 export class DbCheckRefreshToken implements CheckRefreshToken {
   public constructor(
