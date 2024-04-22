@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "tsnd src/main/server.ts",
     "build": "tsc",
-    "start": "node dist/main/server.js",
+    "start": "node dist/src/main/server.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test -- --watch -c jest-unit-config.js",
