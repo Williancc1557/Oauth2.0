@@ -1,5 +1,10 @@
 import { VerifyAccessTokenController } from "../../../src/presentation/controller/verify-access-token";
-import { ok, serverError } from "../../../src/presentation/helpers/http-helper";
+import { InvalidParamError } from "../../../src/presentation/errors";
+import {
+  badRequest,
+  ok,
+  serverError,
+} from "../../../src/presentation/helpers/http-helper";
 import type { HttpRequest } from "../../../src/presentation/protocols";
 
 const makeSut = () => {
@@ -8,11 +13,19 @@ const makeSut = () => {
     verify: jest.fn((accessToken: string) => true),
   };
 
-  const sut = new VerifyAccessTokenController(verifyAccessTokenStub);
+  const validationStub = {
+    validate: jest.fn(),
+  };
+
+  const sut = new VerifyAccessTokenController(
+    verifyAccessTokenStub,
+    validationStub
+  );
 
   return {
     sut,
     verifyAccessTokenStub,
+    validationStub,
   };
 };
 
@@ -59,5 +72,19 @@ describe("VerifyAccessToken Controller", () => {
     const data = await sut.handle(fakeData);
 
     expect(data).toStrictEqual(serverError());
+  });
+
+  test("should return 400 if validation returns an error", async () => {
+    const { sut, validationStub } = makeSut();
+
+    validationStub.validate.mockReturnValueOnce(
+      new InvalidParamError("authorization")
+    );
+
+    const httpResponse = await sut.handle(fakeData);
+
+    expect(httpResponse).toStrictEqual(
+      badRequest(new InvalidParamError("authorization"))
+    );
   });
 });
