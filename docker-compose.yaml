@@ -25,7 +25,7 @@ services:
     depends_on:
       - mongodb
     ports:
-      - "${PORT}:${PORT}"
+      - "8080:8080" # if change this port, you need change in the .env.docker file too
     volumes:
       - ./:/app/
     networks:
