@@ -106,15 +106,13 @@ Para pegar as informações do access-token, essa rota é a ideal! Para isso pas
 
 ```json
 {
-  "accountId": "62f85a83b0064c118943be76",
-  "sub": "client",
+  "sub": "62f85a83b0064c118943be76",
   "iat": 1661116870,
   "exp": 1661117170
 }
 ```
 
-- `accountId`: É o id do usuário;
-- `sub`: A quem pertence esse token;
+- `sub`: É o id do usuário;
 - `iat`: Serve para visualizar em que tempo o token foi criado;
 - `exp`: Serve para visualizar quando que o token vai ser expirado.
 
